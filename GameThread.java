@@ -30,9 +30,7 @@ public class GameThread extends Thread{
                     repaint();
                     Thread.sleep((long) remainingTime);
                     nextTime += interval;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException e) {}
             }
         }
         while(pZone.isGameOver()){

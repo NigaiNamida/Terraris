@@ -39,13 +39,10 @@ public class Leaderboard extends JPanel{
         if(topScore[0] == 0){
             for (int i = 0; i < topScore.length; i++) {
                 topScore[i] = 0;
-                if(topScore[i] == 0){
+                if(topScore[i] == 0)
                     scoreBoard[i] = new JLabel("No Score");
-                }
-                else{
+                else
                     scoreBoard[i] = new JLabel(topName[i]+" : "+topScore[i]);
-
-                }
                 scoreBoard[i].setForeground(new Color(193,221,196,255));
                 scoreBoard[i].setFont(font);
                 scoreBoard[i].setBounds(150, (60*(i+1))+40, 200, 30);
@@ -71,9 +68,8 @@ public class Leaderboard extends JPanel{
         for (int i = topScore.length-1; i > replaceRank; i--) {
             topScore[i] = topScore[i-1];
             topName[i] =  topName[i-1];
-            if(topScore[i] != 0){
+            if(topScore[i] != 0)
                 scoreBoard[i].setText(topName[i]+" : "+topScore[i]);
-            }
         }
         topScore[replaceRank] = score;
         topName[replaceRank] = name;
@@ -93,12 +89,10 @@ public class Leaderboard extends JPanel{
 
     public static void updateScoreBoard() {
         for (int i = 0; i < topScore.length; i++) {
-            if(topScore[i] == 0){
+            if(topScore[i] == 0)
                 scoreBoard[i].setText("No Score");
-            }
-            else{
+            else
                 scoreBoard[i].setText(topName[i]+" : "+topScore[i]);
-            }
             scoreBoard[i].setForeground(new Color(193,221,196,255));
             scoreBoard[i].setFont(font);
             scoreBoard[i].setBounds(150, (60*(i+1))+40, 200, 30);

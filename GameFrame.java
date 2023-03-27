@@ -94,19 +94,6 @@ public class GameFrame extends JFrame{
         music.setVolume(SettingPanel.musicVolume);
     }
 
-    public static void loadLeaderboard(){
-        try (Scanner input = new Scanner(Paths.get(Leaderboard.getLeaderboardFile()))) {
-            String[] topName = Leaderboard.getTopName();
-            int[] topScore = Leaderboard.getTopScore();
-            for (int i = 0; input.hasNextLine() ; i++) {
-                topName[i] = input.next();
-                topScore[i] = input.nextInt();
-            }
-            Leaderboard.updateScoreBoard();
-        } 
-        catch (Exception e) {}
-    }
-
     public void retry(){
         this.remove(highScorePanel);
         this.remove(gameOverPanel);
@@ -219,6 +206,19 @@ public class GameFrame extends JFrame{
         playMusic(6);
     }
 
+    public static void loadLeaderboard(){
+        try (Scanner input = new Scanner(Paths.get(Leaderboard.getLeaderboardFile()))) {
+            String[] topName = Leaderboard.getTopName();
+            int[] topScore = Leaderboard.getTopScore();
+            for (int i = 0; input.hasNextLine() ; i++) {
+                topName[i] = input.next();
+                topScore[i] = input.nextInt();
+            }
+            Leaderboard.updateScoreBoard();
+        } 
+        catch (Exception e) {}
+    }
+
     public static Menu getMenu() {
         return menu;
     }
@@ -278,7 +278,6 @@ public class GameFrame extends JFrame{
         return isPlaying;
     }
     
-
     public static void setPlaying(boolean isPlaying) {
         GameFrame.isPlaying = isPlaying;
     }

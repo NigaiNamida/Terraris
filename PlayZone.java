@@ -8,7 +8,6 @@ import javax.swing.border.LineBorder;
 public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
     private NextPanel nextPanel;
-    private GoalPanel goalPanel;
     private Gravity gravity;
     private Color gridLineColor;
     private int gridCols;
@@ -32,7 +31,6 @@ public class PlayZone extends JPanel{
 
         holdPanel = GameFrame.getHoldPanel();
         nextPanel = GameFrame.getNextPanel();
-        goalPanel = GameFrame.getGoalPanel();
 
         gridLineColor = new Color(36, 36, 36);
 
@@ -691,7 +689,7 @@ public class PlayZone extends JPanel{
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset
                         middle = blockCordinate[row][col];
-                        TetrisTexture.mergePileTexture(g,middle,x,y,goalPanel,sideCheck); 
+                        TetrisTexture.mergePileTexture(g,middle,x,y,sideCheck); 
                         sideCheck = new boolean[3][3];
                     }               
                 }

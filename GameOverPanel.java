@@ -10,14 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverPanel extends JPanel implements ActionListener{
-    public static JLabel gameOverLabel = new JLabel("GAME OVER");
-    public static JButton retryButton = new JButton("RETRY");
-    public static JButton exitButton = new JButton("EXIT TO MENU");
+    private static JLabel gameOverLabel;
+    private static JButton retryButton;
+    private static JButton exitButton;
 
     public GameOverPanel(){
         gameOverLabel = new JLabel("GAME OVER");new JLabel("GAME OVER");
         retryButton = new JButton("RETRY");
         exitButton = new JButton("EXIT TO MENU");
+        
         this.setOpaque(true);
         this.setBounds(225, 155, 350, 250);
         this.setBackground(Color.BLACK);
@@ -62,11 +63,11 @@ public class GameOverPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == retryButton){
-            Tetris.gameFrame.retry();
+            Tetris.getGameFrame().retry();
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
-            Tetris.gameFrame.backToMenu();
+            Tetris.getGameFrame().backToMenu();
         }
     }
 }

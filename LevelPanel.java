@@ -4,12 +4,14 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class LevelPanel extends JPanel{
-    public static int level = 1;
-    public static JLabel levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
-    public static JLabel levelScore = new JLabel(""+level, SwingConstants.CENTER);
+    private static int level;
+    private static JLabel levelLabel;
+    private static JLabel levelScore;
 
     public LevelPanel(){
         level = 1;
+        levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
+        levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
         this.setBounds(150, 280, 100, 100);
         this.setBackground(Color.black);
@@ -26,6 +28,18 @@ public class LevelPanel extends JPanel{
         levelLabel.setFont(new Font("Futura",Font.BOLD,20));
         levelScore.setFont(new Font("Futura",Font.BOLD,30));
         levelScore.setText(""+level);
+    }
+
+    public static int getLevel() {
+        return level;
+    }
+
+    public static void addLevel() {
+        level++;
+    }
+
+    public static JLabel getLevelScore() {
+        return levelScore;
     }
 
     @Override

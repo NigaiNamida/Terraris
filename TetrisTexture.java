@@ -3,8 +3,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class TetrisTexture {
-    Image blockImage;
-    Image pileImage;
+    private Image blockImage;
+    private Image pileImage;
 
     public TetrisTexture(Image blockImage, Image pileImage){
         this.blockImage = blockImage;

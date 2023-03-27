@@ -4,14 +4,16 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class GoalPanel extends JPanel{
-    public static int goal = 0;
-    public static JLabel goalLabel = new JLabel("LINES", SwingConstants.CENTER);
-    public static JLabel goalScore = new JLabel(""+goal, SwingConstants.CENTER);
-    
+    private static int goal;
+    private static JLabel goalLabel;
+    private static JLabel goalScore;
 
     public GoalPanel(){
         //setting panel
         goal = 0;
+        goalLabel = new JLabel("LINES", SwingConstants.CENTER);
+        goalScore = new JLabel(""+goal, SwingConstants.CENTER);
+
         this.setBounds(150, 400, 100, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
@@ -33,4 +35,19 @@ public class GoalPanel extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
     }
+
+    public static int getGoal() {
+        return goal;
+    }
+
+    public static void addGoal() {
+        goal++;
+    }
+
+    public static JLabel getGoalScore() {
+        return goalScore;
+    }
+    
+
+    
 }

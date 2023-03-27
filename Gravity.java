@@ -2,22 +2,21 @@ import javax.swing.Timer;
 import java.awt.event.*;
 
 public class Gravity implements ActionListener{
-    KeyHandler keyHandler = GameFrame.keyHandler;
-    PlayZone pZone;
-    Timer timer;
-    Timer lastTimer;
-    double fallSpeed;
+    private PlayZone playZone;
+    private Timer timer;
+    private Timer lastTimer;
+    private double fallSpeed;
 
     public Gravity(PlayZone pZone,double fallSpeed){
         this.fallSpeed = fallSpeed;
-        this.pZone = pZone;
+        this.playZone = pZone;
         timer = new Timer((int)(fallSpeed*1000), this);
         lastTimer = new Timer(500, this);
         timer.start();
     }
 
-    void repaint(){
-        pZone.repaint();
+    void repaintPlayZone(){
+        playZone.repaint();
     }
     
     void increaseFallSpeed(int level){
@@ -29,9 +28,43 @@ public class Gravity implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(!pZone.isGameOver && !KeyHandler.isPause && GameFrame.isPlaying){
-            pZone.applyGravity();
-            repaint();
+        if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
+            playZone.applyGravity();
+            repaintPlayZone();
         }
     }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public Timer getLastTimer() {
+        return lastTimer;
+    }
+
+    public void startTimer(){
+        timer.start();
+    }
+
+    public void startLastTimer(){
+        lastTimer.start();
+    }
+
+    public void restartTimer(){
+        timer.restart();
+    }
+
+    public void restartLastTimer(){
+        lastTimer.restart();
+    }
+
+    public void stopTimer(){
+        timer.stop();
+    }
+
+    public void stopLastTimer(){
+        lastTimer.stop();
+    }
+
+    
 }

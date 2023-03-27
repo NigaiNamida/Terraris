@@ -6,18 +6,17 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class HoldPanel extends JPanel{
-
-    public static JLabel holdLabel = new JLabel();
+    private JLabel holdLabel;
     
     private int gridCols;
     private int gridRows;
 
     private int blockSize;
 
-    protected TetrisPiece block;
+    private TetrisPiece block;
 
     public HoldPanel(){
-        holdLabel.setText("HOLD");
+        holdLabel = new JLabel("HOLD");
         holdLabel.setForeground(new Color(193,221,196,255));
         holdLabel.setFont(new Font("Futura",Font.BOLD,20));
         //setting panel
@@ -33,6 +32,14 @@ public class HoldPanel extends JPanel{
         blockSize = this.getWidth() / gridCols;
         gridRows = this.getHeight() / blockSize;
 
+    }
+
+    public TetrisPiece getBlock() {
+        return block;
+    }
+
+    public void setBlock(TetrisPiece block) {
+        this.block = block;
     }
 
     @Override

@@ -282,12 +282,12 @@ public class SettingPanel extends JPanel implements ActionListener{
         if(e.getSource() == musicDecreaseVolumeButton && musicVolume!= 0){
             musicVolume -= 10;
             musicVolumeValue.setText((musicVolume)+"%");
-            GameFrame.music.setVolume(musicVolume/2);
+            GameFrame.getMusic().setVolume(musicVolume/2);
         }
         else if(e.getSource() == musicIncreaseVolumeButton && musicVolume != 100){
             musicVolume += 10;
             musicVolumeValue.setText((musicVolume)+"%");
-            GameFrame.music.setVolume(musicVolume/2);
+            GameFrame.getMusic().setVolume(musicVolume/2);
         }
         else if(e.getSource() == effectDecreaseVolumeButton && effectVolume!= 0){
             effectVolume -= 10;
@@ -297,43 +297,43 @@ public class SettingPanel extends JPanel implements ActionListener{
         else if(e.getSource() == effectIncreaseVolumeButton && effectVolume != 100){
             effectVolume += 10;
             effectVolumeValue.setText((effectVolume)+"%");
-            GameFrame.effect.setVolume(effectVolume/2);
+            GameFrame.getEffect().setVolume(effectVolume/2);
         }
         else{
             if(e.getSource() == moveLeftButton){
                 settingKey = 1;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == moveRightButton){
                 settingKey = 2;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == rotateCWButton){
                 settingKey = 3;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == rotateCT_CWButton){
                 settingKey = 4;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == softDropButton){
                 settingKey = 5;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == hardDropButton){
                 settingKey = 6;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             else if(e.getSource() == holdButton){
                 settingKey = 7;
                 isSetting = true;
-                GameFrame.newKeyPanel.setVisible(true);
+                GameFrame.getAnyKeyPanel().setVisible(true);
             }
             disableButton();
         }

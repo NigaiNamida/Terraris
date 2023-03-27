@@ -14,11 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HighScorePanel extends JPanel implements ActionListener{
-    public static JLabel highScoreLabel;
-    public static JLabel score;
-    public static JLabel initial;
-    public static JTextField textField;
-    public static JButton okButton;
+    private static JLabel highScoreLabel;
+    private static JLabel score;
+    private static JLabel initial;
+    private static JTextField textField;
+    private static JButton okButton;
 
     public HighScorePanel(){
         highScoreLabel = new JLabel("NEW HIGH SCORE!");
@@ -70,6 +70,10 @@ public class HighScorePanel extends JPanel implements ActionListener{
         this.add(okButton);
     }
 
+    public static JLabel getScore() {
+      return score;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -78,8 +82,8 @@ public class HighScorePanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okButton){
-            int[] topScore = Leaderboard.topScore;
-            int score = ScorePanel.score;
+            int[] topScore = Leaderboard.getTopScore();
+            int score = ScorePanel.getScore();
             for (int i = 0; i< topScore.length; i++) {
                 if(score > topScore[i]){
                     Leaderboard.newRank(textField.getText(), score,i);
@@ -87,7 +91,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
                 }
             }
             this.setVisible(false);
-            GameFrame.gameOverPanel.setVisible(true);
+            GameFrame.getGameOverPanel().setVisible(true);
             Leaderboard.saveLeaderboard();
         }
 

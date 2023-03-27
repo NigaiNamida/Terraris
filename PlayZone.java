@@ -6,28 +6,37 @@ import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 
 public class PlayZone extends JPanel{
-    public HoldPanel holdPanel = GameFrame.holdPanel;
-    public NextPanel nextPanel = GameFrame.nextPanel;
-    public GoalPanel goalPanel = GameFrame.goalPanel;
-    public Gravity gravity;
-    public TetrisTexture texture;
-    private Color gridLineColor = new Color(36, 36, 36);
+    private HoldPanel holdPanel;
+    private NextPanel nextPanel;
+    private GoalPanel goalPanel;
+    private Gravity gravity;
+    private TetrisTexture texture;
+    private Color gridLineColor;
     private int gridCols;
     private int gridRows;
-    protected static int blockSize;
+    private static int blockSize;
     private static int lastAction;
 
-    private static boolean isUseHold = false;
-    protected boolean isGameOver = false;
+    private static boolean isUseHold;
+    private boolean isGameOver;
 
     private TetrisPiece block;
-    protected static ArrayList<String> blockQueue = new ArrayList<String>();
+    private static ArrayList<String> blockQueue = new ArrayList<String>();;
     
     private Color[][] background;
 
     private int[][] testSet;
 
     public PlayZone(){
+        isUseHold = false;
+        isGameOver = false;
+
+        holdPanel = GameFrame.getHoldPanel();
+        nextPanel = GameFrame.getNextPanel();
+        goalPanel = GameFrame.getGoalPanel();
+
+        gridLineColor = new Color(36, 36, 36);
+
         this.setOpaque(true);
         this.setBounds(275, 20, 250, 500);
         this.setBackground(Color.black);
@@ -43,9 +52,17 @@ public class PlayZone extends JPanel{
         gravity = new Gravity(this,1);
         createBlock();
         texture = new TetrisTexture(null,null);
-        GameThread.FPS = 60;
+        GameThread.setFPS(60);
     }
-    
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
+    }
+
     //check if tetris piece reach the bottom
     public boolean isBottom(){
         return block.getY() + block.getHeight() == gridRows;
@@ -94,35 +111,35 @@ public class PlayZone extends JPanel{
 
     public void lastTimerTrigger(){
         if (isBottom() || !canGo("Down")){
-            gravity.timer.stop();
-            gravity.lastTimer.start();
+            gravity.stopTimer();
+            gravity.startLastTimer();
         }
         else if(!isBottom() || canGo("Down")){
-            gravity.lastTimer.stop();
-            gravity.timer.restart();
+            gravity.stopLastTimer();
+            gravity.restartTimer();
         }
     }
 
     public void lastTimerReset(){
-        gravity.lastTimer.stop();
-        gravity.lastTimer.restart();
+        gravity.stopLastTimer();
+        gravity.restartLastTimer();
     }
 
     public void TowerSlide(){
         if(isBottom() || !canGo("Down")){
             if (lastAction <= 0){
                 int m = (lowestPoint()-block.getHeight()) - block.getY();
-                ScorePanel.score -= m;
+                ScorePanel.deductScore(m);
                 hardDrop();
                 repaint();
             }
-            gravity.timer.restart();
-            gravity.timer.stop();
-            gravity.lastTimer.start();
+            gravity.restartTimer();
+            gravity.stopTimer();
+            gravity.startLastTimer();
         }
         else if(!isBottom() || canGo("Down")){
-            gravity.lastTimer.stop();
-            gravity.timer.start();
+            gravity.stopLastTimer();;
+            gravity.startTimer();
         }
     }
 
@@ -133,7 +150,7 @@ public class PlayZone extends JPanel{
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0));
         block.spawnTetris(gridCols);
-        nextPanel.block = getNextPiece();
+        nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
         int x = block.getX();
         int y = block.getY();
@@ -150,43 +167,43 @@ public class PlayZone extends JPanel{
     
     public void gameOver(){
         boolean isHighScore = false;
-        gravity.timer.stop();
-        gravity.lastTimer.stop();
+        gravity.stopTimer();
+        gravity.stopLastTimer();;
         isGameOver = true;
-        GameFrame.isPlaying = false;
-        if(GameFrame.music != null){
+        GameFrame.setPlaying(false);
+        if(GameFrame.getMusic() != null){
             GameFrame.stopMusic();
         }
-        int[] topScore = Leaderboard.topScore;
-        int score = ScorePanel.score;
+        int[] topScore = Leaderboard.getTopScore();
+        int score = ScorePanel.getScore();
         for (int i = 0; i< topScore.length; i++) {
             if(score > topScore[i]){
                 isHighScore = true;
-                HighScorePanel.score.setText(String.format("%,d",score));
-                GameFrame.highScorePanel.setVisible(true);
+                HighScorePanel.getScore().setText(String.format("%,d",score));
+                GameFrame.getHighScorePanel().setVisible(true);
                 break;
             }
         }
         if(!isHighScore){
-            GameFrame.gameOverPanel.setVisible(true);
+            GameFrame.getGameOverPanel().setVisible(true);
         }
     }
 
     //hold the current playing Tetris piece
     public void holdBlock(){
         if(!isUseHold){
-            if(holdPanel.block == null){
-                holdPanel.block = TetrisPiece.getBlock(block.getName());
-                nextPanel.block = getNextPiece();
-                holdPanel.block.spawnTetris(gridCols);
+            if(holdPanel.getBlock() == null){
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName()));
+                nextPanel.setBlock(getNextPiece()); 
+                holdPanel.getBlock().spawnTetris(gridCols);
                 createBlock();
             }
             else{
                 TetrisPiece temp;
-                temp = holdPanel.block;
-                holdPanel.block = TetrisPiece.getBlock(block.getName());
+                temp = holdPanel.getBlock();
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName()));
                 block = temp;
-                holdPanel.block.spawnTetris(gridCols);
+                holdPanel.getBlock().spawnTetris(gridCols);
             }
             isUseHold = true;
             nextPanel.repaint();
@@ -470,12 +487,12 @@ public class PlayZone extends JPanel{
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         repaint();
         nextPanel.repaint();
-        nextPanel.block = getNextPiece();
+        nextPanel.setBlock(getNextPiece());
         updateBackGround();
         GameFrame.playSE(2);
         checkFullLine();
         createBlock();
-        gravity.timer.restart();
+        gravity.restartTimer();
         repaint();  
     }
 
@@ -528,7 +545,7 @@ public class PlayZone extends JPanel{
         }
         else{//reach the end (bottom or hit block)
             nextPanel.repaint();
-            nextPanel.block = getNextPiece();
+            nextPanel.setBlock(getNextPiece());
             updateBackGround();
             GameFrame.playSE(2);
             checkFullLine();
@@ -569,12 +586,12 @@ public class PlayZone extends JPanel{
             }
             if(isFullRow){
                 fullLineAmount++;
-                GoalPanel.goal++;
-                GoalPanel.goalScore.setText(""+GoalPanel.goal);
-                if(GoalPanel.goal % 10 == 0){
-                    LevelPanel.level++;
-                    LevelPanel.levelScore.setText(""+LevelPanel.level);
-                    gravity.increaseFallSpeed(LevelPanel.level);
+                GoalPanel.addGoal();
+                GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
+                if(GoalPanel.getGoal() % 10 == 0){
+                    LevelPanel.addLevel();
+                    LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
+                    gravity.increaseFallSpeed(LevelPanel.getLevel());
                 }
                 shiftRow(row);//bottom row to shift
             }

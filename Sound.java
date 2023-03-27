@@ -7,10 +7,10 @@ import javax.sound.sampled.FloatControl;
 
 
 public class Sound {
-    long pauseTime;
-    Clip clip;
-    URL[] soundURL = new URL[10];
-    FloatControl gainControl;
+    private long pauseTime;
+    private Clip clip;
+    private URL[] soundURL = new URL[10];
+    private FloatControl gainControl;
 
     public Sound(){
         soundURL[0] = getClass().getResource("Assets/Sound/BGM_Prangles.wav");//bgm
@@ -75,5 +75,9 @@ public class Sound {
     public void resumeSound(){
         clip.setMicrosecondPosition(pauseTime);
         clip.start();
+    }
+
+    public Clip getClip() {
+        return clip;
     }
 }

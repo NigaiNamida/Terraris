@@ -10,12 +10,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PausePanel extends JPanel implements ActionListener{
-    public static JLabel pauseLabel = new JLabel("PAUSE");
-    public static JButton resumeButton = new JButton("RESUME");
-    public static JButton settingButton = new JButton("SETTING");
-    public static JButton exitButton = new JButton("EXIT TO MENU");
+    private static JLabel pauseLabel;
+    private static JButton resumeButton;
+    private static JButton settingButton;
+    private static JButton exitButton;
 
     public PausePanel(){
+        pauseLabel = new JLabel("PAUSE");
+        resumeButton = new JButton("RESUME");
+        settingButton = new JButton("SETTING");
+        exitButton = new JButton("EXIT TO MENU");
+
         this.setOpaque(true);
         this.setBounds(275, 120, 250, 300);
         this.setBackground(Color.BLACK);
@@ -70,7 +75,7 @@ public class PausePanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == resumeButton){
             GameFrame.continueGame();
-            KeyHandler.isPause = false;
+            KeyHandler.setPause(false);
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
@@ -78,11 +83,11 @@ public class PausePanel extends JPanel implements ActionListener{
             SettingPanel.settingKey = -1;
             SettingPanel.isSetting = false;
             SettingPanel.enableButton();
-            GameFrame.settingPanel.setVisible(true);
+            GameFrame.getSettingPanel().setVisible(true);
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
-            Tetris.gameFrame.backToMenu();
+            Tetris.getGameFrame().backToMenu();
         }
     }
 }

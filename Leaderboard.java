@@ -9,14 +9,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Leaderboard extends JPanel{
-    public static JLabel leaderboardLabel = new JLabel("LEADERBOARD");
-    public static int[] topScore = new int[5];
-    public static String[] topName = new String[5];
-    public static JLabel[] scoreBoard = new JLabel[5];
-    public static Font font = new Font("Futura",Font.PLAIN,20);
-    public static String leaderboardFile = "leaderboard.txt";
+    private static JLabel leaderboardLabel;
+    private static int[] topScore;
+    private static String[] topName;
+    private static JLabel[] scoreBoard;
+    private static Font font;
+    private static String leaderboardFile;
     
     public Leaderboard(){
+        leaderboardLabel = new JLabel("LEADERBOARD");
+        topScore = new int[5];
+        topName = new String[5];
+        scoreBoard = new JLabel[5];
+        leaderboardFile = "leaderboard.txt";
+
+        font = new Font("Futura",Font.PLAIN,20);
         this.setOpaque(true);
         this.setBounds(150, 70, 500, 400);
         this.setBackground(Color.BLACK);
@@ -46,6 +53,18 @@ public class Leaderboard extends JPanel{
                 this.add(scoreBoard[i]);
             }
         }
+    }
+
+    public static String[] getTopName() {
+        return topName;
+    }
+
+    public static int[] getTopScore() {
+        return topScore;
+    }
+
+    public static String getLeaderboardFile() {
+        return leaderboardFile;
     }
 
     public static void newRank(String name,int score,int replaceRank){

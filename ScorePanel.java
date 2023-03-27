@@ -6,12 +6,14 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class ScorePanel extends JPanel{
-    public static int score = 0;
-    public static JLabel scoreLabel = new JLabel("SCORE", SwingConstants.CENTER);
-    public static JLabel scorePoint = new JLabel(String.format("%,d",score), SwingConstants.CENTER);
+    private static int score;
+    private static JLabel scoreLabel;
+    private static JLabel scorePoint;
 
     public ScorePanel(){
         score = 0;
+        scoreLabel = new JLabel("SCORE", SwingConstants.CENTER);
+        scorePoint = new JLabel(String.format("%,d",score), SwingConstants.CENTER);
         //setting panel
         this.setBounds(545, 340, 200, 100);
         this.setBackground(Color.black);
@@ -27,6 +29,14 @@ public class ScorePanel extends JPanel{
         scoreLabel.setFont(new Font("Futura",Font.BOLD,20));
         scorePoint.setFont(new Font("Futura",Font.BOLD,25));
         scorePoint.setText(String.format("%,d",score));
+    }
+
+    public static int getScore() {
+        return score;
+    }
+
+    public static void deductScore(int point){
+        score -= point;
     }
 
     public static void addFullLineScore(int fullLineAmount){
@@ -45,7 +55,7 @@ public class ScorePanel extends JPanel{
                 point = 800;
                 break;
         }
-        score += LevelPanel.level * point;
+        score += LevelPanel.getLevel() * point;
         scorePoint.setText(String.format("%,d",score));
     }
 

@@ -14,14 +14,18 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Menu extends JPanel implements ActionListener{
-    BufferedImage myPicture;
-    public static JLabel title = new JLabel("Teraris");
-    public static JButton startButton = new JButton("Start Game");
-    public static JButton leaderboardButton = new JButton("Leaderboard");
-    public static JButton settingButton = new JButton("Setting");
-    public static JButton exitButton = new JButton("Exit");
-    public static JLabel LogoLabel;
+    private static BufferedImage myPicture;
+    private static JButton startButton;
+    private static JButton leaderboardButton;
+    private static JButton settingButton;
+    private static JButton exitButton;
+    private static JLabel LogoLabel;
     Menu(){
+        startButton = new JButton("Start Game");
+        leaderboardButton = new JButton("Leaderboard");
+        settingButton = new JButton("Setting");
+        exitButton = new JButton("Exit");
+
         this.setVisible(true);
         this.setBounds(140, 20, 520, 520);
         this.setBackground(Color.black);
@@ -83,11 +87,11 @@ public class Menu extends JPanel implements ActionListener{
         }
         else if(e.getSource() == leaderboardButton){
             this.setVisible(false);
-            GameFrame.leaderboard.setVisible(true);
+            GameFrame.getLeaderboard().setVisible(true);
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
-            GameFrame.settingPanel.setVisible(true);
+            GameFrame.getSettingPanel().setVisible(true);
             SettingPanel.newKey = -1;
             SettingPanel.settingKey = -1;
             SettingPanel.isSetting = false;

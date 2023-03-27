@@ -6,21 +6,16 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class NextPanel extends JPanel{
-
-    public static JLabel nextLabel = new JLabel();
-    public static PlayZone pZone = GameFrame.pZone;
-    public TetrisTexture texture;
-
+    private JLabel nextLabel;
     private int gridCols;
     private int gridRows;
 
     private int blockSize;
 
-    protected TetrisPiece block;
+    private TetrisPiece block;
 
     public NextPanel(){
-
-        nextLabel.setText("NEXT");
+        nextLabel = new JLabel("NEXT");
         nextLabel.setForeground(new Color(193,221,196,255));
         nextLabel.setFont(new Font("Futura",Font.BOLD,20));
 
@@ -38,6 +33,14 @@ public class NextPanel extends JPanel{
         blockSize = this.getWidth()/ gridCols;
         gridRows = this.getHeight() / blockSize;
 
+    }
+
+    public TetrisPiece getBlock() {
+        return block;
+    }
+
+    public void setBlock(TetrisPiece block) {
+        this.block = block;
     }
 
     @Override

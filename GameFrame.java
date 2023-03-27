@@ -86,7 +86,7 @@ public class GameFrame extends JFrame{
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
 
-        ImageIcon icon = new ImageIcon("Assets/Image/Tetris.png");
+        ImageIcon icon = new ImageIcon("Assets/Image/Terraris.png");
         this.setIconImage(icon.getImage());
         
         this.add(menu);

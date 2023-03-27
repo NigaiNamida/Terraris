@@ -10,7 +10,6 @@ public class PlayZone extends JPanel{
     private NextPanel nextPanel;
     private GoalPanel goalPanel;
     private Gravity gravity;
-    private TetrisTexture texture;
     private Color gridLineColor;
     private int gridCols;
     private int gridRows;
@@ -51,7 +50,6 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueBlock(blockQueue,true);
         gravity = new Gravity(this,1);
         createBlock();
-        texture = new TetrisTexture(null,null);
         GameThread.setFPS(60);
     }
 
@@ -621,7 +619,7 @@ public class PlayZone extends JPanel{
         super.paintComponent(g);//not have = no panel bg color
         drawGridLine(g);
         drawPhantomBlock(g);
-        drawBlock(g);
+        drawColorBlock(g);
         drawPile(g);
     }
 
@@ -693,7 +691,7 @@ public class PlayZone extends JPanel{
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset
                         middle = blockCordinate[row][col];
-                        texture.pileTexture(g,middle,x,y,goalPanel,sideCheck); 
+                        TetrisTexture.mergePileTexture(g,middle,x,y,goalPanel,sideCheck); 
                         sideCheck = new boolean[3][3];
                     }               
                 }
@@ -703,7 +701,7 @@ public class PlayZone extends JPanel{
     }
 
     //paint current playing Tetris piece
-    private void drawBlock(Graphics g){
+    private void drawColorBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
         Color color = block.getColor();
@@ -718,7 +716,7 @@ public class PlayZone extends JPanel{
                 }
             }
         }
-        texture.blockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize,goalPanel);
+        TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
     }
 
     //paint predicted phantom piece of current playing Tetris piece

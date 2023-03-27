@@ -1,130 +1,36 @@
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
-public class TetrisTexture {
-    private Image blockImage;
-    private Image pileImage;
-
-    public TetrisTexture(Image blockImage, Image pileImage){
-        this.blockImage = blockImage;
-        this.pileImage = pileImage;
-    }
-     
-    public Image getblockImage(){
-        return blockImage;
-    }
-
-    public Image getpileImage(){
-        return pileImage;
-    }
-
-    public void blockTexture(Graphics g, String Name, int Variant, int x, int y, GoalPanel goalPanel){
-        switch (Name) {
-            case "O":
-                blockImage = new ImageIcon("Assets/Image/O/Full_Block.png").getImage();
-                g.drawImage(blockImage ,x, y, goalPanel);
-                break;
-            case "I":
-                switch (Variant % 2) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/I/Horizontal.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/I/Vertical.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                }
-                break;
-            case "T":
-                switch (Variant) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/T/Horizontal_Up.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/T/Vertical_Right.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 2:
-                        blockImage = new ImageIcon("Assets/Image/T/Horizontal_Down.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 3:
-                        blockImage = new ImageIcon("Assets/Image/T/Vertical_Left.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                }
-                break;
-            case "L":
-                switch (Variant) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/L/Horizontal_Up.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/L/Vertical_Right.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 2:
-                        blockImage = new ImageIcon("Assets/Image/L/Horizontal_Down.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 3:
-                        blockImage = new ImageIcon("Assets/Image/L/Vertical_Left.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                }
-                break;
-            case "J":
-                switch (Variant) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/J/Horizontal_Up.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/J/Vertical_Right.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 2:
-                        blockImage = new ImageIcon("Assets/Image/J/Horizontal_Down.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 3:
-                        blockImage = new ImageIcon("Assets/Image/J/Vertical_Left.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                }
-                break;
-            case "S":
-                switch (Variant % 2) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/S/Horizontal.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/S/Vertical.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                }
-                break;
-            case "Z":
-                switch (Variant % 2) {
-                    case 0:
-                        blockImage = new ImageIcon("Assets/Image/Z/Horizontal.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-                    case 1:
-                        blockImage = new ImageIcon("Assets/Image/Z/Vertical.png").getImage();
-                        g.drawImage(blockImage ,x, y, goalPanel);
-                        break;
-            }
-            break;           
-        } 
+public class TetrisTexture extends JPanel{
+    private static String path = "Assets/Image/";
+    private static Image blockImage;
+    private static Image pileImage;
+    
+    public static void drawBlockTexture(Graphics g, String name, int variant, int x, int y){
+        String imagePath = null;
+        if(name == "O")
+            imagePath = path+name+"/Full_Block.png";
+        else if(name == "I" || name == "S" || name == "Z")
+            if(variant % 2 == 0)
+                imagePath = path+name+"/Horizontal.png";
+            else
+                imagePath = path+name+"/Vertical.png";
+        else if(name == "T" || name == "L" || name == "J")
+            if(variant == 0)
+                imagePath = path+name+"/Horizontal_Up.png";
+            else if(variant == 1)
+                imagePath = path+name+"/Vertical_Right.png";
+            else if(variant == 2)
+                imagePath = path+name+"/Horizontal_Down.png";
+            else
+                imagePath = path+name+"/Vertical_Left.png";
+        blockImage = new ImageIcon(imagePath).getImage();
+        g.drawImage(blockImage ,x, y, null); 
     }
 
-    public void pileTexture(Graphics g, String middle, int x, int y, GoalPanel goalPanel,boolean[][] sideCheck){
+    public static void mergePileTexture(Graphics g, String middle, int x, int y, GoalPanel goalPanel,boolean[][] sideCheck){
         boolean painted = false;
         boolean Top = sideCheck [0][1];
         boolean Left = sideCheck [1][0];

@@ -164,7 +164,7 @@ public class KeyHandler implements KeyListener{
                 }
             }
             if(!isPause){
-                if(code == SettingPanel.moveRightKey){
+                if(code == SettingPanel.getKeyBind("Right")){
                     isRightPressed = true;
                     if(!isRightFirst && !isLeftFirst){
                         isRightFirst = true;
@@ -173,7 +173,7 @@ public class KeyHandler implements KeyListener{
                         isRightFirst = !isLeftFirst;
                     }
                 }
-                else if(code == SettingPanel.moveLeftKey){
+                else if(code == SettingPanel.getKeyBind("Left")){
                     isLeftPressed = true;
                     if(!isRightFirst && !isLeftFirst){
                         isLeftFirst = true;
@@ -182,19 +182,19 @@ public class KeyHandler implements KeyListener{
                         isLeftFirst = !isRightFirst;
                     }
                 }
-                else if(code == SettingPanel.softDropKey){
+                else if(code == SettingPanel.getKeyBind("SoftDrop")){
                     isSoftDropPressed = true;
                 }
-                else if(code == SettingPanel.rotateCWKey || code == 88){
+                else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
                     isRotateCWPressed = true;
                 }
-                else if(code ==  SettingPanel.rotateCT_CWKey || code == 17){
+                else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
                     isRotateCT_CWPressed = true;
                 }
-                else if(code ==  SettingPanel.hardDropKey){
+                else if(code ==  SettingPanel.getKeyBind("HardDrop")){
                     isHardDropPressed = true;
                 }
-                else if(code ==  SettingPanel.holdKey || code == 16){
+                else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
                     isHoldPressed = true;
                 }
             }
@@ -208,32 +208,32 @@ public class KeyHandler implements KeyListener{
             if(code == 27 || code == 112){
                 isHoldingPause = false;
             }
-            else if(code == SettingPanel.moveRightKey){
+            else if(code == SettingPanel.getKeyBind("Right")){
                 isRightPressed = false;
                 isRightFirst = false;
                 GameThread.resetRightHoldingTime();
             }
-            else if(code == SettingPanel.moveLeftKey){
+            else if(code == SettingPanel.getKeyBind("Left")){
                 isLeftPressed = false;
                 isLeftFirst = false;
                 GameThread.resetLeftHoldingTime();
             }
-            else if(code == SettingPanel.softDropKey){
+            else if(code == SettingPanel.getKeyBind("SoftDrop")){
                 isSoftDropPressed = false;
             }
-            else if(code == SettingPanel.rotateCWKey || code == 88){
+            else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
                 isRotateCWPressed = false;
                 isHoldingCWRotate = false;
             }
-            else if(code ==  SettingPanel.rotateCT_CWKey || code == 17){
+            else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
                 isRotateCT_CWPressed = false;
                 isHoldingCT_CWRotate = false;
             }
-            else if(code ==  SettingPanel.hardDropKey){
+            else if(code ==  SettingPanel.getKeyBind("HardDrop")){
                 isHardDropPressed = false;
                 isHoldingHardDrop = false;
             }
-            else if(code ==  SettingPanel.holdKey || code == 16){
+            else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
                 isHoldPressed = false;
             }
         }

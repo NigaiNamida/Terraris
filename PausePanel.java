@@ -80,7 +80,7 @@ public class PausePanel extends JPanel implements ActionListener{
         else if(e.getSource() == settingButton){
             this.setVisible(false);
             SettingPanel.newKey = -1;
-            SettingPanel.settingKey = -1;
+            SettingPanel.settingKey = null;
             SettingPanel.isSetting = false;
             SettingPanel.enableButton();
             GameFrame.getSettingPanel().setVisible(true);

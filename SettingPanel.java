@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -9,50 +10,62 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class SettingPanel extends JPanel implements ActionListener{
-    public static String settingFile = "setting";
-    public static int moveRightKey = 39;//Right
-    public static int moveLeftKey = 37;//Left
-    public static int holdKey = 67;//C
-    public static int softDropKey = 40;//down
-    public static int hardDropKey = 32;//space
-    public static int rotateCWKey = 38;//up
-    public static int rotateCT_CWKey = 90;//Z
+    public static String settingFile;
+    public static HashMap<String,Integer> keyBind;
+    public static HashMap<String,JLabel> settingLabel;
+    public static HashMap<String,JButton> settingButton;
+
     public static boolean isSetting;
-    public static int settingKey;
+    public static String settingKey;
     public static int newKey;
 
-    public static int musicVolume = 40;
-    public static int effectVolume = 50;
-
-    public static JLabel settingLabel = new JLabel("SETTING");
-    public static JLabel musicVolumeLabel = new JLabel("MUSIC VOLUME");
-    public static JLabel musicVolumeValue = new JLabel(musicVolume+"%");
-    public static JButton musicDecreaseVolumeButton = new JButton("-");
-    public static JButton musicIncreaseVolumeButton = new JButton("+");
-    public static JLabel effectVolumeLabel = new JLabel("SOUND FX VOLUME");
-    public static JLabel effectVolumeValue = new JLabel(effectVolume+"%");
-    public static JButton effectDecreaseVolumeButton = new JButton("-");
-    public static JButton effectIncreaseVolumeButton = new JButton("+");
-
-    public static JLabel moveRightLabel = new JLabel("Move Right");
-    public static JButton moveRightButton = new JButton();
-    public static JLabel moveLeftLabel = new JLabel("Move Left");
-    public static JButton moveLeftButton = new JButton();
-    public static JLabel rotateCWLabel = new JLabel("Rotate Clockwise");
-    public static JButton rotateCWButton = new JButton();
-    public static JLabel rotateCT_CWLabel = new JLabel("Rotate Counter-Clockwise");
-    public static JButton rotateCT_CWButton = new JButton();
-    public static JLabel softDropLabel = new JLabel("Soft Drop");
-    public static JButton softDropButton = new JButton();
-    public static JLabel hardDropLabel = new JLabel("Hard Drop");
-    public static JButton hardDropButton = new JButton();
-    public static JLabel holdLabel = new JLabel("Hold");
-    public static JButton holdButton = new JButton();
+    public static int musicVolume;
+    public static int effectVolume;
 
     public Font font = new Font("Futura",Font.PLAIN,20);
     public SettingPanel(){
+
+        keyBind = new HashMap<String,Integer>();
+        settingLabel = new HashMap<String,JLabel>();
+        settingButton = new HashMap<String,JButton>();
+        musicVolume = 40;
+        effectVolume = 50;
+        settingFile = "setting";
         isSetting = false;
-        settingKey = -1;
+        settingKey = null;
+
+        keyBind.put("Right", 39);
+        keyBind.put("Left", 37);
+        keyBind.put("Hold", 67);
+        keyBind.put("SoftDrop", 40);
+        keyBind.put("HardDrop", 32);
+        keyBind.put("RotateCW", 38);
+        keyBind.put("RotateCT_CW", 90);
+
+        settingLabel.put("Title", new JLabel("SETTING"));
+        settingLabel.put("MusicLabel", new JLabel("MUSIC VOLUME"));
+        settingLabel.put("MusicVolume", new JLabel(musicVolume+"%"));
+        settingLabel.put("FXLabel", new JLabel("SOUND FX VOLUME"));
+        settingLabel.put("FXVolume", new JLabel(effectVolume+"%"));
+        settingLabel.put("Right", new JLabel("Move Right"));
+        settingLabel.put("Left", new JLabel("Move Left"));
+        settingLabel.put("RotateCW", new JLabel("Rotate Clockwise"));
+        settingLabel.put("RotateCT_CW", new JLabel("Rotate Counter-Clockwise"));
+        settingLabel.put("SoftDrop", new JLabel("Soft Drop"));
+        settingLabel.put("HardDrop", new JLabel("Hard Drop"));
+        settingLabel.put("Hold", new JLabel("Hold"));
+
+        settingButton.put("MusicVolumeDecrease", new JButton("-"));
+        settingButton.put("MusicVolumeIncrease", new JButton("+"));
+        settingButton.put("FXVolumeDecrease", new JButton("-"));
+        settingButton.put("FXVolumeIncrease", new JButton("+"));
+        settingButton.put("Right", new JButton("Move Right"));
+        settingButton.put("Left", new JButton("Move Left"));
+        settingButton.put("RotateCW", new JButton("Rotate Clockwise"));
+        settingButton.put("RotateCT_CW", new JButton("Rotate Counter-Clockwise"));
+        settingButton.put("SoftDrop", new JButton("Soft Drop"));
+        settingButton.put("HardDrop", new JButton("Hard Drop"));
+        settingButton.put("Hold", new JButton("Hold"));
 
         this.setOpaque(true);
         this.setBounds(100, 5, 600, 550);
@@ -60,188 +73,55 @@ public class SettingPanel extends JPanel implements ActionListener{
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setLayout(null);
 
-        settingLabel.setForeground(new Color(193,221,196,255));
-        settingLabel.setFont(new Font("Futura",Font.BOLD,40));
-        settingLabel.setBounds(200, 30, 200, 40);
-        settingLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        musicVolumeLabel.setForeground(new Color(193,221,196,255));
-        musicVolumeLabel.setFont(font);
-        musicVolumeLabel.setBounds(50, 95, 200, 25);
-        musicVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        musicDecreaseVolumeButton.setForeground(new Color(193,221,196,255));
-        musicDecreaseVolumeButton.setFont(font);
-        musicDecreaseVolumeButton.setBounds(293, 95, 60, 25);
-        musicDecreaseVolumeButton.setHorizontalAlignment(JLabel.CENTER);
-        musicDecreaseVolumeButton.setFocusable(false);
-        musicDecreaseVolumeButton.setBackground(Color.gray);
-        musicDecreaseVolumeButton.addActionListener(this);
-
-        musicVolumeValue.setForeground(new Color(193,221,196,255));
-        musicVolumeValue.setFont(font);
-        musicVolumeValue.setBounds(395, 95, 60, 25);
-        musicVolumeValue.setHorizontalAlignment(JLabel.CENTER);
-
-        musicIncreaseVolumeButton.setForeground(new Color(193,221,196,255));
-        musicIncreaseVolumeButton.setFont(font);
-        musicIncreaseVolumeButton.setBounds(497, 95, 60, 25);
-        musicIncreaseVolumeButton.setHorizontalAlignment(JLabel.CENTER);
-        musicIncreaseVolumeButton.setFocusable(false);
-        musicIncreaseVolumeButton.setBackground(Color.gray);
-        musicIncreaseVolumeButton.addActionListener(this);
-        //-----------------------------------------------------------
-        effectVolumeLabel.setForeground(new Color(193,221,196,255));
-        effectVolumeLabel.setFont(font);
-        effectVolumeLabel.setBounds(50, 145, 200, 25);
-        effectVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        effectDecreaseVolumeButton.setForeground(new Color(193,221,196,255));
-        effectDecreaseVolumeButton.setFont(font);
-        effectDecreaseVolumeButton.setBounds(293, 145, 60, 25);
-        effectDecreaseVolumeButton.setHorizontalAlignment(JLabel.CENTER);
-        effectDecreaseVolumeButton.setFocusable(false);
-        effectDecreaseVolumeButton.setBackground(Color.gray);
-        effectDecreaseVolumeButton.addActionListener(this);
-
-        effectVolumeValue.setForeground(new Color(193,221,196,255));
-        effectVolumeValue.setFont(font);
-        effectVolumeValue.setBounds(395, 145, 60, 25);
-        effectVolumeValue.setHorizontalAlignment(JLabel.CENTER);
 
 
-        effectIncreaseVolumeButton.setForeground(new Color(193,221,196,255));
-        effectIncreaseVolumeButton.setFont(font);
-        effectIncreaseVolumeButton.setBounds(497, 145, 60, 25);
-        effectIncreaseVolumeButton.setHorizontalAlignment(JLabel.CENTER);
-        effectIncreaseVolumeButton.setFocusable(false);
-        effectIncreaseVolumeButton.setBackground(Color.gray);
-        effectIncreaseVolumeButton.addActionListener(this);
-        //----------------------------------------------------
-        moveRightLabel.setForeground(new Color(193,221,196,255));
-        moveRightLabel.setFont(font);
-        moveRightLabel.setBounds(50, 195, 200, 25);
-        moveRightLabel.setHorizontalAlignment(JLabel.CENTER);
+        for (var labelName : settingLabel.keySet()) {
+            JLabel label = settingLabel.get(labelName);
+            label.setForeground(new Color(193,221,196,255));
+            label.setHorizontalAlignment(JLabel.CENTER);
+            this.add(label);
+        }
 
-        moveRightButton.setText(showName(moveRightKey));
-        moveRightButton.setForeground(new Color(193,221,196,255));
-        moveRightButton.setFont(font);
-        moveRightButton.setBounds(350, 195, 150, 25);
-        moveRightButton.setHorizontalAlignment(JLabel.CENTER);
-        moveRightButton.setFocusable(false);
-        moveRightButton.setBackground(Color.gray);
-        moveRightButton.addActionListener(this);
-        //---------------------------------------
-        moveLeftLabel.setForeground(new Color(193,221,196,255));
-        moveLeftLabel.setFont(font);
-        moveLeftLabel.setBounds(50, 245, 200, 25);
-        moveLeftLabel.setHorizontalAlignment(JLabel.CENTER);
+        settingLabel.get("Title").setFont(new Font("Futura",Font.BOLD,40));
 
-        moveLeftButton.setText(showName(moveLeftKey));
-        moveLeftButton.setForeground(new Color(193,221,196,255));
-        moveLeftButton.setFont(font);
-        moveLeftButton.setBounds(350, 245, 150, 25);
-        moveLeftButton.setHorizontalAlignment(JLabel.CENTER);
-        moveLeftButton.setFocusable(false);
-        moveLeftButton.setBackground(Color.gray);
-        moveLeftButton.addActionListener(this);
-        //---------------------------------------
-        rotateCWLabel.setForeground(new Color(193,221,196,255));
-        rotateCWLabel.setFont(font);
-        rotateCWLabel.setBounds(50, 295, 200, 25);
-        rotateCWLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        rotateCWButton.setText(showName(rotateCWKey));
-        rotateCWButton.setForeground(new Color(193,221,196,255));
-        rotateCWButton.setFont(font);
-        rotateCWButton.setBounds(350, 295, 150, 25);
-        rotateCWButton.setHorizontalAlignment(JLabel.CENTER);
-        rotateCWButton.setFocusable(false);
-        rotateCWButton.setBackground(Color.gray);
-        rotateCWButton.addActionListener(this);
-        //---------------------------------------
-        rotateCT_CWLabel.setForeground(new Color(193,221,196,255));
-        rotateCT_CWLabel.setFont(font);
-        rotateCT_CWLabel.setBounds(25, 345,250, 25);
-        rotateCT_CWLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        rotateCT_CWButton.setText(showName(rotateCT_CWKey));
-        rotateCT_CWButton.setForeground(new Color(193,221,196,255));
-        rotateCT_CWButton.setFont(font);
-        rotateCT_CWButton.setBounds(350, 345, 150, 25);
-        rotateCT_CWButton.setHorizontalAlignment(JLabel.CENTER);
-        rotateCT_CWButton.setFocusable(false);
-        rotateCT_CWButton.setBackground(Color.gray);
-        rotateCT_CWButton.addActionListener(this);
-        //---------------------------------------
-        softDropLabel.setForeground(new Color(193,221,196,255));
-        softDropLabel.setFont(font);
-        softDropLabel.setBounds(50, 395, 200, 25);
-        softDropLabel.setHorizontalAlignment(JLabel.CENTER);
-
-
-        softDropButton.setText(showName(softDropKey));
-        softDropButton.setForeground(new Color(193,221,196,255));
-        softDropButton.setFont(font);
-        softDropButton.setBounds(350, 395, 150, 25);
-        softDropButton.setHorizontalAlignment(JLabel.CENTER);
-        softDropButton.setFocusable(false);
-        softDropButton.setBackground(Color.gray);
-        softDropButton.addActionListener(this);
-        //---------------------------------------
-        hardDropLabel.setForeground(new Color(193,221,196,255));
-        hardDropLabel.setFont(font);
-        hardDropLabel.setBounds(50, 445, 200, 25);
-        hardDropLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        hardDropButton.setText(showName(hardDropKey));
-        hardDropButton.setForeground(new Color(193,221,196,255));
-        hardDropButton.setFont(font);
-        hardDropButton.setBounds(350, 445, 150, 25);
-        hardDropButton.setHorizontalAlignment(JLabel.CENTER);
-        hardDropButton.setFocusable(false);
-        hardDropButton.setBackground(Color.gray);
-        hardDropButton.addActionListener(this);
-        //---------------------------------------
-        holdLabel.setForeground(new Color(193,221,196,255));
-        holdLabel.setFont(font);
-        holdLabel.setBounds(50, 495, 200, 25);
-        holdLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        holdButton.setText(showName(holdKey));
-        holdButton.setForeground(new Color(193,221,196,255));
-        holdButton.setFont(font);
-        holdButton.setBounds(350, 495, 150, 25);
-        holdButton.setHorizontalAlignment(JLabel.CENTER);
-        holdButton.setFocusable(false);
-        holdButton.setBackground(Color.gray);
-        holdButton.addActionListener(this);
-        //---------------------------------------
-
-        this.add(settingLabel);
-        this.add(musicVolumeLabel);
-        this.add(musicVolumeValue);
-        this.add(musicIncreaseVolumeButton);
-        this.add(musicDecreaseVolumeButton);
-        this.add(effectVolumeLabel);
-        this.add(effectVolumeValue);
-        this.add(effectIncreaseVolumeButton);
-        this.add(effectDecreaseVolumeButton);
-
-        this.add(moveRightLabel);
-        this.add(moveRightButton);
-        this.add(moveLeftLabel);
-        this.add(moveLeftButton);
-        this.add(rotateCWLabel);
-        this.add(rotateCWButton);
-        this.add(rotateCT_CWLabel);
-        this.add(rotateCT_CWButton);
-        this.add(softDropLabel);
-        this.add(softDropButton);
-        this.add(hardDropLabel);
-        this.add(hardDropButton);
-        this.add(holdLabel);
-        this.add(holdButton);
+        for (var buttonName : settingButton.keySet()) {
+            JButton button = settingButton.get(buttonName);
+            if(buttonName != "MusicVolumeDecrease" && buttonName != "MusicVolumeIncrease" 
+            && buttonName != "FXVolumeDecrease" && buttonName != "FXVolumeIncrease"){
+                button.setText(showName(keyBind.get(buttonName)));
+            }
+            button.setForeground(new Color(193,221,196,255));
+            button.setFont(font);
+            button.setHorizontalAlignment(JLabel.CENTER);
+            button.setFocusable(false);
+            button.setBackground(Color.gray);
+            button.addActionListener(this);
+            this.add(button);
+        }
+        settingLabel.get("Title").setBounds(200, 30, 200, 40);
+        settingLabel.get("MusicLabel").setBounds(50, 95, 200, 25);
+        settingLabel.get("MusicVolume").setBounds(395, 95, 60, 25);
+        settingLabel.get("FXLabel").setBounds(50, 145, 200, 25);
+        settingLabel.get("FXVolume").setBounds(395, 145, 60, 25);
+        settingLabel.get("Right").setBounds(50, 195, 200, 25);
+        settingLabel.get("Left").setBounds(50, 245, 200, 25);
+        settingLabel.get("RotateCW").setBounds(50, 295, 200, 25);
+        settingLabel.get("RotateCT_CW").setBounds(25, 345,250, 25);
+        settingLabel.get("SoftDrop").setBounds(50, 395, 200, 25);
+        settingLabel.get("HardDrop").setBounds(50, 445, 200, 25);
+        settingLabel.get("Hold").setBounds(50, 495, 200, 25);
+        
+        settingButton.get("MusicVolumeDecrease").setBounds(293, 95, 60, 25);
+        settingButton.get("MusicVolumeIncrease").setBounds(497, 95, 60, 25);
+        settingButton.get("FXVolumeDecrease").setBounds(293, 145, 60, 25);
+        settingButton.get("FXVolumeIncrease").setBounds(497, 145, 60, 25);
+        settingButton.get("Right").setBounds(350, 195, 150, 25);
+        settingButton.get("Left").setBounds(350, 245, 150, 25);
+        settingButton.get("RotateCW").setBounds(350, 295, 150, 25);
+        settingButton.get("RotateCT_CW").setBounds(350, 345, 150, 25);
+        settingButton.get("SoftDrop").setBounds(350, 395, 150, 25);
+        settingButton.get("HardDrop").setBounds(350, 445, 150, 25);
+        settingButton.get("Hold").setBounds(350, 495, 150, 25);
     }
 
     @Override
@@ -250,130 +130,61 @@ public class SettingPanel extends JPanel implements ActionListener{
     }
 
     public static void disableButton(){
-        musicDecreaseVolumeButton.setEnabled(false);
-        musicIncreaseVolumeButton.setEnabled(false);
-        effectDecreaseVolumeButton.setEnabled(false);
-        effectIncreaseVolumeButton.setEnabled(false);
-        moveLeftButton.setEnabled(false);
-        moveRightButton.setEnabled(false);
-        rotateCWButton.setEnabled(false);
-        rotateCT_CWButton.setEnabled(false);
-        softDropButton.setEnabled(false);
-        hardDropButton.setEnabled(false);
-        holdButton.setEnabled(false);
+        for (var buttonName : settingButton.keySet()) {
+            JButton button = settingButton.get(buttonName);
+            button.setEnabled(false);
+        }
     }
 
     public static void enableButton(){
-        musicDecreaseVolumeButton.setEnabled(true);
-        musicIncreaseVolumeButton.setEnabled(true);
-        effectDecreaseVolumeButton.setEnabled(true);
-        effectIncreaseVolumeButton.setEnabled(true);
-        moveLeftButton.setEnabled(true);
-        moveRightButton.setEnabled(true);
-        rotateCWButton.setEnabled(true);
-        rotateCT_CWButton.setEnabled(true);
-        softDropButton.setEnabled(true);
-        hardDropButton.setEnabled(true);
-        holdButton.setEnabled(true);
+        for (var buttonName : settingButton.keySet()) {
+            JButton button = settingButton.get(buttonName);
+            button.setEnabled(true);
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == musicDecreaseVolumeButton && musicVolume!= 0){
+        JButton button = (JButton) e.getSource();
+        if(button == settingButton.get("MusicVolumeDecrease") && musicVolume != 0){
             musicVolume -= 10;
-            musicVolumeValue.setText((musicVolume)+"%");
+            settingLabel.get("MusicVolume").setText((musicVolume)+"%");
             GameFrame.getMusic().setVolume(musicVolume/2);
         }
-        else if(e.getSource() == musicIncreaseVolumeButton && musicVolume != 100){
+        else if(button == settingButton.get("MusicVolumeIncrease") && musicVolume != 100){
             musicVolume += 10;
-            musicVolumeValue.setText((musicVolume)+"%");
+            settingLabel.get("MusicVolume").setText((musicVolume)+"%");
             GameFrame.getMusic().setVolume(musicVolume/2);
         }
-        else if(e.getSource() == effectDecreaseVolumeButton && effectVolume!= 0){
+        else if(button == settingButton.get("FXVolumeDecrease")  && effectVolume != 0){
             effectVolume -= 10;
-            effectVolumeValue.setText((effectVolume)+"%");
+            settingLabel.get("FXVolume").setText((effectVolume)+"%");
             
         }
-        else if(e.getSource() == effectIncreaseVolumeButton && effectVolume != 100){
+        else if(button == settingButton.get("FXVolumeIncrease") && effectVolume != 100){
             effectVolume += 10;
-            effectVolumeValue.setText((effectVolume)+"%");
+            settingLabel.get("FXVolume").setText((effectVolume)+"%");
             GameFrame.getEffect().setVolume(effectVolume/2);
         }
-        else{
-            if(e.getSource() == moveLeftButton){
-                settingKey = 1;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == moveRightButton){
-                settingKey = 2;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == rotateCWButton){
-                settingKey = 3;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == rotateCT_CWButton){
-                settingKey = 4;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == softDropButton){
-                settingKey = 5;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == hardDropButton){
-                settingKey = 6;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
-            else if(e.getSource() == holdButton){
-                settingKey = 7;
-                isSetting = true;
-                GameFrame.getAnyKeyPanel().setVisible(true);
-            }
+        else if(settingButton.containsValue(button) && effectVolume != 0 && effectVolume != 100 && musicVolume != 0 && musicVolume != 100){
+            settingKey = getKeyFromButton((JButton) e.getSource());
+            isSetting = true;
+            GameFrame.getAnyKeyPanel().setVisible(true);
             disableButton();
         }
     }
 
     public static void setNewKey(){
-        switch(settingKey){
-            case 1:
-                moveLeftKey = newKey;
-                moveLeftButton.setText(showName(moveLeftKey));
-                break;
-            case 2:
-                moveRightKey = newKey;
-                moveRightButton.setText(showName(moveRightKey));
-                break;
-            case 3:
-                rotateCWKey = newKey;
-                rotateCWButton.setText(showName(rotateCWKey));
-                break;
-            case 4:
-                rotateCT_CWKey = newKey;
-                rotateCT_CWButton.setText(showName(rotateCT_CWKey));
-                break;
-            case 5:
-                softDropKey = newKey;
-                softDropButton.setText(showName(softDropKey));
-                break;
-            case 6:
-                hardDropKey = newKey;
-                hardDropButton.setText(showName(hardDropKey));
-                break;
-            case 7:
-                holdKey = newKey;
-                holdButton.setText(showName(holdKey));
-                break;
-        }
+        keyBind.put(settingKey, newKey);
+        settingButton.get(settingKey).setText(showName(newKey));
         newKey = -1;
-        settingKey = -1;
+        settingKey = null;
         isSetting = false;
         enableButton();
+    }
+    
+    public static int getKeyBind(String key) {
+        return keyBind.get(key);
     }
 
     public static String showName(int Key){
@@ -414,27 +225,27 @@ public class SettingPanel extends JPanel implements ActionListener{
     }
 
     public static boolean Duplicate(int code) {
-        if(code == moveLeftKey && settingKey != 1){
-            return true;
-        }
-        if(code == moveRightKey && settingKey != 2){
-            return true;
-        }
-        if(code == rotateCWKey && settingKey != 3){
-            return true;
-        }
-        if(code == rotateCT_CWKey && settingKey != 4){
-            return true;
-        }
-        if(code == softDropKey && settingKey != 5){
-            return true;
-        }
-        if(code == hardDropKey && settingKey != 6){
-            return true;
-        }
-        if(code == holdKey && settingKey != 7){
+        if(keyBind.containsValue(code) && settingKey != getKeyFromValue(code)){
             return true;
         }
         return false;
+    }
+
+    public static String getKeyFromValue(int code){
+        for(var key : keyBind.entrySet()) {
+            if(key.getValue() == code) {
+                return key.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static String getKeyFromButton(JButton btn){
+        for(var button : settingButton.entrySet()) {
+            if(button.getValue() == btn) {
+                return button.getKey();
+            }
+        }
+        return null;
     }
 }

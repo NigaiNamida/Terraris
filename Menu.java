@@ -93,7 +93,7 @@ public class Menu extends JPanel implements ActionListener{
             this.setVisible(false);
             GameFrame.getSettingPanel().setVisible(true);
             SettingPanel.newKey = -1;
-            SettingPanel.settingKey = -1;
+            SettingPanel.settingKey = null;
             SettingPanel.isSetting = false;
             SettingPanel.enableButton();
         }

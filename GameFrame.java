@@ -46,7 +46,9 @@ public class GameFrame extends JFrame{
         anyKeyPanel = new AnyKeyPanel();
         isPlaying = false;
         loadLeaderboard();
+        loadSetting();
         Leaderboard.updateScoreBoard();
+        SettingPanel.updateSetting();
 
         //setting game frame
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -91,7 +93,7 @@ public class GameFrame extends JFrame{
         
         this.add(menu);
         playMusic(6);
-        music.setVolume(SettingPanel.musicVolume);
+        music.setVolume(SettingPanel.getMusicVolume());
     }
 
     public void retry(){
@@ -219,6 +221,18 @@ public class GameFrame extends JFrame{
         catch (Exception e) {}
     }
 
+    public static void loadSetting(){
+        try (Scanner input = new Scanner(Paths.get(SettingPanel.getSettingFile()))) {
+            SettingPanel.setMusicVolume(input.nextInt());
+            SettingPanel.setFXVolume(input.nextInt());
+            while (input.hasNextLine()) {
+                SettingPanel.addKeyBind(input.next(), input.nextInt());
+            }
+            SettingPanel.updateSetting();
+        } 
+        catch (Exception e) {}
+    }
+
     public static Menu getMenu() {
         return menu;
     }
@@ -312,7 +326,7 @@ public class GameFrame extends JFrame{
     public static void playMusic(int i){
         music.setFiles(i);
         music.playSound();
-        music.setVolume(SettingPanel.musicVolume);
+        music.setVolume(SettingPanel.getMusicVolume());
         music.loopSound();
     }
 
@@ -322,7 +336,7 @@ public class GameFrame extends JFrame{
 
     public static void playSE(int i){
         effect.setFiles(i);
-        effect.setVolume(SettingPanel.effectVolume);
+        effect.setVolume(SettingPanel.getFXVolume());
         effect.playSound();
     }
 }

@@ -92,13 +92,14 @@ public class Menu extends JPanel implements ActionListener{
         else if(e.getSource() == settingButton){
             this.setVisible(false);
             GameFrame.getSettingPanel().setVisible(true);
-            SettingPanel.newKey = -1;
-            SettingPanel.settingKey = null;
-            SettingPanel.isSetting = false;
+            SettingPanel.setNewKey(-1);
+            SettingPanel.setSettingKey(null);
+            SettingPanel.setSetting(false);
             SettingPanel.enableButton();
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
+            SettingPanel.saveSetting();
             System.exit(0);
         }
     }

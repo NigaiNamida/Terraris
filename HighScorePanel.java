@@ -93,6 +93,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
             this.setVisible(false);
             GameFrame.getGameOverPanel().setVisible(true);
             Leaderboard.saveLeaderboard();
+            SettingPanel.saveSetting();
         }
 
     }

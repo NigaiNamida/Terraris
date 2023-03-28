@@ -547,16 +547,6 @@ public class PlayZone extends JPanel{
             lastTimerTrigger();
             repaint();       
         }
-        for (Color[] colors : background) {
-            for (Color color : colors) {
-                if(color != null){
-                    System.out.print(1);
-                }
-                else{
-                    System.out.print(0);
-                }
-            }
-        }
     }
 
     //update the new value of background to keep track of placed Tetris piece

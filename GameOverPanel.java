@@ -67,6 +67,7 @@ public class GameOverPanel extends JPanel implements ActionListener{
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
+            SettingPanel.saveSetting();
             Tetris.getGameFrame().backToMenu();
         }
     }

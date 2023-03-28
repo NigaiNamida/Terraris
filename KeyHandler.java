@@ -132,23 +132,25 @@ public class KeyHandler implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if(code != 27 && SettingPanel.isSetting && !SettingPanel.Duplicate(code)){
-            SettingPanel.newKey = code;
+        if(code != 27 && SettingPanel.isSetting() && !SettingPanel.Duplicate(code)){
+            SettingPanel.setNewKey(code);
             SettingPanel.setNewKey();
             GameFrame.getAnyKeyPanel().setVisible(false);
         }
-        if((code == 27) && !SettingPanel.isSetting && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
+        if((code == 27) && !SettingPanel.isSetting() && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
         (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
             GameFrame.getMenu().setVisible(true);
             GameFrame.getSettingPanel().setVisible(false);
+            SettingPanel.saveSetting();
             GameFrame.getLeaderboard().setVisible(false);
         }
-        else if((code == 27 || code == 112) && !SettingPanel.isSetting && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
+        else if((code == 27 || code == 112) && !SettingPanel.isSetting() && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
             GameFrame.getPausePanel().setVisible(true);
+            SettingPanel.saveSetting();
             GameFrame.getSettingPanel().setVisible(false);
             GameFrame.getLeaderboard().setVisible(false);
         }
-        else if(!playZone.isGameOver() && !SettingPanel.isSetting){
+        else if(!playZone.isGameOver() && !SettingPanel.isSetting()){
             if((code == 27 || code == 112) && !isHoldingPause && GameFrame.isPlaying()){
                 isHoldingPause = true;
                 isPause = !isPause;

@@ -14,7 +14,7 @@ public class GameThread extends Thread{
         while(GameFrame.isPlaying()){
             if(!playZone.isGameOver()){
                 if(GameFrame.getEffect().getClip() != null)
-                    GameFrame.getEffect().setVolume(SettingPanel.effectVolume/2);
+                    GameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
                 pausePanel.repaint();
                 if(!KeyHandler.isPause()){
                     try{

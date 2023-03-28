@@ -2,6 +2,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -10,27 +13,27 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class SettingPanel extends JPanel implements ActionListener{
-    public static String settingFile;
-    public static HashMap<String,Integer> keyBind;
-    public static HashMap<String,JLabel> settingLabel;
-    public static HashMap<String,JButton> settingButton;
+    private static String settingFile;
+    private static HashMap<String,Integer> keyBind;
+    private static HashMap<String,JLabel> settingLabel;
+    private static HashMap<String,JButton> settingButton;
 
-    public static boolean isSetting;
-    public static String settingKey;
-    public static int newKey;
+    private static boolean isSetting;
+    private static String settingKey;
+    private static int newKey;
 
-    public static int musicVolume;
-    public static int effectVolume;
+    private static int musicVolume;
+    private static int FXVolume;
 
-    public Font font = new Font("Futura",Font.PLAIN,20);
+    private Font font = new Font("Futura",Font.PLAIN,20);
     public SettingPanel(){
 
         keyBind = new HashMap<String,Integer>();
         settingLabel = new HashMap<String,JLabel>();
         settingButton = new HashMap<String,JButton>();
         musicVolume = 40;
-        effectVolume = 50;
-        settingFile = "setting";
+        FXVolume = 50;
+        settingFile = "setting.txt";
         isSetting = false;
         settingKey = null;
 
@@ -46,7 +49,7 @@ public class SettingPanel extends JPanel implements ActionListener{
         settingLabel.put("MusicLabel", new JLabel("MUSIC VOLUME"));
         settingLabel.put("MusicVolume", new JLabel(musicVolume+"%"));
         settingLabel.put("FXLabel", new JLabel("SOUND FX VOLUME"));
-        settingLabel.put("FXVolume", new JLabel(effectVolume+"%"));
+        settingLabel.put("FXVolume", new JLabel(FXVolume+"%"));
         settingLabel.put("Right", new JLabel("Move Right"));
         settingLabel.put("Left", new JLabel("Move Left"));
         settingLabel.put("RotateCW", new JLabel("Rotate Clockwise"));
@@ -72,8 +75,6 @@ public class SettingPanel extends JPanel implements ActionListener{
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setLayout(null);
-
-
 
         for (var labelName : settingLabel.keySet()) {
             JLabel label = settingLabel.get(labelName);
@@ -123,6 +124,50 @@ public class SettingPanel extends JPanel implements ActionListener{
         settingButton.get("HardDrop").setBounds(350, 445, 150, 25);
         settingButton.get("Hold").setBounds(350, 495, 150, 25);
     }
+    
+    public static boolean isSetting() {
+        return isSetting;
+    }
+
+    public static void setSetting(boolean isSetting) {
+        SettingPanel.isSetting = isSetting;
+    }
+
+    public static String getSettingKey() {
+        return settingKey;
+    }
+
+    public static void setSettingKey(String settingKey) {
+        SettingPanel.settingKey = settingKey;
+    }
+
+    public static String getSettingFile() {
+        return settingFile;
+    }
+
+    public static int getNewKey() {
+        return newKey;
+    }
+
+    public static void setNewKey(int newKey) {
+        SettingPanel.newKey = newKey;
+    }
+
+    public static int getMusicVolume() {
+        return musicVolume;
+    }
+
+    public static void setMusicVolume(int musicVolume) {
+        SettingPanel.musicVolume = musicVolume;
+    }
+
+    public static int getFXVolume() {
+        return FXVolume;
+    }
+
+    public static void setFXVolume(int fXVolume) {
+        FXVolume = fXVolume;
+    }
 
     @Override
     public void paintComponents(Graphics g) {
@@ -143,6 +188,32 @@ public class SettingPanel extends JPanel implements ActionListener{
         }
     }
 
+    public static void saveSetting(){
+        Path path = Paths.get(settingFile);
+        try (PrintWriter output = new PrintWriter(path.getFileName().toString())) {
+            output.printf("%d%n",musicVolume);
+            output.printf("%d%n",FXVolume);
+            for (var entry : keyBind.entrySet()) {
+                String key = entry.getKey();
+                int code = entry.getValue();
+                output.printf("%s %d%n",key,code);
+            }
+        } 
+        catch (Exception e) {}
+    }
+
+    public static void updateSetting() {
+        settingLabel.get("MusicVolume").setText(musicVolume+"%");
+        settingLabel.get("FXVolume").setText(FXVolume+"%");
+        for (var buttonName : settingButton.keySet()) {
+            JButton button = settingButton.get(buttonName);
+            if(buttonName != "MusicVolumeDecrease" && buttonName != "MusicVolumeIncrease" 
+            && buttonName != "FXVolumeDecrease" && buttonName != "FXVolumeIncrease"){
+                button.setText(showName(keyBind.get(buttonName)));
+            }
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
@@ -156,17 +227,17 @@ public class SettingPanel extends JPanel implements ActionListener{
             settingLabel.get("MusicVolume").setText((musicVolume)+"%");
             GameFrame.getMusic().setVolume(musicVolume/2);
         }
-        else if(button == settingButton.get("FXVolumeDecrease")  && effectVolume != 0){
-            effectVolume -= 10;
-            settingLabel.get("FXVolume").setText((effectVolume)+"%");
+        else if(button == settingButton.get("FXVolumeDecrease")  && FXVolume != 0){
+            FXVolume -= 10;
+            settingLabel.get("FXVolume").setText((FXVolume)+"%");
             
         }
-        else if(button == settingButton.get("FXVolumeIncrease") && effectVolume != 100){
-            effectVolume += 10;
-            settingLabel.get("FXVolume").setText((effectVolume)+"%");
-            GameFrame.getEffect().setVolume(effectVolume/2);
+        else if(button == settingButton.get("FXVolumeIncrease") && FXVolume != 100){
+            FXVolume += 10;
+            settingLabel.get("FXVolume").setText((FXVolume)+"%");
+            GameFrame.getEffect().setVolume(FXVolume/2);
         }
-        else if(settingButton.containsValue(button) && effectVolume != 0 && effectVolume != 100 && musicVolume != 0 && musicVolume != 100){
+        else if(settingButton.containsValue(button) && FXVolume != 0 && FXVolume != 100 && musicVolume != 0 && musicVolume != 100){
             settingKey = getKeyFromButton((JButton) e.getSource());
             isSetting = true;
             GameFrame.getAnyKeyPanel().setVisible(true);
@@ -185,6 +256,10 @@ public class SettingPanel extends JPanel implements ActionListener{
     
     public static int getKeyBind(String key) {
         return keyBind.get(key);
+    }
+
+    public static void addKeyBind(String key, int code){
+        keyBind.put(key, code);
     }
 
     public static String showName(int Key){

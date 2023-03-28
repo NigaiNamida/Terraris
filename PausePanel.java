@@ -79,14 +79,15 @@ public class PausePanel extends JPanel implements ActionListener{
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
-            SettingPanel.newKey = -1;
-            SettingPanel.settingKey = null;
-            SettingPanel.isSetting = false;
+            SettingPanel.setNewKey(-1);
+            SettingPanel.setSettingKey(null);
+            SettingPanel.setSetting(false);
             SettingPanel.enableButton();
             GameFrame.getSettingPanel().setVisible(true);
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
+            SettingPanel.saveSetting();
             GameFrame.getPlayZone().setGameOver(true);
             Tetris.getGameFrame().backToMenu();
         }

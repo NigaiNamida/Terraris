@@ -51,7 +51,7 @@ public class ScorePanel extends JPanel{
 
     public void paintBar(Graphics g){
         int pixel = (int)((score/maxScore) * 500);
-        g.setColor(Color.yellow);
+        g.setColor(new Color(134,219,51));
         g.fillRect(0, 500-pixel, 20,pixel);
     }
 

@@ -26,7 +26,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
         initial = new JLabel("ENTER YOUR INITIAL");
         textField = new JTextField();
         textField.setDocument(new JTextFieldLimit(3));
-        okButton = new JButton("OK");
+        okButton = new RoundButton("OK");
 
         this.setOpaque(true);
         this.setBounds(200, 90, 400, 350);

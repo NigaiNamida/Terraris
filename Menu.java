@@ -20,11 +20,12 @@ public class Menu extends JPanel implements ActionListener{
     private static JButton settingButton;
     private static JButton exitButton;
     private static JLabel LogoLabel;
+    
     Menu(){
-        startButton = new JButton("Start Game");
-        leaderboardButton = new JButton("Leaderboard");
-        settingButton = new JButton("Setting");
-        exitButton = new JButton("Exit");
+        startButton = new RoundButton("Start Game");
+        leaderboardButton = new RoundButton("Leaderboard");
+        settingButton = new RoundButton("Setting");
+        exitButton = new RoundButton("Exit");
 
         this.setVisible(true);
         this.setBounds(140, 20, 520, 520);
@@ -37,7 +38,6 @@ public class Menu extends JPanel implements ActionListener{
         startButton.setBackground(new Color(29,201,88));
         startButton.setForeground(new Color(89,68,52));
         startButton.setFont(new Font("Futura",Font.BOLD, 30));
-        //startButton.setBorder(new LineBorder(new Color(239,239,239,255),2));
         this.add(startButton);
 
         leaderboardButton.setSize(180, 30);
@@ -79,6 +79,7 @@ public class Menu extends JPanel implements ActionListener{
         settingButton.addActionListener(this);
         exitButton.addActionListener(this);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == startButton){

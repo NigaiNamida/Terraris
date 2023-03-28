@@ -27,27 +27,27 @@ public class SettingPanel extends JPanel implements ActionListener{
     public static JLabel settingLabel = new JLabel("SETTING");
     public static JLabel musicVolumeLabel = new JLabel("MUSIC VOLUME");
     public static JLabel musicVolumeValue = new JLabel(musicVolume+"%");
-    public static JButton musicDecreaseVolumeButton = new JButton("-");
-    public static JButton musicIncreaseVolumeButton = new JButton("+");
+    public static JButton musicDecreaseVolumeButton = new RoundButton("-");
+    public static JButton musicIncreaseVolumeButton = new RoundButton("+");
     public static JLabel effectVolumeLabel = new JLabel("SOUND FX VOLUME");
     public static JLabel effectVolumeValue = new JLabel(effectVolume+"%");
-    public static JButton effectDecreaseVolumeButton = new JButton("-");
-    public static JButton effectIncreaseVolumeButton = new JButton("+");
+    public static JButton effectDecreaseVolumeButton = new RoundButton("-");
+    public static JButton effectIncreaseVolumeButton = new RoundButton("+");
 
     public static JLabel moveRightLabel = new JLabel("Move Right");
-    public static JButton moveRightButton = new JButton();
+    public static JButton moveRightButton = new RoundButton();
     public static JLabel moveLeftLabel = new JLabel("Move Left");
-    public static JButton moveLeftButton = new JButton();
+    public static JButton moveLeftButton = new RoundButton();
     public static JLabel rotateCWLabel = new JLabel("Rotate Clockwise");
-    public static JButton rotateCWButton = new JButton();
+    public static JButton rotateCWButton = new RoundButton();
     public static JLabel rotateCT_CWLabel = new JLabel("Rotate Counter-Clockwise");
-    public static JButton rotateCT_CWButton = new JButton();
+    public static JButton rotateCT_CWButton = new RoundButton();
     public static JLabel softDropLabel = new JLabel("Soft Drop");
-    public static JButton softDropButton = new JButton();
+    public static JButton softDropButton = new RoundButton();
     public static JLabel hardDropLabel = new JLabel("Hard Drop");
-    public static JButton hardDropButton = new JButton();
+    public static JButton hardDropButton = new RoundButton();
     public static JLabel holdLabel = new JLabel("Hold");
-    public static JButton holdButton = new JButton();
+    public static JButton holdButton = new RoundButton();
 
     public Font font = new Font("Futura",Font.PLAIN,20);
     public SettingPanel(){

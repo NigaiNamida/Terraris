@@ -16,8 +16,8 @@ public class GameOverPanel extends JPanel implements ActionListener{
 
     public GameOverPanel(){
         gameOverLabel = new JLabel("GAME OVER");new JLabel("GAME OVER");
-        retryButton = new JButton("RETRY");
-        exitButton = new JButton("EXIT TO MENU");
+        retryButton = new RoundButton("RETRY");
+        exitButton = new RoundButton("EXIT TO MENU");
         
         this.setOpaque(true);
         this.setBounds(225, 155, 350, 250);

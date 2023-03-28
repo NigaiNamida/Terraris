@@ -1,16 +1,16 @@
-
-
 import java.awt.*;
 import javax.swing.*;
 
 import javax.swing.border.LineBorder;
 
 public class ScorePanel extends JPanel{
+    private double maxScore;
     private int score;
     // private static JLabel scoreLabel;
     // private static JLabel scorePoint;
 
     public ScorePanel(){
+        maxScore = 2000;
         score = 0;
         // scoreLabel = new JLabel("SCORE", SwingConstants.CENTER);
         // scorePoint = new JLabel(String.format("%,d",score), SwingConstants.CENTER);
@@ -34,12 +34,24 @@ public class ScorePanel extends JPanel{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintBar(g);
-        System.out.println("Painted");
+    }
+
+    public void checkLevel(){
+        System.out.println(score);
+        if(score >= maxScore){
+            LevelPanel.addLevel();
+            LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
+            if(LevelPanel.getLevel()%2 == 1)
+                PlayZone.getGravity().increaseFallSpeed(LevelPanel.getLevel()/2+1);
+            score %= maxScore;
+            maxScore += 1000;
+        }
+        repaint();
     }
 
     public void paintBar(Graphics g){
-        int pixel = (int)((score/1000.0) * 500);
-        g.setColor(Color.WHITE);
+        int pixel = (int)((score/maxScore) * 500);
+        g.setColor(Color.yellow);
         g.fillRect(0, 500-pixel, 20,pixel);
     }
 
@@ -49,8 +61,7 @@ public class ScorePanel extends JPanel{
 
     public void deductScore(int point){
         score -= point;
-        System.out.println("-score : "+score);
-        this.repaint();
+        checkLevel();
     }
 
     public void addFullLineScore(int fullLineAmount){
@@ -60,32 +71,27 @@ public class ScorePanel extends JPanel{
                 point = 100;
                 break;
             case 2:
-                point = 300;
+                point = 225;
                 break;
             case 3:
-                point = 500;
+                point = 350;
                 break;
             default:
-                point = 800;
+                point = 500;
                 break;
         }
-        score += LevelPanel.getLevel() * point;
-        System.out.println("-score : "+score);
-        this.repaint();
-        // scorePoint.setText(String.format("%,d",score));
+        score += (int)(LevelPanel.getLevel()/1.5 * point);
+        checkLevel();
     }
 
     public void addSoftDropScore(){
         score ++;
-        System.out.println("-score : "+score);
-        this.repaint();
-        // scorePoint.setText(String.format("%,d",score));
+        checkLevel();
     }
 
     public void addHardDropScore(int m){
         score += 2*m;
-        System.out.println("-score : "+score);
-        this.repaint();
+        checkLevel();
         // scorePoint.setText(String.format("%,d",score));
     }
 }

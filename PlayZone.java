@@ -6,7 +6,7 @@ public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
     private ScorePanel scorePanel;
     private NextPanel nextPanel;
-    private Gravity gravity;
+    private static Gravity gravity;
     private Color gridLineColor;
     private int gridCols;
     private int gridRows;
@@ -49,6 +49,10 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueBlock(blockQueue,true);
         gravity = new Gravity(this,1);
         createBlock();
+    }
+
+    public static Gravity getGravity() {
+        return gravity;
     }
 
     public boolean isGameOver() {
@@ -584,11 +588,6 @@ public class PlayZone extends JPanel{
                 fullLineAmount++;
                 GoalPanel.addGoal();
                 GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
-                if(GoalPanel.getGoal() % 10 == 0){
-                    LevelPanel.addLevel();
-                    LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
-                    gravity.increaseFallSpeed(LevelPanel.getLevel());
-                }
                 shiftRow(row);//bottom row to shift
             }
         }

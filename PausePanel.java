@@ -89,7 +89,7 @@ public class PausePanel extends JPanel implements ActionListener{
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
             GameFrame.getPlayZone().setGameOver(true);
-            Tetris.getGameFrame().backToMenu();
+            Terraris.getGameFrame().backToMenu();
         }
     }
 }

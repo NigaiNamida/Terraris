@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
+    private ScorePanel scorePanel;
     private NextPanel nextPanel;
     private Gravity gravity;
     private Color gridLineColor;
@@ -30,11 +31,12 @@ public class PlayZone extends JPanel{
 
         holdPanel = GameFrame.getHoldPanel();
         nextPanel = GameFrame.getNextPanel();
+        scorePanel = GameFrame.getScorePanel();
 
         gridLineColor = new Color(36, 36, 36);
 
         this.setOpaque(true);
-        this.setBounds(275, 20, 250, 500);
+        this.setBounds(145, 20, 250, 500);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setDoubleBuffered(true);
@@ -123,7 +125,7 @@ public class PlayZone extends JPanel{
         if(isBottom() || !canGo("Down")){
             if (lastAction <= 0){
                 int m = (lowestPoint()-block.getHeight()) - block.getY();
-                ScorePanel.deductScore(m);
+                scorePanel.deductScore(m);
                 hardDrop();
                 repaint();
             }
@@ -169,7 +171,7 @@ public class PlayZone extends JPanel{
             GameFrame.stopMusic();
         }
         int[] topScore = Leaderboard.getTopScore();
-        int score = ScorePanel.getScore();
+        int score = scorePanel.getScore();
         for (int i = 0; i< topScore.length; i++) {
             if(score > topScore[i]){
                 isHighScore = true;
@@ -477,7 +479,7 @@ public class PlayZone extends JPanel{
     //instant drop playing Tetris piece to bottom
     public void hardDrop(){
         int m = (lowestPoint()-block.getHeight()) - block.getY();
-        ScorePanel.addHardDropScore(m);
+        scorePanel.addHardDropScore(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         repaint();
         nextPanel.repaint();
@@ -526,7 +528,7 @@ public class PlayZone extends JPanel{
     public void softDrop(){
         if(!isBottom() && canGo("Down")){
             applyGravity();
-            ScorePanel.addSoftDropScore();
+            scorePanel.addSoftDropScore();
             GameFrame.playSE(1);
         }
     }
@@ -592,7 +594,7 @@ public class PlayZone extends JPanel{
         }
         if(fullLineAmount > 0){
             GameFrame.playSE(4);
-            ScorePanel.addFullLineScore(fullLineAmount);
+            scorePanel.addFullLineScore(fullLineAmount);
         }
     }
 

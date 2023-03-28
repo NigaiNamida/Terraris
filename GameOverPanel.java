@@ -63,12 +63,12 @@ public class GameOverPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == retryButton){
-            Tetris.getGameFrame().retry();
+            Terraris.getGameFrame().retry();
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
-            Tetris.getGameFrame().backToMenu();
+            Terraris.getGameFrame().backToMenu();
         }
     }
 }

@@ -83,7 +83,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okButton){
             int[] topScore = Leaderboard.getTopScore();
-            int score = ScorePanel.getScore();
+            int score = GameFrame.getScorePanel().getScore();
             for (int i = 0; i< topScore.length; i++) {
                 if(score > topScore[i]){
                     Leaderboard.newRank(textField.getText(), score,i);

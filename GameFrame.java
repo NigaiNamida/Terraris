@@ -272,6 +272,14 @@ public class GameFrame extends JFrame{
         return highScorePanel;
     }
 
+    public static LevelPanel getLevelPanel() {
+        return levelPanel;
+    }
+
+    public static ScorePanel getScorePanel() {
+        return scorePanel;
+    }
+
     public static PausePanel getPausePanel() {
         return pausePanel;
     }

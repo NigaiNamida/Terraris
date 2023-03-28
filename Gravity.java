@@ -12,7 +12,7 @@ public class Gravity implements ActionListener{
         this.playZone = pZone;
         timer = new Timer((int)(fallSpeed*1000), this);
         lastTimer = new Timer(500, this);
-        timer.start();
+        startTimer();
     }
 
     void repaintPlayZone(){
@@ -21,9 +21,9 @@ public class Gravity implements ActionListener{
     
     void increaseFallSpeed(int level){
         fallSpeed = Math.pow(0.8-((level-1)*0.007),(level-1));
-        timer.stop();
+        stopTimer();
         timer = new Timer((int)(fallSpeed*1000), this);
-        timer.start();
+        startTimer();
     }
 
     @Override

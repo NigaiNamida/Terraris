@@ -1,10 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
-
 import java.util.ArrayList;
-
 import javax.swing.border.LineBorder;
-
 public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
     private NextPanel nextPanel;
@@ -78,9 +75,9 @@ public class PlayZone extends JPanel{
         return TetrisPiece.getBlock(blockQueue.get(0));
     }
 
-    //find the lowest point index point (y) of obsatable that playing Tetris piece will hit
+    //find the lowest point index point (y) of obstacle that playing Tetris piece will hit
     public int lowestPoint(){
-        int lowestPointIndex = 20;
+        int lowestPointIndex = gridRows;
         int x = block.getX();
         int y = block.getY();
         int[][] shape = block.getShape();
@@ -620,19 +617,6 @@ public class PlayZone extends JPanel{
         drawColorBlock(g);
         drawPile(g);
     }
-
-    // private void drawFullLineEffect(Graphics g,ArrayList<Integer> rowList) {
-    //     for (int i = 0; i < rowList.size(); i++) {
-    //         for (int col = 0; col < gridCols; col++) {
-    //             int x = col * blockSize; //coordinate + offset
-    //             int y = rowList.get(i) * blockSize + 20; //coordinate + offset
-    //             g.setColor(Color.WHITE);
-    //             g.fillRect(x, y, blockSize, blockSize);  
-    //         }
-    //     }
-    //     long start = System.currentTimeMillis();
-    //     while(System.currentTimeMillis() - start < 400){}
-	// }
 
 	//paint playzone Background gridline
     private void drawGridLine(Graphics g){

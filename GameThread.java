@@ -1,53 +1,56 @@
 public class GameThread extends Thread{
 
-    private PlayZone pZone;
-    private KeyHandler keyHandler;
-    private PausePanel pausePanel;
+    private static PlayZone playZone;
+    private static KeyHandler keyHandler;
+    private static PausePanel pausePanel;
     private static int FPS;
     private static long leftHoldingTime;
     private static long rightHoldingTime;
+    private static double interval;
+    private static double nextTime;
     @Override
     public void run() {
-        keyHandler = GameFrame.getKeyHandler();
-        pZone = GameFrame.getPlayZone();
-        pausePanel = GameFrame.getPausePanel();
-
-        double interval = 1000000000/FPS;;
-        double nextTime = System.nanoTime() + interval;
-        leftHoldingTime = rightHoldingTime = 0;
-        while(!pZone.isGameOver()){
-            if(GameFrame.getEffect().getClip() != null)
-                GameFrame.getEffect().setVolume(SettingPanel.effectVolume/2);
-            pausePanel.repaint();
-            if(!KeyHandler.isPause()){
-                try{
-                    double remainingTime = nextTime - System.nanoTime();
-                    remainingTime /= 1000000;
-                    if(remainingTime < 0){
-                        remainingTime = 0;
-                    }
-                    update();
-                    repaint();
-                    Thread.sleep((long) remainingTime);
-                    nextTime += interval;
-                } catch (InterruptedException e) {}
-            }
-        }
-        while(pZone.isGameOver()){
-            if(GameFrame.getHighScorePanel().isVisible()){
-                GameFrame.getHighScorePanel().repaint();
+        setInitialValue();
+        while(GameFrame.isPlaying()){
+            if(!playZone.isGameOver()){
+                if(GameFrame.getEffect().getClip() != null)
+                    GameFrame.getEffect().setVolume(SettingPanel.effectVolume/2);
+                pausePanel.repaint();
+                if(!KeyHandler.isPause()){
+                    try{
+                        double remainingTime = nextTime - System.nanoTime();
+                        remainingTime /= 1000000;
+                        if(remainingTime < 0){
+                            remainingTime = 0;
+                        }
+                        update();
+                        repaintPlayZone();
+                        Thread.sleep((long) remainingTime);
+                        nextTime += interval;
+                    } catch (InterruptedException e) {}
+                }
             }
             else{
-                GameFrame.getGameOverPanel().repaint();
+                if(GameFrame.getHighScorePanel().isVisible()){
+                    GameFrame.getHighScorePanel().repaint();
+                }
+                else{
+                    GameFrame.getGameOverPanel().repaint();
+                }
             }
         }
     }
-    
 
-    public static void setFPS(int fps) {
-        FPS = fps;
+    public static void setInitialValue(){
+        keyHandler = GameFrame.getKeyHandler();
+        playZone = GameFrame.getPlayZone();
+        pausePanel = GameFrame.getPausePanel();
+
+        FPS = 60;
+        interval = 1000000000/FPS;
+        nextTime = System.nanoTime() + interval;
+        leftHoldingTime = rightHoldingTime = 0;
     }
-
 
     public static void resetLeftHoldingTime() {
         leftHoldingTime = 0;
@@ -71,58 +74,58 @@ public class GameThread extends Thread{
             if(rightHoldingTime <= 8){
                 if(rightHoldingTime == 0){
                     Thread.sleep(40);
-                    pZone.moveRight();
+                    playZone.moveRight();
                 }
                 rightHoldingTime++;
             }
             else if(keyHandler.isRightFirst() && keyHandler.isLeftPressed()){
                 Thread.sleep(40);
-                pZone.moveLeft();
+                playZone.moveLeft();
             }   
             else{
                 Thread.sleep(40);
-                pZone.moveRight();
+                playZone.moveRight();
             }
         }
         if(keyHandler.isLeftPressed()){
             if(leftHoldingTime <= 8){
                 if(leftHoldingTime == 0){
                     Thread.sleep(40);
-                    pZone.moveLeft();
+                    playZone.moveLeft();
                 }
                 leftHoldingTime++;
             }
             else if(keyHandler.isLeftFirst() && keyHandler.isRightPressed()){
                 Thread.sleep(40);
-                pZone.moveRight();
+                playZone.moveRight();
             }   
             else{
                 Thread.sleep(40);
-                pZone.moveLeft();
+                playZone.moveLeft();
             }
         }
         if(keyHandler.isHoldPressed()){
-            pZone.holdBlock();
+            playZone.holdBlock();
         }
         if(keyHandler.isHardDropPressed() && !keyHandler.isHoldingHardDrop()){
             keyHandler.setHoldingHardDrop(true);
-            pZone.hardDrop();
+            playZone.hardDrop();
         }
         if(keyHandler.isSoftDropPressed()){
             Thread.sleep(40);
-            pZone.softDrop();
+            playZone.softDrop();
         }
         if(keyHandler.isisRotateCWPressed() && !keyHandler.isHoldingCWRotate()){
             keyHandler.setHoldingCWRotate(true);
-            pZone.rotate("CW");
+            playZone.rotate("CW");
         }
         if(keyHandler.isRotateCT_CWPressed() && !keyHandler.isHoldingCT_CWRotate()){
             keyHandler.setHoldingCT_CWRotate(true);
-            pZone.rotate("CT-CW");
+            playZone.rotate("CT-CW");
         }
     }
 
-    void repaint(){
-        pZone.repaint();
+    void repaintPlayZone(){
+        playZone.repaint();
     }
 }

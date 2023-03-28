@@ -16,13 +16,15 @@ public class PlayZone extends JPanel{
     private boolean isGameOver;
 
     private TetrisPiece block;
-    private static ArrayList<String> blockQueue = new ArrayList<String>();;
+    private static ArrayList<String> blockQueue = new ArrayList<String>();
     
-    private Color[][] background;
+    private static Color[][] background;
 
     private int[][] testSet;
 
     public PlayZone(){
+        lastAction = 0;
+        blockQueue = new ArrayList<String>();
         isUseHold = false;
         isGameOver = false;
 
@@ -45,7 +47,6 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueBlock(blockQueue,true);
         gravity = new Gravity(this,1);
         createBlock();
-        GameThread.setFPS(60);
     }
 
     public boolean isGameOver() {
@@ -58,6 +59,16 @@ public class PlayZone extends JPanel{
 
     //check if tetris piece reach the bottom
     public boolean isBottom(){
+        if(block.getY() + block.getHeight() == gridRows){
+            System.out.println("===============================");
+            System.out.println("Checking isBottom");
+            System.out.println("Y : "+block.getY());
+            System.out.println("Height : "+block.getHeight());
+            System.out.println("Y + Height : " + (block.getY() + block.getHeight()) );
+            System.out.println("isBottom : "+ (block.getY() + block.getHeight() == gridRows));
+            System.out.println("=========================================");
+        }
+        
         return block.getY() + block.getHeight() == gridRows;
     }
 
@@ -138,6 +149,7 @@ public class PlayZone extends JPanel{
 
     //get a new playable Tetris piece from queue and set position
     public void createBlock(){
+        System.out.println("Create New Block" + System.currentTimeMillis());
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
@@ -156,6 +168,7 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+        System.out.println(block.getX()+","+block.getY());
     }
     
     public void gameOver(){
@@ -465,6 +478,14 @@ public class PlayZone extends JPanel{
             for (int col = 0; col < blockWidth; col++){
                 if(y+row+yOffset >= 0 && y+row+yOffset < gridRows && x+col+xOffset >= 0 && x+col+xOffset < gridCols){
                     if(shape[row][col] == 1 && background[y+row+yOffset][x+col+xOffset] != null){
+                        System.out.println("===============================");
+                        System.out.println("can go down = false");
+                        System.out.println("shape[row][col] == 1 && background[y+row+yOffset][x+col+xOffset] != null");
+                        System.out.println("shape row = " + row);
+                        System.out.println("shape col = " + col);
+                        System.out.println("y+row+yOffset = " +(y+row+yOffset));
+                        System.out.println("x+col+xOffset = "+(x+col+xOffset));
+                        System.out.println("===============================");
                         return false;
                     }
                 }
@@ -475,6 +496,7 @@ public class PlayZone extends JPanel{
 
     //instant drop playing Tetris piece to bottom
     public void hardDrop(){
+        System.out.println("HARD DROPPED");
         int m = (lowestPoint()-block.getHeight()) - block.getY();
         ScorePanel.addHardDropScore(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
@@ -545,6 +567,17 @@ public class PlayZone extends JPanel{
             createBlock();
             lastTimerTrigger();
             repaint();       
+        }
+        for (Color[] colors : background) {
+            for (Color color : colors) {
+                if(color != null){
+                    System.out.print(1);
+                }
+                else{
+                    System.out.print(0);
+                }
+            }
+            System.out.println();
         }
     }
 

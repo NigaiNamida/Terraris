@@ -87,6 +87,7 @@ public class PausePanel extends JPanel implements ActionListener{
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
+            GameFrame.getPlayZone().setGameOver(true);
             Tetris.getGameFrame().backToMenu();
         }
     }

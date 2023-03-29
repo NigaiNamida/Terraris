@@ -644,8 +644,6 @@ public class PlayZone extends JPanel{
                 isMiniTSpin = true;
             }
         }
-        System.out.println("Mini  :"+isMiniTSpin);
-        System.out.println("TSpin :" + isTSpin);
         int fullLineAmount = 0;
         for(int row = 0; row < gridRows; row++) {
             boolean isFullRow = true;

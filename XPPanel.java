@@ -1,12 +1,15 @@
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class XPPanel extends JPanel{
+    private boolean isBackToBack;
     private double maxXP;
     private int XP;
 
     public XPPanel(){
+        isBackToBack = false;
         maxXP = 2000;
         XP = 0;
 
@@ -22,7 +25,6 @@ public class XPPanel extends JPanel{
     }
 
     public void checkLevel(){
-        System.out.println(XP);
         if(XP >= maxXP){
             LevelPanel.addLevel();
             LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
@@ -83,7 +85,16 @@ public class XPPanel extends JPanel{
                     break;
             }
         }
-        XP += (int)(LevelPanel.getLevel()/1.5 * point);
+
+        point = (int)(LevelPanel.getLevel()/1.5 * point);
+        if(isBackToBack && fullLineAmount != 0){
+            point *= 1.5;
+        }
+        if(!isBackToBack){
+            System.out.println("Starting Back To Back");
+        }
+        isBackToBack = true;
+        XP += point;
         checkLevel();
     }
 
@@ -103,7 +114,20 @@ public class XPPanel extends JPanel{
                 point = 500;
                 break;
         }
-        XP += (int)(LevelPanel.getLevel()/1.5 * point);
+
+        point = (int)(LevelPanel.getLevel()/1.5 * point);
+        if(!isBackToBack && fullLineAmount == 4){
+            System.out.println("Starting Back To Back");
+        }
+        else if(isBackToBack && fullLineAmount != 4){
+            System.out.println("Back to back broke");
+        }
+        if(isBackToBack && (fullLineAmount == 4)){
+            point *= 1.5;
+        }
+        isBackToBack = (fullLineAmount == 4);
+
+        XP += point;
         checkLevel();
     }
 

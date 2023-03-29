@@ -64,6 +64,8 @@ public class GameOverPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == retryButton){
             Terraris.getGameFrame().retry();
+            this.setVisible(false);
+            Terraris.getGameFrame().repaint();
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();

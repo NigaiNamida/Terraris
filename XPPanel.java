@@ -1,12 +1,8 @@
 import java.awt.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
-
 import javax.swing.border.LineBorder;
 
 public class XPPanel extends JPanel{
-    //private ArrayList<String>
     private double maxXP;
     private int XP;
 

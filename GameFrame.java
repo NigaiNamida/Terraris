@@ -37,9 +37,9 @@ public class GameFrame extends JFrame{
         nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
+        playZone = new PlayZone();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
-        playZone = new PlayZone();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         settingPanel = new SettingPanel();
@@ -114,15 +114,15 @@ public class GameFrame extends JFrame{
         this.remove(menu);
         this.removeKeyListener(keyHandler);
 
-        bossPanel = new BossPanel();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
-        XPPanel = new XPPanel();
         playZone = new PlayZone();
+        bossPanel = new BossPanel();
+        XPPanel = new XPPanel();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         isPlaying = false;
@@ -175,15 +175,15 @@ public class GameFrame extends JFrame{
         this.remove(menu);
         this.removeKeyListener(keyHandler);
 
-        bossPanel = new BossPanel();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
-        XPPanel = new XPPanel();
         playZone = new PlayZone();
+        bossPanel = new BossPanel();
+        XPPanel = new XPPanel();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         isPlaying = false;

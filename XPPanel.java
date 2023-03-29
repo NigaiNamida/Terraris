@@ -13,7 +13,7 @@ public class XPPanel extends JPanel{
         bossPanel = GameFrame.getBossPanel();
         isBackToBack = false;
         maxXP = 2000;
-        XP = 20;
+        XP = 1900;
 
         this.setBounds(415, 20, 20, 500);
         this.setBackground(Color.black);

@@ -691,7 +691,6 @@ public class PlayZone extends JPanel{
         drawPhantomBlock(g);
         drawColorBlock(g);
         drawPile(g);
-        drawBoss(g);
     }
 
 	//paint playzone Background gridline
@@ -805,83 +804,5 @@ public class PlayZone extends JPanel{
     private void paintBlocks(Graphics g,Color color,int x,int y){
         g.setColor(color);
         g.fillRect(x, y, blockSize, blockSize);
-    }
-
-    static int frame = 0;
-    Image enemy;
-    int phase = 0;
-    String boss;
-
-    public void animate(){
-        repaint();
-        frame = (frame + 1) % 8;
-    }
-
-    public void spawnBoss(){     
-        if(LevelPanel.getLevel() == 2 && phase == 0){
-            boss = "KingSlime";
-            phase++;}
-        else if (LevelPanel.getLevel() == 3 && phase == 0){
-            boss = "EyeOfCthulhu";
-            phase ++;}
-        else if(phase != 0)
-            phase++;
-        if(boss == "KingSlime" && phase >= 4){
-            boss = "null";
-            phase = 0;}
-        else if(boss == "EyeOfCthulhu" && phase >= 3){
-            phase = 0;
-            boss = "null";}
-    }
-    
-
-    public void drawBoss(Graphics g){  
-        if (boss == "KingSlime"){       
-            if(frame % 2 == 0){
-                enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_0.png").getImage();
-                g.drawImage(enemy ,40, 100,null);}
-            else if(frame % 4 == 1){
-                enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_1.png").getImage();
-                g.drawImage(enemy ,40, 100, null);}
-            else if(frame % 4 == 3){
-                enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_2.png").getImage();
-                g.drawImage(enemy ,40, 100, null);}  
-        }  
-        else if (boss == "EyeOfCthulhu"){       
-            if (phase == 1){
-                if(frame % 4 == 0){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_0.png").getImage();
-                    g.drawImage(enemy ,25, 100,null);}
-                else if(frame == 1){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_1.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}
-                else if(frame == 2){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_2.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}  
-                else if(frame == 3){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_3.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}
-                else if(frame == 5){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_4.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}
-                else if(frame == 6){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_5.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}  
-                else if(frame == 7){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_6.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}    
-            }
-            else if (phase == 2){
-                if(frame % 2 == 0){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_0.png").getImage();
-                    g.drawImage(enemy ,25, 100,null);}
-                else if(frame % 4 == 1){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_1.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}
-                else if(frame % 4 == 3){
-                    enemy = new ImageIcon("Assets/Image/Bosses/" + boss + "/Idle_" + phase + "_2.png").getImage();
-                    g.drawImage(enemy ,25, 100, null);}  
-            }
-        }  
     }
 }

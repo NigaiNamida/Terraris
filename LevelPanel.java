@@ -1,4 +1,5 @@
 import java.awt.*;
+
 import javax.swing.*;
 
 import javax.swing.border.LineBorder;
@@ -36,6 +37,13 @@ public class LevelPanel extends JPanel{
 
     public static void addLevel() {
         level++;
+        BossPanel.spawnChance += 5;
+        if(BossPanel.phase == 0){
+            BossPanel.canSpawn = true;
+            BossPanel.spawnTimer.restart();
+            System.out.println("Boss Spawn Active");
+            System.out.println(BossPanel.spawnChance + "%");
+        }
     }
 
     public static JLabel getLevelScore() {

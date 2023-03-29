@@ -15,6 +15,9 @@ public class PlayZone extends JPanel{
 
     private static boolean isUseHold;
     private boolean isGameOver;
+    private boolean isMiniTSpin;
+    private boolean isTSpin;
+    private boolean isRotated;
 
     private TetrisPiece block;
     private static ArrayList<String> blockQueue = new ArrayList<String>();
@@ -28,6 +31,10 @@ public class PlayZone extends JPanel{
         blockQueue = new ArrayList<String>();
         isUseHold = false;
         isGameOver = false;
+
+        isRotated = false;
+        isMiniTSpin = false;
+        isTSpin = false;
 
         holdPanel = GameFrame.getHoldPanel();
         nextPanel = GameFrame.getNextPanel();
@@ -49,6 +56,12 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueBlock(blockQueue,true);
         gravity = new Gravity(this,1);
         createBlock();
+    }
+
+    public void resetTSpin() {
+        isRotated = false;
+        isMiniTSpin = false;
+        isTSpin = false;
     }
 
     public static Gravity getGravity() {
@@ -145,6 +158,7 @@ public class PlayZone extends JPanel{
 
     //get a new playable Tetris piece from queue and set position
     public void createBlock(){
+        resetTSpin();
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
@@ -204,6 +218,7 @@ public class PlayZone extends JPanel{
                 holdPanel.setBlock(TetrisPiece.getBlock(block.getName()));
                 block = temp;
                 holdPanel.getBlock().spawnTetris(gridCols);
+                resetTSpin();
             }
             isUseHold = true;
             nextPanel.repaint();
@@ -304,8 +319,10 @@ public class PlayZone extends JPanel{
                     }
                 }
             }
-            if(isPassCase)
+            if(isPassCase){
+                isRotated = true;
                 return i;
+            }
         }
         return -1;
     }
@@ -483,6 +500,9 @@ public class PlayZone extends JPanel{
     //instant drop playing Tetris piece to bottom
     public void hardDrop(){
         int m = (lowestPoint()-block.getHeight()) - block.getY();
+        if(m != 0){
+            resetTSpin();
+        }
         XPPanel.addHardDropXP(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         repaint();
@@ -539,6 +559,7 @@ public class PlayZone extends JPanel{
 
     public void applyGravity(){
         if(!isBottom() && canGo("Down")){
+            resetTSpin();
             block.moveDown();
             lastTimerTrigger();
             repaint();
@@ -572,9 +593,59 @@ public class PlayZone extends JPanel{
         }
     }
 
+    public boolean haveBlock(int r,int c){
+        int x = block.getX();
+        int y = block.getY();
+        if(y+r < gridRows && x+c < gridCols && y+r >= 0 && x+c >= 0 && background[y+r][x+c] == null ){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean[] checkSide(){
+        boolean[] sideCheck = new boolean[4];//A B C D
+        switch (block.getVariant()) {
+            case 0:
+                sideCheck[0] = haveBlock(0,0);
+                sideCheck[1] = haveBlock(0,2);
+                sideCheck[2] = haveBlock(2,0);
+                sideCheck[3] = haveBlock(2,2);
+                break;
+            case 1:
+                sideCheck[0] = haveBlock(0,1);
+                sideCheck[1] = haveBlock(2,1);
+                sideCheck[2] = haveBlock(0,-1);
+                sideCheck[3] = haveBlock(2,-1);
+                break;
+            case 2:
+                sideCheck[0] = haveBlock(1,2);
+                sideCheck[1] = haveBlock(1,0);
+                sideCheck[2] = haveBlock(-1,2);
+                sideCheck[3] = haveBlock(-1,0);
+                break;
+            default:
+                sideCheck[0] = haveBlock(2,0);
+                sideCheck[1] = haveBlock(0,0);
+                sideCheck[2] = haveBlock(2,2);
+                sideCheck[3] = haveBlock(0,2);
+                break;
+        }
+        return sideCheck;
+    }
 
     //check for the row full of block to delete and get XP
     public void checkFullLine(){
+        if(block.getName() == "T" && isRotated){
+            boolean[] sideCheck = checkSide();
+            if(sideCheck[0] && sideCheck[1] && (sideCheck[2] || sideCheck[3])){
+                isTSpin = true;
+            }
+            else if(sideCheck[2] && sideCheck[3] && (sideCheck[0] || sideCheck[1])){
+                isMiniTSpin = true;
+            }
+        }
+        System.out.println("Mini  :"+isMiniTSpin);
+        System.out.println("TSpin :" + isTSpin);
         int fullLineAmount = 0;
         for(int row = 0; row < gridRows; row++) {
             boolean isFullRow = true;
@@ -591,7 +662,10 @@ public class PlayZone extends JPanel{
                 shiftRow(row);//bottom row to shift
             }
         }
-        if(fullLineAmount > 0){
+        if(isMiniTSpin || isTSpin){
+            XPPanel.addTSpinXP(isTSpin,fullLineAmount);
+        }
+        else if(fullLineAmount > 0){
             GameFrame.playSE(4);
             XPPanel.addFullLineXP(fullLineAmount);
         }

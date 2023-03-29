@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import javax.swing.border.LineBorder;
 
 public class XPPanel extends JPanel{
+    //private ArrayList<String>
     private double maxXP;
     private int XP;
 
@@ -50,6 +53,44 @@ public class XPPanel extends JPanel{
         checkLevel();
     }
 
+    public void addTSpinXP(boolean isTSpin,int fullLineAmount) {
+        int point = 0;
+        if(isTSpin){
+            switch (fullLineAmount) {
+                case 0:
+                    point = 250;
+                    System.out.println("T-SPIN!");
+                    break;
+                case 1:
+                    point = 500;
+                    System.out.println("T-SPIN! SINGLE");
+                    break;
+                case 2:
+                    point = 750;
+                    System.out.println("T-SPIN! DOUBLE");
+                    break;
+                case 3:
+                    point = 1000;
+                    System.out.println("T-SPIN! TRIPLE");
+                    break;
+            }
+        }
+        else{
+            switch (fullLineAmount) {
+                case 0:
+                    point = 60;
+                    System.out.println("MINI T-SPIN!");
+                    break;
+                case 1:
+                    point = 125;
+                    System.out.println("MINI T-SPIN! SINGLE");
+                    break;
+            }
+        }
+        XP += (int)(LevelPanel.getLevel()/1.5 * point);
+        checkLevel();
+    }
+
     public void addFullLineXP(int fullLineAmount){
         int point = 0;
         switch (fullLineAmount) {
@@ -79,4 +120,5 @@ public class XPPanel extends JPanel{
         XP += 2*m;
         checkLevel();
     }
+
 }

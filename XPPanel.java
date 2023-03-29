@@ -4,14 +4,16 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class XPPanel extends JPanel{
+    private BossPanel bossPanel;
     private boolean isBackToBack;
     private double maxXP;
     private int XP;
 
     public XPPanel(){
+        bossPanel = GameFrame.getBossPanel();
         isBackToBack = false;
         maxXP = 2000;
-        XP = 0;
+        XP = 20;
 
         this.setBounds(415, 20, 20, 500);
         this.setBackground(Color.black);
@@ -48,6 +50,7 @@ public class XPPanel extends JPanel{
 
     public void deductXP(int point){
         XP -= point;
+        bossPanel.damageToBoss(-point);
         checkLevel();
     }
 
@@ -95,6 +98,7 @@ public class XPPanel extends JPanel{
         }
         isBackToBack = true;
         XP += point;
+        bossPanel.damageToBoss(point);
         checkLevel();
     }
 
@@ -128,16 +132,19 @@ public class XPPanel extends JPanel{
         isBackToBack = (fullLineAmount == 4);
 
         XP += point;
+        bossPanel.damageToBoss(point);
         checkLevel();
     }
 
     public void addSoftDropXP(){
-        XP ++;
+        XP++;
+        bossPanel.damageToBoss(1);
         checkLevel();
     }
 
     public void addHardDropXP(int m){
         XP += 2*m;
+        bossPanel.damageToBoss(2*m);
         checkLevel();
     }
 

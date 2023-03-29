@@ -12,6 +12,7 @@ public class GameFrame extends JFrame{
     private static NextPanel nextPanel;
     private static GoalPanel goalPanel;
     private static LevelPanel levelPanel;
+    private static BossPanel bossPanel;
     private static XPPanel XPPanel;
     private static PausePanel pausePanel;
     private static SettingPanel settingPanel;
@@ -36,6 +37,7 @@ public class GameFrame extends JFrame{
         nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
+        bossPanel = new BossPanel();
         XPPanel = new XPPanel();
         playZone = new PlayZone();
         keyHandler = new KeyHandler();
@@ -71,7 +73,9 @@ public class GameFrame extends JFrame{
         this.add(nextPanel);
         this.add(levelPanel);
         this.add(XPPanel);
+        this.add(bossPanel);
         this.add(playZone);
+        bossPanel.setVisible(false);
         anyKeyPanel.setVisible(false);
         highscorePanel.setVisible(false);
         leaderboard.setVisible(false);
@@ -97,6 +101,7 @@ public class GameFrame extends JFrame{
     }
 
     public void retry(){
+        this.remove(bossPanel);
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
         this.remove(pausePanel);
@@ -109,6 +114,7 @@ public class GameFrame extends JFrame{
         this.remove(menu);
         this.removeKeyListener(keyHandler);
 
+        bossPanel = new BossPanel();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
@@ -122,6 +128,7 @@ public class GameFrame extends JFrame{
         isPlaying = false;
         
         //add component
+        this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
         this.add(pausePanel);
@@ -131,6 +138,7 @@ public class GameFrame extends JFrame{
         this.add(levelPanel);
         this.add(XPPanel);
         this.add(playZone);
+        bossPanel.setVisible(false);
         anyKeyPanel.setVisible(false);
         highscorePanel.setVisible(false);
         leaderboard.setVisible(false);
@@ -154,6 +162,7 @@ public class GameFrame extends JFrame{
             GameFrame.stopMusic();
         }
 
+        this.remove(bossPanel);
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
         this.remove(pausePanel);
@@ -166,6 +175,7 @@ public class GameFrame extends JFrame{
         this.remove(menu);
         this.removeKeyListener(keyHandler);
 
+        bossPanel = new BossPanel();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
@@ -178,8 +188,8 @@ public class GameFrame extends JFrame{
         pausePanel = new PausePanel();
         isPlaying = false;
         
-        
         //add component
+        this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
         this.add(pausePanel);
@@ -190,6 +200,7 @@ public class GameFrame extends JFrame{
         this.add(XPPanel);
         this.add(playZone);
         this.add(menu);
+        bossPanel.setVisible(false);
         anyKeyPanel.setVisible(false);
         highscorePanel.setVisible(false);
         leaderboard.setVisible(false);
@@ -284,6 +295,10 @@ public class GameFrame extends JFrame{
         return pausePanel;
     }
 
+    public static BossPanel getBossPanel() {
+        return bossPanel;
+    }
+
     public static KeyHandler getKeyHandler() {
         return keyHandler;
     }
@@ -315,6 +330,7 @@ public class GameFrame extends JFrame{
     }
 
     public static void startGame(){
+        bossPanel.setVisible(true);
         goalPanel.setVisible(true);
         holdPanel.setVisible(true);
         nextPanel.setVisible(true);

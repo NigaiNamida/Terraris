@@ -33,6 +33,8 @@ public class BossPanel extends JPanel implements ActionListener{
     public static PlayZone playZone;
 
     public BossPanel(){
+        bossName = "";
+        spawn = 0;
         frame = 0;
         state = 0;
         phase = 0;
@@ -44,7 +46,6 @@ public class BossPanel extends JPanel implements ActionListener{
         animateTimer = new Timer(200, this);
         spawnTimer = new Timer(5000, this);
         playZone = GameFrame.getPlayZone();
-
         bossTitle = new JLabel(bossName);
         bossTitle.setForeground(new Color(193,221,196,255));
         bossTitle.setFont(new Font("Futura",Font.BOLD,15));
@@ -57,6 +58,9 @@ public class BossPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(playZone == null){
+            playZone = GameFrame.getPlayZone();
+        }
         if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == animateTimer)
             animate();
         if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == spawnTimer)

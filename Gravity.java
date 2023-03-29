@@ -5,6 +5,7 @@ public class Gravity implements ActionListener{
     KeyHandler keyHandler = GameFrame.keyHandler;
     PlayZone pZone;
     Timer timer;
+    Timer animation;
     Timer lastTimer;
     double fallSpeed;
 
@@ -13,6 +14,8 @@ public class Gravity implements ActionListener{
         this.pZone = pZone;
         timer = new Timer((int)(fallSpeed*1000), this);
         lastTimer = new Timer(500, this);
+        animation = new Timer(200, this);
+        animation.start();
         timer.start();
     }
 
@@ -29,8 +32,12 @@ public class Gravity implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(!pZone.isGameOver && !KeyHandler.isPause && GameFrame.isPlaying){
+        if(!pZone.isGameOver && !KeyHandler.isPause && GameFrame.isPlaying && e.getSource()!=animation){
             pZone.applyGravity();
+            repaint();
+        }
+        else if (!pZone.isGameOver && !KeyHandler.isPause && GameFrame.isPlaying && e.getSource()==animation){
+            pZone.animate();
             repaint();
         }
     }

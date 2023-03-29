@@ -65,6 +65,4 @@ public class Gravity implements ActionListener{
     public void stopLastTimer(){
         lastTimer.stop();
     }
-
-    
 }

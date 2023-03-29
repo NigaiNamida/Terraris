@@ -58,7 +58,7 @@ public class GameFrame extends JFrame{
         this.setLayout(null);
         this.setSize(800,600);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.getContentPane().setBackground(Color.black);
         
         //add component

@@ -55,7 +55,7 @@ public class SettingPanel extends JPanel implements ActionListener{
         settingKey = -1;
 
         this.setOpaque(true);
-        this.setBounds(100, 5, 600, 550);
+        this.setBounds(470, 155, 600, 550);
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setLayout(null);

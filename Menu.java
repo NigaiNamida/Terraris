@@ -28,7 +28,7 @@ public class Menu extends JPanel implements ActionListener{
         exitButton = new RoundButton("Exit");
 
         this.setVisible(true);
-        this.setBounds(140, 20, 520, 520);
+        this.setBounds(510, 170, 520, 520);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setLayout(null);

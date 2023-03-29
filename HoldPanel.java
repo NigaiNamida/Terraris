@@ -20,7 +20,7 @@ public class HoldPanel extends JPanel{
         holdLabel.setForeground(new Color(193,221,196,255));
         holdLabel.setFont(new Font("Futura",Font.BOLD,20));
         //setting panel
-        this.setBounds(150, 50, 100, 100);
+        this.setBounds(515, 180, 100, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
 

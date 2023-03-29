@@ -20,7 +20,7 @@ public class NextPanel extends JPanel{
         nextLabel.setFont(new Font("Futura",Font.BOLD,20));
 
         //setting panel
-        this.setBounds(545, 50, 100, 100);
+        this.setBounds(925, 180, 100, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
 

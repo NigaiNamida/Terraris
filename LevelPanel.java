@@ -13,7 +13,7 @@ public class LevelPanel extends JPanel{
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
-        this.setBounds(150, 280, 100, 100);
+        this.setBounds(515, 580, 100, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
 

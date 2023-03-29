@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
-    private ScorePanel scorePanel;
+    private XPPanel XPPanel;
     private NextPanel nextPanel;
     private static Gravity gravity;
     private Color gridLineColor;
@@ -31,7 +31,7 @@ public class PlayZone extends JPanel{
 
         holdPanel = GameFrame.getHoldPanel();
         nextPanel = GameFrame.getNextPanel();
-        scorePanel = GameFrame.getScorePanel();
+        XPPanel = GameFrame.getXPPanel();
 
         gridLineColor = new Color(36, 36, 36);
 
@@ -129,7 +129,7 @@ public class PlayZone extends JPanel{
         if(isBottom() || !canGo("Down")){
             if (lastAction <= 0){
                 int m = (lowestPoint()-block.getHeight()) - block.getY();
-                scorePanel.deductScore(m);
+                XPPanel.deductXP(m);
                 hardDrop();
                 repaint();
             }
@@ -166,7 +166,7 @@ public class PlayZone extends JPanel{
     }
     
     public void gameOver(){
-        boolean isHighScore = false;
+        boolean isHighXP = false;
         gravity.stopTimer();
         gravity.stopLastTimer();;
         isGameOver = true;
@@ -174,17 +174,17 @@ public class PlayZone extends JPanel{
         if(GameFrame.getMusic() != null){
             GameFrame.stopMusic();
         }
-        int[] topScore = Leaderboard.getTopScore();
-        int score = scorePanel.getScore();
-        for (int i = 0; i< topScore.length; i++) {
-            if(score > topScore[i]){
-                isHighScore = true;
-                HighScorePanel.getScore().setText(String.format("%,d",score));
+        int[] topXP = Leaderboard.getTopScore();
+        int XP = XPPanel.getXP();
+        for (int i = 0; i< topXP.length; i++) {
+            if(XP > topXP[i]){
+                isHighXP = true;
+                HighScorePanel.getScore().setText(String.format("%,d",XP));
                 GameFrame.getHighScorePanel().setVisible(true);
                 break;
             }
         }
-        if(!isHighScore){
+        if(!isHighXP){
             GameFrame.getGameOverPanel().setVisible(true);
         }
     }
@@ -483,7 +483,7 @@ public class PlayZone extends JPanel{
     //instant drop playing Tetris piece to bottom
     public void hardDrop(){
         int m = (lowestPoint()-block.getHeight()) - block.getY();
-        scorePanel.addHardDropScore(m);
+        XPPanel.addHardDropXP(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         repaint();
         nextPanel.repaint();
@@ -532,7 +532,7 @@ public class PlayZone extends JPanel{
     public void softDrop(){
         if(!isBottom() && canGo("Down")){
             applyGravity();
-            scorePanel.addSoftDropScore();
+            XPPanel.addSoftDropXP();
             GameFrame.playSE(1);
         }
     }
@@ -573,7 +573,7 @@ public class PlayZone extends JPanel{
     }
 
 
-    //check for the row full of block to delete and get score
+    //check for the row full of block to delete and get XP
     public void checkFullLine(){
         int fullLineAmount = 0;
         for(int row = 0; row < gridRows; row++) {
@@ -593,7 +593,7 @@ public class PlayZone extends JPanel{
         }
         if(fullLineAmount > 0){
             GameFrame.playSE(4);
-            scorePanel.addFullLineScore(fullLineAmount);
+            XPPanel.addFullLineXP(fullLineAmount);
         }
     }
 

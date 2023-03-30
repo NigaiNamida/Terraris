@@ -44,7 +44,9 @@ public class BossPanel extends JPanel implements ActionListener{
         
         random = new Random();
         animateTimer = new Timer(200, this);
-        spawnTimer = new Timer(5000, this);
+        spawnTimer = new Timer(10000, this);
+        animateTimer.stop();
+        spawnTimer.stop();
         playZone = GameFrame.getPlayZone();
         bossTitle = new JLabel(bossName);
         bossTitle.setForeground(new Color(193,221,196,255));
@@ -77,10 +79,10 @@ public class BossPanel extends JPanel implements ActionListener{
     public static void randomSpawn(){
         if (canSpawn){
             spawn = random.nextInt(101);
-                if(spawn <= spawnChance){
-                    spawnBoss();
+            if(spawn <= spawnChance){
+                spawnBoss();
             }
-            spawnChance++;
+            else spawnChance++;
             System.out.println(spawnChance + ("%"));
         }
     }
@@ -103,14 +105,14 @@ public class BossPanel extends JPanel implements ActionListener{
         }
 
         if(bossName == "KingSlime"){
-            if(phase >= 2){
-                exitFight();
-            }
-            else if(bossHP <= 500)
+            if(bossHP <= 500)
                 state = 3;
             else if(bossHP <= 1000)
                 state = 2;
+            if(phase >= 2)
+                exitFight();
         }
+
         else if(bossName == "EyeOfCthulhu"){
             if(phase == 2 && !transformed){
                 bossMaxHP = 4000;
@@ -138,6 +140,7 @@ public class BossPanel extends JPanel implements ActionListener{
         phase = 0;
         state = 0;
         transformed = false;
+        spawnChance = 0;
         bossTitle.setText("");
         animateTimer.stop();
         spawnTimer.restart();

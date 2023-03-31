@@ -14,12 +14,17 @@ import javax.swing.border.LineBorder;
 import java.util.Random;
 
 public class BossPanel extends JPanel implements ActionListener{
+    private GameFrame gameFrame;
+    private PlayZone playZone;
+    private LevelPanel levelPanel;
+    private KeyHandler keyHandler;
+
     private JLabel bossTitle;
     private double bossMaxHP;
     private int bossHP;
     private String bossName;
     public int attack;
-    public int cooldown;
+    public int coolDown;
 
     private int frame;
     private int state;   
@@ -33,15 +38,17 @@ public class BossPanel extends JPanel implements ActionListener{
     private Timer animateTimer;
     public Timer spawnTimer;
     public Timer attackTimer;
-    public static PlayZone playZone;
 
     public BossPanel(){
+        gameFrame = Terraris.getGameFrame();
+        keyHandler = gameFrame.getKeyHandler();
+
         bossName = "";
         spawn = 0;
         frame = 0;
         state = 0;
         phase = 0;
-        cooldown = 0;
+        coolDown = 0;
         spawnChance = 0;
         canSpawn = false;
         transformed = false;
@@ -49,11 +56,11 @@ public class BossPanel extends JPanel implements ActionListener{
         random = new Random();
         animateTimer = new Timer(200, this);
         spawnTimer = new Timer(100, this);
-        attackTimer = new Timer(cooldown, this);
+        attackTimer = new Timer(coolDown, this);
         animateTimer.stop();
         spawnTimer.stop();
         attackTimer.stop();
-        playZone = GameFrame.getPlayZone();
+
         bossTitle = new JLabel(bossName);
         bossTitle.setForeground(new Color(193,221,196,255));
         bossTitle.setFont(new Font("Futura",Font.BOLD,15));
@@ -67,13 +74,19 @@ public class BossPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(playZone == null){
-            playZone = GameFrame.getPlayZone();
+            playZone = gameFrame.getPlayZone();
         }
-        if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == animateTimer)
+        if(levelPanel == null){
+            levelPanel = gameFrame.getLevelPanel();
+        }
+        if(keyHandler == null){
+            keyHandler = gameFrame.getKeyHandler();
+        }
+        if (!playZone.isGameOver() && !keyHandler.isPause() && gameFrame.isPlaying() && e.getSource() == animateTimer)
             animate();
-        if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == spawnTimer)
+        if (!playZone.isGameOver() && !keyHandler.isPause() && gameFrame.isPlaying() && e.getSource() == spawnTimer)
             randomSpawn();
-        if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == attackTimer)
+        if (!playZone.isGameOver() && !keyHandler.isPause() && gameFrame.isPlaying() && e.getSource() == attackTimer)
             attack();
         if (playZone.isGameOver()){
             animateTimer.stop();
@@ -102,13 +115,13 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void spawnBoss(){
         if(phase == 0){
-            if(LevelPanel.getLevel() <= 5){
+            if(levelPanel.getLevel() <= 5){
                 bossName = "KingSlime";
                 bossMaxHP = 5000;
                 bossHP = 5000;
                 bossTitle.setText("King Slime");
             }
-            else if (LevelPanel.getLevel() <= 10){
+            else if (levelPanel.getLevel() <= 10){
                 bossName = "EyeOfCthulhu";
                 bossMaxHP = 4000;
                 bossHP = 4000;
@@ -186,12 +199,12 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void setAttackTimer(){
         if (bossName == "KingSlime"){
-           cooldown = 10000; 
+           coolDown = 10000; 
         }
         else if (bossName == "EyeOfCthulhu"){
-            cooldown = 15000; 
+            coolDown = 15000; 
         }
-        attackTimer = new Timer(cooldown, this);
+        attackTimer = new Timer(coolDown, this);
     }
 
     public void attack(){

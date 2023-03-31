@@ -14,13 +14,15 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Menu extends JPanel implements ActionListener{
-    private static BufferedImage myPicture;
-    private static JButton startButton;
-    private static JButton leaderboardButton;
-    private static JButton settingButton;
-    private static JButton exitButton;
-    private static JLabel LogoLabel;
+    private GameFrame gameFrame;
+    private BufferedImage myPicture;
+    private JButton startButton;
+    private JButton leaderboardButton;
+    private JButton settingButton;
+    private JButton exitButton;
+    private JLabel LogoLabel;
     Menu(){
+        gameFrame = Terraris.getGameFrame();
         startButton = new JButton("Start Game");
         leaderboardButton = new JButton("Leaderboard");
         settingButton = new JButton("Setting");
@@ -83,15 +85,15 @@ public class Menu extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == startButton){
             this.setVisible(false);
-            GameFrame.startGame();
+            gameFrame.startGame();
         }
         else if(e.getSource() == leaderboardButton){
             this.setVisible(false);
-            GameFrame.getLeaderboard().setVisible(true);
+            gameFrame.getLeaderboard().setVisible(true);
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
-            GameFrame.getSettingPanel().setVisible(true);
+            gameFrame.getSettingPanel().setVisible(true);
             SettingPanel.setNewKey(-1);
             SettingPanel.setSettingKey(null);
             SettingPanel.setSetting(false);

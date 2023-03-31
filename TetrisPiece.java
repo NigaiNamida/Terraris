@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class TetrisPiece {
-    private static ArrayList<String> blockSet = new ArrayList<String>();
+    private static ArrayList<String> blockSet;
     private String name;
     private int[][] shape;
     private Color color;
@@ -39,6 +39,9 @@ public class TetrisPiece {
     }
 
     public static void queueBlock(ArrayList<String> blockQueue,boolean reset){
+        if(blockSet == null){
+            blockSet = new ArrayList<String>();
+        }
         if(reset){
             blockQueue.clear();
             blockSet.clear();

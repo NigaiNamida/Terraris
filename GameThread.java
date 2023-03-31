@@ -1,22 +1,27 @@
 public class GameThread extends Thread{
+    private GameFrame gameFrame;
+    private PlayZone playZone;
+    private KeyHandler keyHandler;
+    private PausePanel pausePanel;
+    private int FPS;
+    private long leftHoldingTime;
+    private long rightHoldingTime;
+    private double interval;
+    private double nextTime;
 
-    private static PlayZone playZone;
-    private static KeyHandler keyHandler;
-    private static PausePanel pausePanel;
-    private static int FPS;
-    private static long leftHoldingTime;
-    private static long rightHoldingTime;
-    private static double interval;
-    private static double nextTime;
+    GameThread(){
+        gameFrame = Terraris.getGameFrame();
+        keyHandler = gameFrame.getKeyHandler();
+    }
     @Override
     public void run() {
         setInitialValue();
-        while(GameFrame.isPlaying()){
+        while(gameFrame.isPlaying()){
             if(!playZone.isGameOver()){
-                if(GameFrame.getEffect().getClip() != null)
-                    GameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
+                if(gameFrame.getEffect().getClip() != null)
+                    gameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
                 pausePanel.repaint();
-                if(!KeyHandler.isPause()){
+                if(!keyHandler.isPause()){
                     try{
                         double remainingTime = nextTime - System.nanoTime();
                         remainingTime /= 1000000;
@@ -31,20 +36,20 @@ public class GameThread extends Thread{
                 }
             }
             else{
-                if(GameFrame.getHighScorePanel().isVisible()){
-                    GameFrame.getHighScorePanel().repaint();
+                if(gameFrame.getHighScorePanel().isVisible()){
+                    gameFrame.getHighScorePanel().repaint();
                 }
                 else{
-                    GameFrame.getGameOverPanel().repaint();
+                    gameFrame.getGameOverPanel().repaint();
                 }
             }
         }
     }
 
-    public static void setInitialValue(){
-        keyHandler = GameFrame.getKeyHandler();
-        playZone = GameFrame.getPlayZone();
-        pausePanel = GameFrame.getPausePanel();
+    public void setInitialValue(){
+        keyHandler = gameFrame.getKeyHandler();
+        playZone = gameFrame.getPlayZone();
+        pausePanel = gameFrame.getPausePanel();
 
         FPS = 60;
         interval = 1000000000/FPS;
@@ -52,12 +57,12 @@ public class GameThread extends Thread{
         leftHoldingTime = rightHoldingTime = 0;
     }
 
-    public static void resetLeftHoldingTime() {
+    public void resetLeftHoldingTime() {
         leftHoldingTime = 0;
     }
 
 
-    public static void resetRightHoldingTime() {
+    public void resetRightHoldingTime() {
         rightHoldingTime = 0;
     }
 

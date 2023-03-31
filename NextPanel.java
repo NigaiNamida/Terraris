@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class NextPanel extends JPanel{
+    private PlayZone playZone;
     private JLabel nextLabel;
     private int gridCols;
     private int gridRows;
@@ -13,6 +14,7 @@ public class NextPanel extends JPanel{
     private TetrisPiece block;
 
     public NextPanel(){
+        playZone = Terraris.getGameFrame().getPlayZone();
         nextLabel = new JLabel("NEXT");
         nextLabel.setForeground(new Color(193,221,196,255));
         nextLabel.setFont(new Font("Futura",Font.BOLD,20));
@@ -24,7 +26,7 @@ public class NextPanel extends JPanel{
 
         //add component
         this.add(nextLabel);
-        block = PlayZone.getNextPiece();
+        block = playZone.getNextPiece();
 
         //set value of var for grid
         gridCols = 5;

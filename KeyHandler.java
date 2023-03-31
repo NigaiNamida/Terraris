@@ -2,14 +2,18 @@
 import java.awt.event.*;
 
 public class KeyHandler implements KeyListener{
+    private GameFrame gameFrame;
     private PlayZone playZone;
+    private GameThread gameThread;
     private boolean isRightPressed,isLeftPressed,isSoftDropPressed,isHardDropPressed,isRotateCWPressed,isRotateCT_CWPressed,isHoldPressed;
     private boolean isHoldingCWRotate,isHoldingCT_CWRotate,isHoldingHardDrop,isHoldingPause;
     private boolean isLeftFirst,isRightFirst;
-    private static boolean isPause;
+    private boolean isPause;
 
     KeyHandler(){
-        playZone = GameFrame.getPlayZone();
+        gameFrame = Terraris.getGameFrame();
+        playZone = gameFrame.getPlayZone();
+        gameThread = gameFrame.getGameThread();
         isPause = false;
         isHoldingPause = false;
     }
@@ -118,51 +122,58 @@ public class KeyHandler implements KeyListener{
         this.isRightFirst = rightFirst;
     }
 
-    public static boolean isPause() {
+    public boolean isPause() {
         return isPause;
     }
 
-    public static void setPause(boolean isPause) {
-        KeyHandler.isPause = isPause;
+    public void setPause(boolean isPause) {
+        this.isPause = isPause;
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+        if(gameThread == null){
+            gameThread = gameFrame.getGameThread();
+        }
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(gameThread == null){
+            gameThread = gameFrame.getGameThread();
+        }
         int code = e.getKeyCode();
         if(code != 27 && SettingPanel.isSetting() && !SettingPanel.Duplicate(code)){
             SettingPanel.setNewKey(code);
             SettingPanel.setNewKey();
-            GameFrame.getAnyKeyPanel().setVisible(false);
+            gameFrame.getAnyKeyPanel().setVisible(false);
         }
-        if((code == 27) && !SettingPanel.isSetting() && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
-        (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
-            GameFrame.getMenu().setVisible(true);
-            GameFrame.getSettingPanel().setVisible(false);
+        if((code == 27) && !SettingPanel.isSetting() && !gameFrame.isPlaying() && !gameFrame.getMenu().isVisible() && 
+        (gameFrame.getSettingPanel().isVisible() || gameFrame.getLeaderboard().isVisible())){
+            gameFrame.getMenu().setVisible(true);
+            gameFrame.getSettingPanel().setVisible(false);
             SettingPanel.saveSetting();
-            GameFrame.getLeaderboard().setVisible(false);
+            gameFrame.getLeaderboard().setVisible(false);
         }
-        else if((code == 27 || code == 112) && !SettingPanel.isSetting() && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
-            GameFrame.getPausePanel().setVisible(true);
+        else if((code == 27 || code == 112) && !SettingPanel.isSetting() && gameFrame.isPlaying() && !gameFrame.getMenu().isVisible() && gameFrame.getSettingPanel().isVisible()){
+            gameFrame.getPausePanel().setVisible(true);
             SettingPanel.saveSetting();
-            GameFrame.getSettingPanel().setVisible(false);
-            GameFrame.getLeaderboard().setVisible(false);
+            gameFrame.getSettingPanel().setVisible(false);
+            gameFrame.getLeaderboard().setVisible(false);
         }
         else if(!playZone.isGameOver() && !SettingPanel.isSetting()){
-            if((code == 27 || code == 112) && !isHoldingPause && GameFrame.isPlaying()){
+            if((code == 27 || code == 112) && !isHoldingPause && gameFrame.isPlaying()){
                 isHoldingPause = true;
                 isPause = !isPause;
                 if(isPause){
-                    if(GameFrame.getMusic().getClip() != null)
-                        GameFrame.getMusic().pauseSound();
-                    GameFrame.pauseGame();
+                    if(gameFrame.getMusic().getClip() != null)
+                        gameFrame.getMusic().pauseSound();
+                    gameFrame.pauseGame();
                 }
                 else{
-                    if(GameFrame.getMusic().getClip() != null)
-                        GameFrame.getMusic().resumeSound();
-                    GameFrame.continueGame();
+                    if(gameFrame.getMusic().getClip() != null)
+                        gameFrame.getMusic().resumeSound();
+                    gameFrame.continueGame();
                 }
             }
             if(!isPause){
@@ -205,6 +216,9 @@ public class KeyHandler implements KeyListener{
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if(gameThread == null){
+            gameThread = gameFrame.getGameThread();
+        }
         int code = e.getKeyCode();
         if(!playZone.isGameOver()){
             if(code == 27 || code == 112){
@@ -213,12 +227,12 @@ public class KeyHandler implements KeyListener{
             else if(code == SettingPanel.getKeyBind("Right")){
                 isRightPressed = false;
                 isRightFirst = false;
-                GameThread.resetRightHoldingTime();
+                gameThread.resetRightHoldingTime();
             }
             else if(code == SettingPanel.getKeyBind("Left")){
                 isLeftPressed = false;
                 isLeftFirst = false;
-                GameThread.resetLeftHoldingTime();
+                gameThread.resetLeftHoldingTime();
             }
             else if(code == SettingPanel.getKeyBind("SoftDrop")){
                 isSoftDropPressed = false;

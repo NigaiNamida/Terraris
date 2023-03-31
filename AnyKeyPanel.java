@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class AnyKeyPanel extends JPanel{
-    private static JLabel anyKeyLabel;
+    private JLabel anyKeyLabel;
 
     public AnyKeyPanel(){
         anyKeyLabel = new JLabel("Press any Key to set Key");

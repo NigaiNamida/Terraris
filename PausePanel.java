@@ -10,12 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PausePanel extends JPanel implements ActionListener{
-    private static JLabel pauseLabel;
-    private static JButton resumeButton;
-    private static JButton settingButton;
-    private static JButton exitButton;
+    private GameFrame gameFrame;
+    private KeyHandler keyHandler;
+    private JLabel pauseLabel;
+    private JButton resumeButton;
+    private JButton settingButton;
+    private JButton exitButton;
 
     public PausePanel(){
+        gameFrame = Terraris.getGameFrame();
+        keyHandler = gameFrame.getKeyHandler();
         pauseLabel = new JLabel("PAUSE");
         resumeButton = new JButton("RESUME");
         settingButton = new JButton("SETTING");
@@ -74,8 +78,8 @@ public class PausePanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == resumeButton){
-            GameFrame.continueGame();
-            KeyHandler.setPause(false);
+            gameFrame.continueGame();
+            keyHandler.setPause(false);
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
@@ -83,13 +87,13 @@ public class PausePanel extends JPanel implements ActionListener{
             SettingPanel.setSettingKey(null);
             SettingPanel.setSetting(false);
             SettingPanel.enableButton();
-            GameFrame.getSettingPanel().setVisible(true);
+            gameFrame.getSettingPanel().setVisible(true);
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
-            GameFrame.getPlayZone().setGameOver(true);
-            Terraris.getGameFrame().backToMenu();
+            gameFrame.getPlayZone().setGameOver(true);
+            gameFrame.backToMenu();
         }
     }
 }

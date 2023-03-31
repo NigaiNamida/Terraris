@@ -3,30 +3,40 @@ import javax.swing.*;
 import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 public class PlayZone extends JPanel{
+    private GameFrame gameFrame;
     private HoldPanel holdPanel;
     private XPPanel XPPanel;
     private NextPanel nextPanel;
-    private static Gravity gravity;
+    private GoalPanel goalPanel;
+    private HighScorePanel highScorePanel;
+    private Gravity gravity;
+    
     private Color gridLineColor;
     private int gridCols;
     private int gridRows;
-    private static int blockSize;
-    private static int lastAction;
+    private int blockSize;
+    private int lastAction;
 
-    private static boolean isUseHold;
+    private boolean isUseHold;
     private boolean isGameOver;
     private boolean isMiniTSpin;
     private boolean isTSpin;
     private boolean isRotated;
 
     private TetrisPiece block;
-    private static ArrayList<String> blockQueue = new ArrayList<String>();
+    private ArrayList<String> blockQueue = new ArrayList<String>();
     
-    private static Color[][] background;
+    private Color[][] background;
 
     private int[][] testSet;
 
     public PlayZone(){
+        gameFrame = Terraris.getGameFrame();
+        holdPanel = gameFrame.getHoldPanel();
+        nextPanel = gameFrame.getNextPanel();
+        XPPanel = gameFrame.getXPPanel();
+        goalPanel = gameFrame.getGoalPanel();
+        highScorePanel = gameFrame.getHighScorePanel();
         lastAction = 0;
         blockQueue = new ArrayList<String>();
         isUseHold = false;
@@ -35,10 +45,6 @@ public class PlayZone extends JPanel{
         isRotated = false;
         isMiniTSpin = false;
         isTSpin = false;
-
-        holdPanel = GameFrame.getHoldPanel();
-        nextPanel = GameFrame.getNextPanel();
-        XPPanel = GameFrame.getXPPanel();
 
         gridLineColor = new Color(36, 36, 36);
 
@@ -56,7 +62,6 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueBlock(blockQueue,true);
         
         gravity = new Gravity(this,1);
-        createBlock();
     }
 
     public void resetTSpin() {
@@ -65,7 +70,7 @@ public class PlayZone extends JPanel{
         isTSpin = false;
     }
 
-    public static Gravity getGravity() {
+    public Gravity getGravity() {
         return gravity;
     }
 
@@ -83,14 +88,14 @@ public class PlayZone extends JPanel{
     }
 
     //add more 7 shuffle piece to queue
-    public static void addQueueIfLow(){
+    public void addQueueIfLow(){
         if(blockQueue.size() <= 1){
             TetrisPiece.queueBlock(blockQueue,false);
         }
     }
 
     //return Tetris piece in queue next order and reset Hold usage
-    public static TetrisPiece getNextPiece(){
+    public TetrisPiece getNextPiece(){
         isUseHold = false;
         addQueueIfLow();
         return TetrisPiece.getBlock(blockQueue.get(0));
@@ -165,6 +170,9 @@ public class PlayZone extends JPanel{
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0));
         block.spawnTetris(gridCols);
+        if(nextPanel == null){
+            nextPanel = gameFrame.getNextPanel();
+        }
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
         int x = block.getX();
@@ -172,7 +180,7 @@ public class PlayZone extends JPanel{
         for(int row = 0; row < block.getHeight() && !isGameOver; row++) {
             for(int col = 0; col < block.getWidth(); col++) {
                 if(background[row+y][col+x] != null){
-                    GameFrame.playSE(5);
+                    gameFrame.playSE(5);
                     gameOver();
                     break;
                 }
@@ -185,22 +193,22 @@ public class PlayZone extends JPanel{
         gravity.stopTimer();
         gravity.stopLastTimer();;
         isGameOver = true;
-        GameFrame.setPlaying(false);
-        if(GameFrame.getMusic() != null){
-            GameFrame.stopMusic();
+        gameFrame.setPlaying(false);
+        if(gameFrame.getMusic() != null){
+            gameFrame.stopMusic();
         }
         int[] topXP = Leaderboard.getTopScore();
         int XP = XPPanel.getXP();
         for (int i = 0; i< topXP.length; i++) {
             if(XP > topXP[i]){
                 isHighXP = true;
-                HighScorePanel.getScore().setText(String.format("%,d",XP));
-                GameFrame.getHighScorePanel().setVisible(true);
+                highScorePanel.getScore().setText(String.format("%,d",XP));
+                highScorePanel.setVisible(true);
                 break;
             }
         }
         if(!isHighXP){
-            GameFrame.getGameOverPanel().setVisible(true);
+            gameFrame.getGameOverPanel().setVisible(true);
         }
     }
 
@@ -225,7 +233,7 @@ public class PlayZone extends JPanel{
             nextPanel.repaint();
             holdPanel.repaint();
             repaint();
-            GameFrame.playSE(3);
+            gameFrame.playSE(3);
         }
     }
 
@@ -510,7 +518,7 @@ public class PlayZone extends JPanel{
         nextPanel.repaint();
         nextPanel.setBlock(getNextPiece());
         updateBackGround();
-        GameFrame.playSE(2);
+        gameFrame.playSE(2);
         checkFullLine();
         createBlock();
         gravity.restartTimer();
@@ -554,7 +562,7 @@ public class PlayZone extends JPanel{
         if(!isBottom() && canGo("Down")){
             applyGravity();
             XPPanel.addSoftDropXP();
-            GameFrame.playSE(1);
+            gameFrame.playSE(1);
         }
     }
 
@@ -569,7 +577,7 @@ public class PlayZone extends JPanel{
             nextPanel.repaint();
             nextPanel.setBlock(getNextPiece());
             updateBackGround();
-            GameFrame.playSE(2);
+            gameFrame.playSE(2);
             checkFullLine();
             createBlock();
             lastTimerTrigger();
@@ -656,8 +664,8 @@ public class PlayZone extends JPanel{
             }
             if(isFullRow){
                 fullLineAmount++;
-                GoalPanel.addGoal();
-                GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
+                goalPanel.addGoal();
+                goalPanel.getGoalScore().setText(""+goalPanel.getGoal());
                 shiftRow(row);//bottom row to shift
             }
         }
@@ -665,7 +673,7 @@ public class PlayZone extends JPanel{
             XPPanel.addTSpinXP(isTSpin,fullLineAmount);
         }
         else if(fullLineAmount > 0){
-            GameFrame.playSE(4);
+            gameFrame.playSE(4);
             XPPanel.addFullLineXP(fullLineAmount);
         }
     }

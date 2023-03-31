@@ -10,9 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverPanel extends JPanel implements ActionListener{
-    private static JLabel gameOverLabel;
-    private static JButton retryButton;
-    private static JButton exitButton;
+    private JLabel gameOverLabel;
+    private JButton retryButton;
+    private JButton exitButton;
 
     public GameOverPanel(){
         gameOverLabel = new JLabel("GAME OVER");new JLabel("GAME OVER");

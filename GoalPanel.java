@@ -4,9 +4,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class GoalPanel extends JPanel{
-    private static int goal;
-    private static JLabel goalLabel;
-    private static JLabel goalScore;
+    private int goal;
+    private JLabel goalLabel;
+    private JLabel goalScore;
 
     public GoalPanel(){
         //setting panel
@@ -36,15 +36,15 @@ public class GoalPanel extends JPanel{
         super.paintComponent(g);//not have = no panel bg color
     }
 
-    public static int getGoal() {
+    public int getGoal() {
         return goal;
     }
 
-    public static void addGoal() {
+    public void addGoal() {
         goal++;
     }
 
-    public static JLabel getGoalScore() {
+    public JLabel getGoalScore() {
         return goalScore;
     }
     

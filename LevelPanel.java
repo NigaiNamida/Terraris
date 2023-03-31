@@ -8,6 +8,7 @@ public class LevelPanel extends JPanel{
     private static int level;
     private static JLabel levelLabel;
     private static JLabel levelScore;
+    private static BossPanel bossPanel;
 
     public LevelPanel(){
         level = 1;
@@ -29,6 +30,8 @@ public class LevelPanel extends JPanel{
         levelLabel.setFont(new Font("Futura",Font.BOLD,20));
         levelScore.setFont(new Font("Futura",Font.BOLD,30));
         levelScore.setText(""+level);
+
+        bossPanel = GameFrame.getBossPanel();
     }
 
     public static int getLevel() {
@@ -37,12 +40,15 @@ public class LevelPanel extends JPanel{
 
     public static void addLevel() {
         level++;
-        BossPanel.spawnChance += 5;
-        if(BossPanel.phase == 0){
-            BossPanel.canSpawn = true;
-            BossPanel.spawnTimer.restart();
+        if(bossPanel == null){
+            bossPanel = GameFrame.getBossPanel();
+        }
+        bossPanel.spawnChance += 5;
+        if(bossPanel.phase == 0){
+            bossPanel.canSpawn = true;
+            bossPanel.restartSpawnTimer();
             System.out.println("Boss Spawn Active");
-            System.out.println(BossPanel.spawnChance + "%");
+            System.out.println(bossPanel.spawnChance + "%");
         }
     }
 

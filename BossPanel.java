@@ -14,22 +14,25 @@ import javax.swing.border.LineBorder;
 import java.util.Random;
 
 public class BossPanel extends JPanel implements ActionListener{
-    private static JLabel bossTitle;
-    private static double bossMaxHP;
-    private static int bossHP;
-    private static String bossName;
+    private JLabel bossTitle;
+    private double bossMaxHP;
+    private int bossHP;
+    private String bossName;
+    public int attack;
+    public int cooldown;
 
-    private static int frame;
-    private static int state;   
-    public static int phase;
-    private static double spawn;
-    public static int spawnChance;
-    private static Random random;
-    private static boolean transformed;
-    public static boolean canSpawn;
-    private static Image bossImage;
-    private static Timer animateTimer;
-    public static Timer spawnTimer;
+    private int frame;
+    private int state;   
+    public int phase;
+    private double spawn;
+    public int spawnChance;
+    private Random random;
+    private boolean transformed;
+    public boolean canSpawn;
+    private Image bossImage;
+    private Timer animateTimer;
+    public Timer spawnTimer;
+    public Timer attackTimer;
     public static PlayZone playZone;
 
     public BossPanel(){
@@ -38,15 +41,18 @@ public class BossPanel extends JPanel implements ActionListener{
         frame = 0;
         state = 0;
         phase = 0;
+        cooldown = 0;
         spawnChance = 0;
         canSpawn = false;
         transformed = false;
         
         random = new Random();
         animateTimer = new Timer(200, this);
-        spawnTimer = new Timer(10000, this);
+        spawnTimer = new Timer(100, this);
+        attackTimer = new Timer(cooldown, this);
         animateTimer.stop();
         spawnTimer.stop();
+        attackTimer.stop();
         playZone = GameFrame.getPlayZone();
         bossTitle = new JLabel(bossName);
         bossTitle.setForeground(new Color(193,221,196,255));
@@ -67,6 +73,13 @@ public class BossPanel extends JPanel implements ActionListener{
             animate();
         if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == spawnTimer)
             randomSpawn();
+        if (!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == attackTimer)
+            attack();
+        if (playZone.isGameOver()){
+            animateTimer.stop();
+            spawnTimer.stop();
+            attackTimer.stop();
+        }
     }
 
     @Override
@@ -76,7 +89,7 @@ public class BossPanel extends JPanel implements ActionListener{
         drawBoss(g);
     }
 
-    public static void randomSpawn(){
+    public void randomSpawn(){
         if (canSpawn){
             spawn = random.nextInt(101);
             if(spawn <= spawnChance){
@@ -87,12 +100,12 @@ public class BossPanel extends JPanel implements ActionListener{
         }
     }
 
-    public static void spawnBoss(){
+    public void spawnBoss(){
         if(phase == 0){
             if(LevelPanel.getLevel() <= 5){
                 bossName = "KingSlime";
-                bossMaxHP = 2000;
-                bossHP = 2000;
+                bossMaxHP = 5000;
+                bossHP = 5000;
                 bossTitle.setText("King Slime");
             }
             else if (LevelPanel.getLevel() <= 10){
@@ -105,9 +118,9 @@ public class BossPanel extends JPanel implements ActionListener{
         }
 
         if(bossName == "KingSlime"){
-            if(bossHP <= 500)
+            if(bossHP <= bossMaxHP/4.0)
                 state = 3;
-            else if(bossHP <= 1000)
+            else if(bossHP <= bossMaxHP/2.0)
                 state = 2;
             if(phase >= 2)
                 exitFight();
@@ -125,17 +138,19 @@ public class BossPanel extends JPanel implements ActionListener{
         }
     }
 
-    public static void enterFight(){
-        state++;
-        phase++;
+    public void enterFight(){
+        state = 1;
+        phase = 1;
+        setAttackTimer();
         animateTimer.restart();
+        attackTimer.restart();
         spawnTimer.stop();
         canSpawn = false;
         spawnChance = 0;
         System.out.println("Boss Spawn Deactive");
     }
 
-    public static void exitFight(){
+    public void exitFight(){
         bossName = "null";
         phase = 0;
         state = 0;
@@ -143,6 +158,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = 0;
         bossTitle.setText("");
         animateTimer.stop();
+        attackTimer.stop();
         spawnTimer.restart();
     }
 
@@ -168,6 +184,20 @@ public class BossPanel extends JPanel implements ActionListener{
         }
     }
 
+    public void setAttackTimer(){
+        if (bossName == "KingSlime"){
+           cooldown = 10000; 
+        }
+        else if (bossName == "EyeOfCthulhu"){
+            cooldown = 15000; 
+        }
+        attackTimer = new Timer(cooldown, this);
+    }
+
+    public void attack(){
+        System.out.println("U Stupid");
+    }
+
     public void animate(){
         repaint();
         frame = (frame + 1) % 8;
@@ -175,15 +205,31 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void drawBoss(Graphics g){  
         if (bossName == "KingSlime"){       
-            if(frame % 2 == 0){
-                bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_0.png").getImage();
-                g.drawImage(bossImage ,40, 50,null);}
-            else if(frame % 4 == 1){
-                bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_1.png").getImage();
-                g.drawImage(bossImage ,40, 50, null);}
-            else if(frame % 4 == 3){
-                bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_2.png").getImage();
-                g.drawImage(bossImage ,40, 50, null);}  
+            if (state == 1){
+                if(frame % 2 == 0){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_0.png").getImage();
+                    g.drawImage(bossImage ,40, 50,null);}
+                else if(frame % 4 == 1){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_1.png").getImage();
+                    g.drawImage(bossImage ,40, 50, null);}
+                else if(frame % 4 == 3){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_2.png").getImage();
+                    g.drawImage(bossImage ,40, 50, null);}  
+            }
+            else if (state == 2 || state == 3){
+                if(frame % 4 == 0){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_0.png").getImage();
+                    g.drawImage(bossImage ,40, 50,null);}
+                else if(frame % 4 == 1){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_1.png").getImage();
+                    g.drawImage(bossImage ,40, 50, null);}
+                else if(frame % 4 == 2){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_2.png").getImage();
+                    g.drawImage(bossImage ,40, 50, null);}
+                else if(frame % 4 == 3){
+                    bossImage = new ImageIcon("Assets/Image/Bosses/" + bossName + "/Idle_" + state + "_3.png").getImage();
+                    g.drawImage(bossImage ,40, 50, null);}  
+            }
         }  
         else if (bossName == "EyeOfCthulhu"){       
             if (phase == 1){
@@ -221,6 +267,46 @@ public class BossPanel extends JPanel implements ActionListener{
                     g.drawImage(bossImage ,25, 50, null);}  
             }
         }  
+    }
+
+    public Timer getSpawnTimer() {
+        return spawnTimer;
+    }
+
+    public void setSpawnTimer(Timer spawnTimer) {
+        this.spawnTimer = spawnTimer;
+    }
+
+    public void restartSpawnTimer() {
+        spawnTimer.restart();
+    }
+
+    public void stopSpawnTimer() {
+        spawnTimer.stop();
+    }
+
+    public int getPhase() {
+        return phase;
+    }
+
+    public  void setPhase(int phase) {
+        this.phase = phase;
+    }
+
+    public int getSpawnChance() {
+        return spawnChance;
+    }
+
+    public void setSpawnChance(int spawnChance) {
+        this.spawnChance = spawnChance;
+    }
+
+    public boolean isCanSpawn() {
+        return canSpawn;
+    }
+
+    public void setCanSpawn(boolean canSpawn) {
+        this.canSpawn = canSpawn;
     }
 }
 

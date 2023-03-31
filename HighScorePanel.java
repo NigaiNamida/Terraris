@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 
 public class HighScorePanel extends JPanel implements ActionListener{
     private GameFrame gameFrame;
+    private XPPanel XPPanel;
+    private GameOverPanel gameOverPanel;
     private JLabel highScoreLabel;
     private JLabel score;
     private JLabel initial;
@@ -23,6 +25,8 @@ public class HighScorePanel extends JPanel implements ActionListener{
 
     public HighScorePanel(){
         gameFrame = Terraris.getGameFrame();
+        XPPanel = gameFrame.getXPPanel();
+        gameOverPanel = gameFrame.getGameOverPanel();
         highScoreLabel = new JLabel("NEW HIGH SCORE!");
         score = new JLabel();
         initial = new JLabel("ENTER YOUR INITIAL");
@@ -85,7 +89,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okButton){
             int[] topScore = Leaderboard.getTopScore();
-            int XP = gameFrame.getXPPanel().getXP();
+            int XP = XPPanel.getXP();
             for (int i = 0; i< topScore.length; i++) {
                 if(XP > topScore[i]){
                     Leaderboard.newRank(textField.getText(), XP,i);
@@ -93,7 +97,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
                 }
             }
             this.setVisible(false);
-            gameFrame.getGameOverPanel().setVisible(true);
+            gameOverPanel.setVisible(true);
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
         }

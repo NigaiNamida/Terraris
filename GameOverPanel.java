@@ -10,11 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverPanel extends JPanel implements ActionListener{
+    private GameFrame gameFrame;
     private JLabel gameOverLabel;
     private JButton retryButton;
     private JButton exitButton;
 
     public GameOverPanel(){
+        gameFrame = Terraris.getGameFrame();
         gameOverLabel = new JLabel("GAME OVER");new JLabel("GAME OVER");
         retryButton = new JButton("RETRY");
         exitButton = new JButton("EXIT TO MENU");
@@ -63,14 +65,14 @@ public class GameOverPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == retryButton){
-            Terraris.getGameFrame().retry();
             this.setVisible(false);
-            Terraris.getGameFrame().repaint();
+            gameFrame.retry();
+            gameFrame.repaint();
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
-            Terraris.getGameFrame().backToMenu();
+            gameFrame.backToMenu();
         }
     }
 }

@@ -14,6 +14,9 @@ import javax.swing.border.LineBorder;
 
 public class SettingPanel extends JPanel implements ActionListener{
     private static GameFrame gameFrame;
+    private static AnyKeyPanel anyKeyPanel;
+    private static Sound music;
+    private static Sound effect;
     private static String settingFile;
     private static HashMap<String,Integer> keyBind;
     private static HashMap<String,JLabel> settingLabel;
@@ -29,6 +32,9 @@ public class SettingPanel extends JPanel implements ActionListener{
     private Font font = new Font("Futura",Font.PLAIN,20);
     public SettingPanel(){
         gameFrame = Terraris.getGameFrame();
+        anyKeyPanel = gameFrame.getAnyKeyPanel();
+        music = gameFrame.getMusic();
+        effect = gameFrame.getEffect();
         keyBind = new HashMap<String,Integer>();
         settingLabel = new HashMap<String,JLabel>();
         settingButton = new HashMap<String,JButton>();
@@ -221,12 +227,12 @@ public class SettingPanel extends JPanel implements ActionListener{
         if(button == settingButton.get("MusicVolumeDecrease") && musicVolume != 0){
             musicVolume -= 10;
             settingLabel.get("MusicVolume").setText((musicVolume)+"%");
-            gameFrame.getMusic().setVolume(musicVolume/2);
+            music.setVolume(musicVolume/2);
         }
         else if(button == settingButton.get("MusicVolumeIncrease") && musicVolume != 100){
             musicVolume += 10;
             settingLabel.get("MusicVolume").setText((musicVolume)+"%");
-            gameFrame.getMusic().setVolume(musicVolume/2);
+            music.setVolume(musicVolume/2);
         }
         else if(button == settingButton.get("FXVolumeDecrease")  && FXVolume != 0){
             FXVolume -= 10;
@@ -236,12 +242,12 @@ public class SettingPanel extends JPanel implements ActionListener{
         else if(button == settingButton.get("FXVolumeIncrease") && FXVolume != 100){
             FXVolume += 10;
             settingLabel.get("FXVolume").setText((FXVolume)+"%");
-            gameFrame.getEffect().setVolume(FXVolume/2);
+            effect.setVolume(FXVolume/2);
         }
         else if(settingButton.containsValue(button) && FXVolume != 0 && FXVolume != 100 && musicVolume != 0 && musicVolume != 100){
             settingKey = getKeyFromButton((JButton) e.getSource());
             isSetting = true;
-            gameFrame.getAnyKeyPanel().setVisible(true);
+            anyKeyPanel.setVisible(true);
             disableButton();
         }
     }

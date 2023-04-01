@@ -49,8 +49,12 @@ public class XPPanel extends JPanel{
     }
 
     public void deductXP(int point){
-        XP -= point;
-        bossPanel.damageToBoss(-point);
+        if(bossPanel.getBoss() != null){
+            bossPanel.damageToBoss(-point);
+        }
+        else{
+            XP -= point;
+        }
         checkLevel();
     }
 
@@ -97,8 +101,13 @@ public class XPPanel extends JPanel{
             System.out.println("Starting Back To Back");
         }
         isBackToBack = true;
-        XP += point;
-        bossPanel.damageToBoss(point);
+
+        if(bossPanel.getBoss() != null){
+            bossPanel.damageToBoss(point);
+        }
+        else{
+            XP += point;
+        }
         checkLevel();
     }
 
@@ -131,20 +140,32 @@ public class XPPanel extends JPanel{
         }
         isBackToBack = (fullLineAmount == 4);
 
-        XP += point;
-        bossPanel.damageToBoss(point);
+        if(bossPanel.getBoss() != null){
+            bossPanel.damageToBoss(point);
+        }
+        else{
+            XP += point;
+        }
         checkLevel();
     }
 
     public void addSoftDropXP(){
-        XP++;
-        bossPanel.damageToBoss(1);
+        if(bossPanel.getBoss() != null){
+            bossPanel.damageToBoss(1);
+        }
+        else{
+            XP++;
+        }
         checkLevel();
     }
 
     public void addHardDropXP(int m){
-        XP += 2*m;
-        bossPanel.damageToBoss(2*m);
+        if(bossPanel.getBoss() != null){
+            bossPanel.damageToBoss(2*m);
+        }
+        else{
+            XP += 2*m;
+        }
         checkLevel();
     }
 

@@ -29,7 +29,7 @@ public class PlayZone extends JPanel{
 
     public PlayZone(){
         lastAction = 0;
-        brightness = (70)/100.0f;
+        brightness = (60)/100.0f;
         blockQueue = new ArrayList<String>();
         isUseHold = false;
         isGameOver = false;
@@ -42,7 +42,7 @@ public class PlayZone extends JPanel{
         nextPanel = GameFrame.getNextPanel();
         XPPanel = GameFrame.getXPPanel();
 
-        gridLineColor = new Color(125, 125, 125);
+        gridLineColor = new Color(150, 150, 150);
 
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);

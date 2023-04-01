@@ -27,8 +27,6 @@ public class XPPanel extends JPanel{
     }
 
     public void checkLevel(){
-        System.out.println("XP = "+XP);
-        System.out.println("maxXP = "+maxXP);
         while(XP >= maxXP){
             LevelPanel.addLevel();
             LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());

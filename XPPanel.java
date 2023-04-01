@@ -4,19 +4,13 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class XPPanel extends JPanel{
-    private GameFrame gameFrame;
-    private PlayZone playZone;
-    private LevelPanel levelPanel;
     private BossPanel bossPanel;
     private boolean isBackToBack;
     private double maxXP;
     private int XP;
 
     public XPPanel(){
-        gameFrame = Terraris.getGameFrame();
-        playZone = gameFrame.getPlayZone();
-        levelPanel = gameFrame.getLevelPanel();
-        bossPanel = gameFrame.getBossPanel();
+        bossPanel = GameFrame.getBossPanel();
         isBackToBack = false;
         maxXP = 2000;
         XP = 1900;
@@ -34,14 +28,10 @@ public class XPPanel extends JPanel{
 
     public void checkLevel(){
         if(XP >= maxXP){
-            levelPanel.addLevel();
-            levelPanel.getLevelScore().setText(""+levelPanel.getLevel());
-            if(levelPanel.getLevel()%2 == 1){
-                if(playZone == null){
-                    playZone = gameFrame.getPlayZone();
-                }
-                playZone.getGravity().increaseFallSpeed(levelPanel.getLevel()/2+1);
-            }
+            LevelPanel.addLevel();
+            LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
+            if(LevelPanel.getLevel()%2 == 1)
+                PlayZone.getGravity().increaseFallSpeed(LevelPanel.getLevel()/2+1);
             XP %= maxXP;
             maxXP += 1000;
         }
@@ -99,7 +89,7 @@ public class XPPanel extends JPanel{
             }
         }
 
-        point = (int)(levelPanel.getLevel()/1.5 * point);
+        point = (int)(LevelPanel.getLevel()/1.5 * point);
         if(isBackToBack && fullLineAmount != 0){
             point *= 1.5;
         }
@@ -129,7 +119,7 @@ public class XPPanel extends JPanel{
                 break;
         }
 
-        point = (int)(levelPanel.getLevel()/1.5 * point);
+        point = (int)(LevelPanel.getLevel()/1.5 * point);
         if(!isBackToBack && fullLineAmount == 4){
             System.out.println("Starting Back To Back");
         }

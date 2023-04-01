@@ -6,40 +6,40 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class GameFrame extends JFrame{
-    private Menu menu;
-    private PlayZone playZone;
-    private HoldPanel holdPanel;
-    private NextPanel nextPanel;
-    private GoalPanel goalPanel;
-    private LevelPanel levelPanel;
-    private BossPanel bossPanel;
-    private XPPanel XPPanel;
-    private PausePanel pausePanel;
-    private SettingPanel settingPanel;
-    private AnyKeyPanel anyKeyPanel;
-    private HighScorePanel highscorePanel;
-    private GameOverPanel gameOverPanel;
+    private static Menu menu;
+    private static PlayZone playZone;
+    private static HoldPanel holdPanel;
+    private static NextPanel nextPanel;
+    private static GoalPanel goalPanel;
+    private static LevelPanel levelPanel;
+    private static BossPanel bossPanel;
+    private static XPPanel XPPanel;
+    private static PausePanel pausePanel;
+    private static SettingPanel settingPanel;
+    private static AnyKeyPanel anyKeyPanel;
+    private static HighScorePanel highscorePanel;
+    private static GameOverPanel gameOverPanel;
     
-    private KeyHandler keyHandler;
-    private Leaderboard leaderboard;
-    private GameThread gameThread;
-    private Sound effect;
-    private Sound music;
+    private static KeyHandler keyHandler;
+    private static Leaderboard leaderboard;
+    private static GameThread gameThread;
+    private static Sound effect;
+    private static Sound music;
 
-    private boolean isPlaying;
+    private static boolean isPlaying;
 
-    public void start(){
+    public GameFrame(){
         effect = new Sound();
         music = new Sound();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
+        nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
         playZone = new PlayZone();
-        nextPanel = new NextPanel();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         settingPanel = new SettingPanel();
@@ -117,12 +117,12 @@ public class GameFrame extends JFrame{
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
+        nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
         playZone = new PlayZone();
-        nextPanel = new NextPanel();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         isPlaying = false;
@@ -158,8 +158,8 @@ public class GameFrame extends JFrame{
     }
 
     public void backToMenu(){
-        if(music != null){
-            stopMusic();
+        if(GameFrame.music != null){
+            GameFrame.stopMusic();
         }
 
         this.remove(bossPanel);
@@ -178,12 +178,12 @@ public class GameFrame extends JFrame{
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
+        nextPanel = new NextPanel();
         goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
         playZone = new PlayZone();
-        nextPanel = new NextPanel();
         keyHandler = new KeyHandler();
         pausePanel = new PausePanel();
         isPlaying = false;
@@ -219,7 +219,7 @@ public class GameFrame extends JFrame{
         playMusic(6);
     }
 
-    public void loadLeaderboard(){
+    public static void loadLeaderboard(){
         try (Scanner input = new Scanner(Paths.get(Leaderboard.getLeaderboardFile()))) {
             String[] topName = Leaderboard.getTopName();
             int[] topXP = Leaderboard.getTopScore();
@@ -232,7 +232,7 @@ public class GameFrame extends JFrame{
         catch (Exception e) {}
     }
 
-    public void loadSetting(){
+    public static void loadSetting(){
         try (Scanner input = new Scanner(Paths.get(SettingPanel.getSettingFile()))) {
             SettingPanel.setMusicVolume(input.nextInt());
             SettingPanel.setFXVolume(input.nextInt());
@@ -244,96 +244,92 @@ public class GameFrame extends JFrame{
         catch (Exception e) {}
     }
 
-    public Menu getMenu() {
+    public static Menu getMenu() {
         return menu;
     }
 
-    public GameThread getGameThread() {
-        return gameThread;
-    }
-
-    public Leaderboard getLeaderboard() {
+    public static Leaderboard getLeaderboard() {
         return leaderboard;
     }
 
-    public SettingPanel getSettingPanel() {
+    public static SettingPanel getSettingPanel() {
         return settingPanel;
     }
 
-    public AnyKeyPanel getAnyKeyPanel() {
+    public static AnyKeyPanel getAnyKeyPanel() {
         return anyKeyPanel;
     }
 
-    public HoldPanel getHoldPanel() {
+    public static HoldPanel getHoldPanel() {
         return holdPanel;
     }
 
-    public NextPanel getNextPanel() {
+    public static NextPanel getNextPanel() {
         return nextPanel;
     }
 
-    public GoalPanel getGoalPanel() {
+    public static GoalPanel getGoalPanel() {
         return goalPanel;
     }
 
-    public PlayZone getPlayZone() {
+    public static PlayZone getPlayZone() {
         return playZone;
     }
-    public GameOverPanel getGameOverPanel() {
+    public static GameOverPanel getGameOverPanel() {
         return gameOverPanel;
     }
 
-    public HighScorePanel getHighScorePanel() {
+    public static HighScorePanel getHighScorePanel() {
         return highscorePanel;
     }
 
-    public LevelPanel getLevelPanel() {
+    public static LevelPanel getLevelPanel() {
         return levelPanel;
     }
 
-    public XPPanel getXPPanel() {
+    public static XPPanel getXPPanel() {
         return XPPanel;
     }
 
-    public PausePanel getPausePanel() {
+    public static PausePanel getPausePanel() {
         return pausePanel;
     }
 
-    public BossPanel getBossPanel() {
+    public static BossPanel getBossPanel() {
         return bossPanel;
     }
 
-    public KeyHandler getKeyHandler() {
+    public static KeyHandler getKeyHandler() {
         return keyHandler;
     }
 
-    public Sound getEffect() {
+    public static Sound getEffect() {
         return effect;
     }
 
-    public Sound getMusic() {
+    public static Sound getMusic() {
         return music;
     }
 
-    public boolean isPlaying() {
+    public static boolean isPlaying() {
         return isPlaying;
     }
     
-    public void setPlaying(boolean isPlaying) {
-        this.isPlaying = isPlaying;
+    public static void setPlaying(boolean isPlaying) {
+        GameFrame.isPlaying = isPlaying;
     }
 
-    public void pauseGame(){
-        playSE(7);
+    public static void pauseGame(){
+        GameFrame.playSE(7);
         pausePanel.setVisible(true);
     }
 
-    public void continueGame(){
-        playSE(8);
+    public static void continueGame(){
+        GameFrame.playSE(8);
         pausePanel.setVisible(false);
     }
 
-    public void startGame(){
+    public static void startGame(){
         bossPanel.setVisible(true);
         goalPanel.setVisible(true);
         holdPanel.setVisible(true);
@@ -348,22 +344,21 @@ public class GameFrame extends JFrame{
         if(music.getClip() != null){
             music.stopSound();
         }
-        playZone.createBlock();
         playMusic(0);
     }
 
-    public void playMusic(int i){
+    public static void playMusic(int i){
         music.setFiles(i);
         music.playSound();
         music.setVolume(SettingPanel.getMusicVolume());
         music.loopSound();
     }
 
-    public void stopMusic(){
+    public static void stopMusic(){
         music.stopSound();
     }
 
-    public void playSE(int i){
+    public static void playSE(int i){
         effect.setFiles(i);
         effect.setVolume(SettingPanel.getFXVolume());
         effect.playSound();

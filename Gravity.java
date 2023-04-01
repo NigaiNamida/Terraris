@@ -2,9 +2,7 @@ import javax.swing.Timer;
 import java.awt.event.*;
 
 public class Gravity implements ActionListener{
-    private GameFrame gameFrame;
     private PlayZone playZone;
-    private KeyHandler keyHandler;
     private Timer timer;
     private Timer lastTimer;
     private double fallSpeed;
@@ -12,8 +10,6 @@ public class Gravity implements ActionListener{
     public Gravity(PlayZone pZone,double fallSpeed){
         this.fallSpeed = fallSpeed;
         this.playZone = pZone;
-        gameFrame = Terraris.getGameFrame();
-        keyHandler = gameFrame.getKeyHandler();
         timer = new Timer((int)(fallSpeed*1000), this);
         lastTimer = new Timer(500, this);
         startTimer();
@@ -32,10 +28,7 @@ public class Gravity implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(keyHandler == null){
-            keyHandler = gameFrame.getKeyHandler();
-        }
-        if(!playZone.isGameOver() && !keyHandler.isPause() && gameFrame.isPlaying()){
+        if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
             playZone.applyGravity();
             repaintPlayZone();
         }

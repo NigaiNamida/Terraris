@@ -5,15 +5,12 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class LevelPanel extends JPanel{
-    private GameFrame gameFrame;
-    private int level;
-    private JLabel levelLabel;
-    private JLabel levelScore;
-    private BossPanel bossPanel;
+    private static int level;
+    private static JLabel levelLabel;
+    private static JLabel levelScore;
+    private static BossPanel bossPanel;
 
     public LevelPanel(){
-        gameFrame = Terraris.getGameFrame();
-
         level = 1;
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
@@ -33,16 +30,18 @@ public class LevelPanel extends JPanel{
         levelLabel.setFont(new Font("Futura",Font.BOLD,20));
         levelScore.setFont(new Font("Futura",Font.BOLD,30));
         levelScore.setText(""+level);
+
+        bossPanel = GameFrame.getBossPanel();
     }
 
-    public int getLevel() {
+    public static int getLevel() {
         return level;
     }
 
-    public void addLevel() {
+    public static void addLevel() {
         level++;
         if(bossPanel == null){
-            bossPanel = gameFrame.getBossPanel();
+            bossPanel = GameFrame.getBossPanel();
         }
         bossPanel.spawnChance += 5;
         if(bossPanel.phase == 0){
@@ -53,7 +52,7 @@ public class LevelPanel extends JPanel{
         }
     }
 
-    public JLabel getLevelScore() {
+    public static JLabel getLevelScore() {
         return levelScore;
     }
 

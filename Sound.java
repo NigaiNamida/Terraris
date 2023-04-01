@@ -14,7 +14,7 @@ public class Sound {
 
     public Sound(){
         pauseTime = -1;
-        soundURL[0] = getClass().getResource("Assets/Sound/BGM_Prangles.wav");//bgm
+        soundURL[0] = getClass().getResource("Assets/Sound/Alternate_Day.wav");//bgm
         soundURL[1] = getClass().getResource("Assets/Sound/SoftDrop.wav");//soft
         soundURL[2] = getClass().getResource("Assets/Sound/HardDrop.wav");//hard
         soundURL[3] = getClass().getResource("Assets/Sound/HoldPiece.wav");//hold

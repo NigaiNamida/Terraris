@@ -19,7 +19,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Image bossImage;
     private Boss boss;
 
-    public int spawnRate;
+    public float spawnChance;
     private Random random;
     public boolean canSpawn;
 
@@ -27,10 +27,10 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public BossPanel(){
         random = new Random();
-        spawnRate = 0;
+        spawnChance = -5;
         canSpawn = false;
         
-        spawnTimer = new Timer(500, this);
+        spawnTimer = new Timer(10000, this);
         
         playZone = GameFrame.getPlayZone();
         bossTitle = new JLabel();
@@ -83,14 +83,14 @@ public class BossPanel extends JPanel implements ActionListener{
     
     public void attemptSpawn(){
         if(canSpawn){
-            int number = random.nextInt(101);
-            if(number <= spawnRate){
+            float number = random.nextInt(1001)/10.0f;
+            if(number <= spawnChance){
                 spawnBoss();
             }
             else{
-                spawnRate++;
+                spawnChance+=0.5;
             }
-            System.out.println(spawnRate + ("%"));
+            System.out.println(spawnChance + ("%"));
         }
     }
 
@@ -139,7 +139,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public void enterFight(){
         spawnTimer.stop();
         canSpawn = false;
-        spawnRate = 0;
+        spawnChance = 0;
         System.out.println("Boss Spawn Deactive");
     }
 
@@ -148,7 +148,7 @@ public class BossPanel extends JPanel implements ActionListener{
         boss.stopAttackTimer();
         repaint();
         boss = null;
-        spawnRate = 0;
+        spawnChance = 0;
         bossTitle.setText("");
         restartSpawnTimer();
         repaint();
@@ -235,12 +235,12 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnTimer.stop();
     }
 
-    public int getSpawnChance() {
-        return spawnRate;
+    public float getSpawnChance() {
+        return spawnChance;
     }
 
-    public void setSpawnChance(int spawnRate) {
-        this.spawnRate = spawnRate;
+    public void setSpawnChance(int spawnChance) {
+        this.spawnChance = spawnChance;
     }
 
     public boolean isCanSpawn() {

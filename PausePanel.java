@@ -29,7 +29,7 @@ public class PausePanel extends JPanel implements ActionListener{
         this.setLayout(null);
 
         pauseLabel.setForeground(new Color(193,221,196,255));
-        pauseLabel.setFont(new Font("Futura",Font.BOLD,40));
+        pauseLabel.setFont(new Font("Futura",Font.BOLD,35));
         pauseLabel.setBounds(50, 30, 150, 40);
         pauseLabel.setHorizontalAlignment(JLabel.CENTER);
 

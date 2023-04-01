@@ -41,12 +41,12 @@ public class LevelPanel extends JPanel{
     public static void addLevel() {
         level++;
         bossPanel = GameFrame.getBossPanel();
-        bossPanel.spawnRate += 5;
+        bossPanel.spawnChance += 5;
         if(bossPanel.getBoss() == null){
             bossPanel.setCanSpawn(true);
             bossPanel.restartSpawnTimer();
             System.out.println("Boss Spawn Active");
-            System.out.println(bossPanel.spawnRate + "%");
+            System.out.println(bossPanel.spawnChance + "%");
         }
     }
 

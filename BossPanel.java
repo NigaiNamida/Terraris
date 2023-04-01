@@ -23,6 +23,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public int spawnRate;
     private Random random;
     public boolean canSpawn;
+    private int stateTimer;
 
     public Timer spawnTimer;
 
@@ -99,7 +100,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public void spawnBoss(){
         if(boss == null){
             if(LevelPanel.getLevel() <= 5){
-                boss = new Boss("KingSlime",5000,5000,10000);
+                boss = new Boss("KingSlime",5000,5000,8000);
                 bossTitle.setText("King Slime");
             }
             else if (LevelPanel.getLevel() <= 10){
@@ -113,9 +114,9 @@ public class BossPanel extends JPanel implements ActionListener{
     public void updateState(){
         int HP = boss.getHP();
         double maxHP = boss.getMaxHP();
-        if(HP <= maxHP/4.0)
+        if(HP <= maxHP*0.25)
             boss.setState(3);
-        else if(HP <= maxHP/2.0)
+        else if(HP <= maxHP*0.5)
             boss.setState(2);
         updateCooldownTimer();
     }
@@ -142,13 +143,15 @@ public class BossPanel extends JPanel implements ActionListener{
     public void updateCooldownTimer(){
         switch (boss.getName()) {
             case "KingSlime":
-                if(boss.getState() == 2){
-                    boss.attackTimer = new Timer(15000, this);
+                if(boss.getState() == 2 && stateTimer != 2){
+                    boss.attackTimer = new Timer(10000, this);
                     boss.attackTimer.restart();
+                    stateTimer = 2;
                 }
-                else if(boss.getState() == 3){
-                    boss.attackTimer = new Timer(18000, this);
+                else if(boss.getState() == 3  && stateTimer != 3){
+                    boss.attackTimer = new Timer(12000, this);
                     boss.attackTimer.restart();
+                    stateTimer = 3;
                 }
                 break;
             default:
@@ -160,6 +163,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnTimer.stop();
         canSpawn = false;
         spawnRate = 0;
+        stateTimer = 1;
         System.out.println("Boss Spawn Deactive");
     }
 
@@ -168,6 +172,7 @@ public class BossPanel extends JPanel implements ActionListener{
         boss.stopAttackTimer();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         repaint();
+        bossAttack.BossesDefeat(boss.getName());
         boss = null;
         spawnRate = 0;
         bossTitle.setText("");
@@ -198,7 +203,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void attack(){
-        bossAttack.KingSlimeAttack(boss.getPhase(), boss.getState());
+        bossAttack.BossesAttack(boss.getName(), boss.getPhase(), boss.getState());
     }
 
     public void animate(){

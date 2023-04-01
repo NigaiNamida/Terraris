@@ -14,11 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HighScorePanel extends JPanel implements ActionListener{
-    private static JLabel highScoreLabel;
+    private JLabel highScoreLabel;
     private static JLabel score;
-    private static JLabel initial;
-    private static JTextField textField;
-    private static JButton okButton;
+    private JLabel initial;
+    private JTextField textField;
+    private JButton okButton;
 
     public HighScorePanel(){
         highScoreLabel = new JLabel("NEW HIGH SCORE!");
@@ -69,7 +69,6 @@ public class HighScorePanel extends JPanel implements ActionListener{
         this.add(textField);
         this.add(okButton);
     }
-
     public static JLabel getScore() {
       return score;
     }

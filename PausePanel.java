@@ -16,7 +16,7 @@ public class PausePanel extends JPanel implements ActionListener{
     private static JButton exitButton;
 
     public PausePanel(){
-        pauseLabel = new JLabel("PAUSE");
+        pauseLabel = new JLabel("PAUSED");
         resumeButton = new JButton("RESUME");
         settingButton = new JButton("SETTING");
         exitButton = new JButton("EXIT TO MENU");

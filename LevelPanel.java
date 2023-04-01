@@ -6,9 +6,9 @@ import javax.swing.border.LineBorder;
 
 public class LevelPanel extends JPanel{
     private static int level;
-    private static JLabel levelLabel;
     private static JLabel levelScore;
     private static BossPanel bossPanel;
+    private JLabel levelLabel;
 
     public LevelPanel(){
         level = 1;

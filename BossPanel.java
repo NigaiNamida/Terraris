@@ -33,7 +33,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Timer animateTimer;
     public Timer spawnTimer;
     public Timer attackTimer;
-    public static PlayZone playZone;
+    public PlayZone playZone;
 
     public BossPanel(){
         bossName = "";

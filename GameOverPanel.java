@@ -63,6 +63,7 @@ public class GameOverPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == retryButton){
+            GameFrame.getBossPanel().stopAllTimer();
             Terraris.getGameFrame().retry();
             this.setVisible(false);
             Terraris.getGameFrame().repaint();
@@ -70,6 +71,7 @@ public class GameOverPanel extends JPanel implements ActionListener{
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
+            GameFrame.getBossPanel().stopAllTimer();
             Terraris.getGameFrame().backToMenu();
         }
     }

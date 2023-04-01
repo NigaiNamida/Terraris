@@ -202,6 +202,7 @@ public class PlayZone extends JPanel{
         if(!isHighXP){
             GameFrame.getGameOverPanel().setVisible(true);
         }
+        GameFrame.getBossPanel().stopAllTimer();
     }
 
     //hold the current playing Tetris piece

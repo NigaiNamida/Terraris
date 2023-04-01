@@ -172,7 +172,6 @@ public class BossPanel extends JPanel implements ActionListener{
             int HP = boss.getHP();
             double maxHP = boss.getMaxHP();
             int pixel = (int)((HP/maxHP) * 210) + 1;
-            System.out.println("HP : " + HP);
             g.setColor(Color.red);
             g.fillRect(20, 40,pixel,2);
         }

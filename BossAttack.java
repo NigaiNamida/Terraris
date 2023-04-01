@@ -22,6 +22,27 @@ public class BossAttack implements ActionListener{
         playZone = GameFrame.getPlayZone();
         projectileTimer = new Timer(10, this);
     }
+
+    public void BossesAttack(String bossName, int phase, int state) {
+        switch (bossName) {
+            case "KingSlime":
+                KingSlimeAttack(phase, state);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void BossesDefeat(String bossName) {
+        switch (bossName) {
+            case "KingSlime":
+                slimeFallsColumn = new int[1];
+                slimeFallsCount = 0;
+                break;
+            default:
+                break;
+        }
+    }
     
     public void KingSlimeAttack(int phase, int state){
         SlimeRainColumnSet(phase, state);
@@ -91,4 +112,5 @@ public class BossAttack implements ActionListener{
             g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, 0, null);
         }
     }
+
 }

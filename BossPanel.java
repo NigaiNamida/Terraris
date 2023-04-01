@@ -18,7 +18,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private JLabel bossTitle;
     private Image bossImage;
     private Boss boss;
-    private BossAttack bossAttack = new BossAttack();
+    private BossAttack bossAttack;
 
     public int spawnRate;
     private Random random;
@@ -34,6 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnTimer = new Timer(500, this);
         
         playZone = GameFrame.getPlayZone();
+        bossAttack = new BossAttack();
         bossTitle = new JLabel();
         bossTitle.setForeground(new Color(193,221,196,255));
         bossTitle.setFont(new Font("Futura",Font.BOLD,15));
@@ -116,6 +117,7 @@ public class BossPanel extends JPanel implements ActionListener{
             boss.setState(3);
         else if(HP <= maxHP/2.0)
             boss.setState(2);
+        updateCooldownTimer();
     }
 
     public void updatePhase(){
@@ -134,6 +136,23 @@ public class BossPanel extends JPanel implements ActionListener{
             else if(phase >= 3){
                 exitFight();
             }
+        }
+    }
+
+    public void updateCooldownTimer(){
+        switch (boss.getName()) {
+            case "KingSlime":
+                if(boss.getState() == 2){
+                    boss.attackTimer = new Timer(15000, this);
+                    boss.attackTimer.restart();
+                }
+                else if(boss.getState() == 3){
+                    boss.attackTimer = new Timer(18000, this);
+                    boss.attackTimer.restart();
+                }
+                break;
+            default:
+                break;
         }
     }
 

@@ -74,6 +74,8 @@ public class PausePanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == resumeButton){
+            if(GameFrame.getMusic().getClip() != null)
+                GameFrame.getMusic().resumeSound();
             GameFrame.continueGame();
             KeyHandler.setPause(false);
         }

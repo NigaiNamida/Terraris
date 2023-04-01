@@ -13,6 +13,7 @@ public class Sound {
     private FloatControl gainControl;
 
     public Sound(){
+        pauseTime = -1;
         soundURL[0] = getClass().getResource("Assets/Sound/BGM_Prangles.wav");//bgm
         soundURL[1] = getClass().getResource("Assets/Sound/SoftDrop.wav");//soft
         soundURL[2] = getClass().getResource("Assets/Sound/HardDrop.wav");//hard
@@ -64,17 +65,18 @@ public class Sound {
 
     public void stopSound(){
         clip.stop();
+        pauseTime = -1;
     }
 
     public void pauseSound(){
-        pauseTime = clip.getMicrosecondPosition();
+        pauseTime = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
         clip.stop();
-        //When you want to resume the clip from the last position
     }
     
     public void resumeSound(){
         clip.setMicrosecondPosition(pauseTime);
         clip.start();
+        loopSound();
     }
 
     public Clip getClip() {

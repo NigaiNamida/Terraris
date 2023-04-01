@@ -1,24 +1,25 @@
 public class GameThread extends Thread{
     private GameFrame gameFrame;
     private PlayZone playZone;
-    private HighScorePanel highScorePanel;
     private KeyHandler keyHandler;
     private PausePanel pausePanel;
-    private Sound effect;
-
     private int FPS;
     private long leftHoldingTime;
     private long rightHoldingTime;
     private double interval;
     private double nextTime;
 
+    GameThread(){
+        gameFrame = Terraris.getGameFrame();
+        keyHandler = gameFrame.getKeyHandler();
+    }
     @Override
     public void run() {
         setInitialValue();
         while(gameFrame.isPlaying()){
             if(!playZone.isGameOver()){
-                if(effect.getClip() != null)
-                    effect.setVolume(SettingPanel.getFXVolume()/2);
+                if(gameFrame.getEffect().getClip() != null)
+                    gameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
                 pausePanel.repaint();
                 if(!keyHandler.isPause()){
                     try{
@@ -35,23 +36,20 @@ public class GameThread extends Thread{
                 }
             }
             else{
-                if(highScorePanel.isVisible()){
-                    highScorePanel.repaint();
+                if(gameFrame.getHighScorePanel().isVisible()){
+                    gameFrame.getHighScorePanel().repaint();
                 }
                 else{
-                    highScorePanel.repaint();
+                    gameFrame.getGameOverPanel().repaint();
                 }
             }
         }
     }
 
     public void setInitialValue(){
-        gameFrame = Terraris.getGameFrame();
         keyHandler = gameFrame.getKeyHandler();
-        highScorePanel = gameFrame.getHighScorePanel();
         playZone = gameFrame.getPlayZone();
         pausePanel = gameFrame.getPausePanel();
-        effect = gameFrame.getEffect();
 
         FPS = 60;
         interval = 1000000000/FPS;

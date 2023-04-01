@@ -9,9 +9,7 @@ public class PlayZone extends JPanel{
     private NextPanel nextPanel;
     private GoalPanel goalPanel;
     private HighScorePanel highScorePanel;
-    private GameOverPanel gameOverPanel;
     private Gravity gravity;
-    private Sound music;
     
     private Color gridLineColor;
     private int gridCols;
@@ -34,13 +32,11 @@ public class PlayZone extends JPanel{
 
     public PlayZone(){
         gameFrame = Terraris.getGameFrame();
-        gameOverPanel = gameFrame.getGameOverPanel();
         holdPanel = gameFrame.getHoldPanel();
         nextPanel = gameFrame.getNextPanel();
         XPPanel = gameFrame.getXPPanel();
         goalPanel = gameFrame.getGoalPanel();
         highScorePanel = gameFrame.getHighScorePanel();
-        music = gameFrame.getMusic();
         lastAction = 0;
         blockQueue = new ArrayList<String>();
         isUseHold = false;
@@ -198,7 +194,7 @@ public class PlayZone extends JPanel{
         gravity.stopLastTimer();;
         isGameOver = true;
         gameFrame.setPlaying(false);
-        if(music != null){
+        if(gameFrame.getMusic() != null){
             gameFrame.stopMusic();
         }
         int[] topXP = Leaderboard.getTopScore();
@@ -212,7 +208,7 @@ public class PlayZone extends JPanel{
             }
         }
         if(!isHighXP){
-            gameOverPanel.setVisible(true);
+            gameFrame.getGameOverPanel().setVisible(true);
         }
     }
 

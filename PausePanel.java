@@ -11,20 +11,15 @@ import java.awt.event.ActionListener;
 
 public class PausePanel extends JPanel implements ActionListener{
     private GameFrame gameFrame;
-    private PlayZone playZone;
     private KeyHandler keyHandler;
     private JLabel pauseLabel;
-    private SettingPanel settingPanel;
     private JButton resumeButton;
     private JButton settingButton;
     private JButton exitButton;
 
     public PausePanel(){
         gameFrame = Terraris.getGameFrame();
-        playZone = gameFrame.getPlayZone();
         keyHandler = gameFrame.getKeyHandler();
-        settingPanel = gameFrame.getSettingPanel();
-
         pauseLabel = new JLabel("PAUSE");
         resumeButton = new JButton("RESUME");
         settingButton = new JButton("SETTING");
@@ -82,9 +77,6 @@ public class PausePanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(settingPanel == null){
-            gameFrame.getSettingPanel();
-        }
         if(e.getSource() == resumeButton){
             gameFrame.continueGame();
             keyHandler.setPause(false);
@@ -95,12 +87,12 @@ public class PausePanel extends JPanel implements ActionListener{
             SettingPanel.setSettingKey(null);
             SettingPanel.setSetting(false);
             SettingPanel.enableButton();
-            settingPanel.setVisible(true);
+            gameFrame.getSettingPanel().setVisible(true);
         }
         else if(e.getSource() == exitButton){
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
-            playZone.setGameOver(true);
+            gameFrame.getPlayZone().setGameOver(true);
             gameFrame.backToMenu();
         }
     }

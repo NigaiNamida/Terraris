@@ -40,9 +40,7 @@ public class LevelPanel extends JPanel{
 
     public static void addLevel() {
         level++;
-        if(bossPanel == null){
-            bossPanel = GameFrame.getBossPanel();
-        }
+        bossPanel = GameFrame.getBossPanel();
         bossPanel.spawnRate += 5;
         if(bossPanel.getBoss() == null){
             bossPanel.setCanSpawn(true);

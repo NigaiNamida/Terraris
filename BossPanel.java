@@ -26,13 +26,11 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
 
     public BossPanel(){
+        random = new Random();
         spawnRate = 0;
         canSpawn = false;
         
-        random = new Random();
-
-        spawnTimer = new Timer(100, this);
-        spawnTimer.stop();
+        spawnTimer = new Timer(500, this);
         
         playZone = GameFrame.getPlayZone();
         bossTitle = new JLabel();
@@ -47,12 +45,11 @@ public class BossPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(playZone == null){
-            playZone = GameFrame.getPlayZone();
-        }
+        playZone = GameFrame.getPlayZone();
         if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
-            if (e.getSource() == spawnTimer)
+            if (e.getSource() == spawnTimer){
                 attemptSpawn();
+            }
             if(boss != null){
                 if (e.getSource() == boss.getAnimateTimer()){
                     animate();
@@ -63,8 +60,14 @@ public class BossPanel extends JPanel implements ActionListener{
             }
         }
         if (playZone.isGameOver()){
+            stopAllTimer();
+        }
+    }
+
+    public void stopAllTimer(){
+        spawnTimer.stop();
+        if(boss != null){
             boss.stopAnimateTimer();
-            spawnTimer.stop();
             boss.stopAttackTimer();
         }
     }
@@ -147,7 +150,7 @@ public class BossPanel extends JPanel implements ActionListener{
         boss = null;
         spawnRate = 0;
         bossTitle.setText("");
-        spawnTimer.restart();
+        restartSpawnTimer();
         repaint();
     }
 

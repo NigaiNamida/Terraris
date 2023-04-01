@@ -166,6 +166,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public void exitFight(){
         boss.stopAnimateTimer();
         boss.stopAttackTimer();
+        GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         repaint();
         boss = null;
         spawnRate = 0;
@@ -181,7 +182,6 @@ public class BossPanel extends JPanel implements ActionListener{
         }
         if(boss.getHP() <= 0){
             boss.changePhase();
-            System.out.println("phase is now : "+boss.getPhase());
             updatePhase();
         }
         repaint();

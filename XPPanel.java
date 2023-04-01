@@ -27,7 +27,9 @@ public class XPPanel extends JPanel{
     }
 
     public void checkLevel(){
-        if(XP >= maxXP){
+        System.out.println("XP = "+XP);
+        System.out.println("maxXP = "+maxXP);
+        while(XP >= maxXP){
             LevelPanel.addLevel();
             LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
             if(LevelPanel.getLevel()%2 == 1)
@@ -146,6 +148,13 @@ public class XPPanel extends JPanel{
         else{
             XP += point;
         }
+        checkLevel();
+    }
+
+    public void addBossXP(int HP){
+        int point = 0;
+        point = (int)(LevelPanel.getLevel()/1.5 * HP);
+        XP += point;
         checkLevel();
     }
 

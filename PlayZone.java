@@ -12,6 +12,7 @@ public class PlayZone extends JPanel{
     private int gridRows;
     private static int blockSize;
     private static int lastAction;
+    private float brightness;
 
     private static boolean isUseHold;
     private boolean isGameOver;
@@ -28,6 +29,7 @@ public class PlayZone extends JPanel{
 
     public PlayZone(){
         lastAction = 0;
+        brightness = (70)/100.0f;
         blockQueue = new ArrayList<String>();
         isUseHold = false;
         isGameOver = false;
@@ -40,7 +42,7 @@ public class PlayZone extends JPanel{
         nextPanel = GameFrame.getNextPanel();
         XPPanel = GameFrame.getXPPanel();
 
-        gridLineColor = new Color(36, 36, 36);
+        gridLineColor = new Color(125, 125, 125);
 
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);
@@ -688,6 +690,12 @@ public class PlayZone extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
+        Image BGImage = new ImageIcon(Theme.Day.getBGImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+        int brightness = (int)(256 - 256 * this.brightness);
+        g.setColor(new Color(0,0,0,brightness));
+        g.fillRect(0, 0, getWidth(), getHeight());
+
         drawGridLine(g);
         drawPhantomBlock(g);
         drawColorBlock(g);
@@ -790,9 +798,9 @@ public class PlayZone extends JPanel{
                     if(shape[row][col] == 1){
                         int x = (block.getX() + col) * blockSize; //coordinate + offset
                         int y = (lowestPoint() + row - blockHeight) * blockSize; //coordinate + offset
-                        g.setColor(Color.WHITE.darker().darker().darker());
+                        g.setColor(new Color(255, 255, 255,125));
                         g.fillRect(x, y, blockSize, blockSize);
-                        g.setColor(Color.WHITE.darker());
+                        g.setColor(new Color(100, 100, 100));
                         g.drawRect(x, y, blockSize, blockSize);  
                     }
                 }

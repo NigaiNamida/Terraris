@@ -14,13 +14,13 @@ public class Sound {
 
     public Sound(){
         pauseTime = -1;
-        soundURL[0] = getClass().getResource("Assets/Sound/Alternate_Day.wav");//bgm
+        soundURL[0] = getClass().getResource(Theme.Day.getBGMusicPath());//bgm
         soundURL[1] = getClass().getResource("Assets/Sound/SoftDrop.wav");//soft
         soundURL[2] = getClass().getResource("Assets/Sound/HardDrop.wav");//hard
         soundURL[3] = getClass().getResource("Assets/Sound/HoldPiece.wav");//hold
         soundURL[4] = getClass().getResource("Assets/Sound/ClearLine.wav");//clear
         soundURL[5] = getClass().getResource("Assets/Sound/GameOver.wav");//over
-        soundURL[6] = getClass().getResource("Assets/Sound/MenuTheme.wav");//menu
+        soundURL[6] = getClass().getResource(Theme.Title.getBGMusicPath());//menu
         soundURL[7] = getClass().getResource("Assets/Sound/OpenMenu.wav");//open pause menu
         soundURL[8] = getClass().getResource("Assets/Sound/CloseMenu.wav");//close pause menu
         

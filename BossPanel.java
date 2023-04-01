@@ -18,6 +18,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private JLabel bossTitle;
     private Image bossImage;
     private Boss boss;
+    private BossAttack bossAttack = new BossAttack();
 
     public int spawnRate;
     private Random random;
@@ -173,14 +174,13 @@ public class BossPanel extends JPanel implements ActionListener{
             int HP = boss.getHP();
             double maxHP = boss.getMaxHP();
             int pixel = (int)((HP/maxHP) * 210) + 1;
-            System.out.println("HP : " + HP);
             g.setColor(Color.red);
             g.fillRect(20, 40,pixel,2);
         }
     }
 
     public void attack(){
-        System.out.println("U Stupid");
+        bossAttack.KingSlimeAttack(boss.getPhase(), boss.getState());
     }
 
     public void animate(){

@@ -18,6 +18,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private JLabel bossTitle;
     private Image bossImage;
     private Boss boss;
+    private BossAttack bossAttack;
 
     public float spawnChance;
     private Random random;
@@ -33,6 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnTimer = new Timer(10000, this);
         
         playZone = GameFrame.getPlayZone();
+        bossAttack = new BossAttack();
         bossTitle = new JLabel();
         bossTitle.setForeground(new Color(193,221,196,255));
         bossTitle.setFont(new Font("Futura",Font.BOLD,15));
@@ -115,6 +117,7 @@ public class BossPanel extends JPanel implements ActionListener{
             boss.setState(3);
         else if(HP <= maxHP/2.0)
             boss.setState(2);
+        updateCooldownTimer();
     }
 
     public void updatePhase(){
@@ -136,6 +139,23 @@ public class BossPanel extends JPanel implements ActionListener{
         }
     }
 
+    public void updateCooldownTimer(){
+        switch (boss.getName()) {
+            case "KingSlime":
+                if(boss.getState() == 2){
+                    boss.attackTimer = new Timer(15000, this);
+                    boss.attackTimer.restart();
+                }
+                else if(boss.getState() == 3){
+                    boss.attackTimer = new Timer(18000, this);
+                    boss.attackTimer.restart();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public void enterFight(){
         spawnTimer.stop();
         canSpawn = false;
@@ -146,6 +166,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public void exitFight(){
         boss.stopAnimateTimer();
         boss.stopAttackTimer();
+        GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         repaint();
         boss = null;
         spawnChance = 0;
@@ -161,7 +182,6 @@ public class BossPanel extends JPanel implements ActionListener{
         }
         if(boss.getHP() <= 0){
             boss.changePhase();
-            System.out.println("phase is now : "+boss.getPhase());
             updatePhase();
         }
         repaint();
@@ -178,7 +198,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void attack(){
-        System.out.println("U Stupid");
+        bossAttack.KingSlimeAttack(boss.getPhase(), boss.getState());
     }
 
     public void animate(){

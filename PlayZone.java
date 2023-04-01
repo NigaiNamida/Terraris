@@ -700,6 +700,7 @@ public class PlayZone extends JPanel{
         drawPhantomBlock(g);
         drawColorBlock(g);
         drawPile(g);
+        BossAttack.drawBossAtack(g);
     }
 
 	//paint playzone Background gridline

@@ -155,12 +155,11 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void damageToBoss(int damage){
-        int HP = boss.getHP();
-        if(HP > 0){
+        if(boss.getHP() > 0){
             boss.applyDamage(damage);
             updateState();
         }
-        if(HP <= 0){
+        if(boss.getHP() <= 0){
             boss.changePhase();
             System.out.println("phase is now : "+boss.getPhase());
             updatePhase();

@@ -89,9 +89,6 @@ public class HighScorePanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okButton){
             int[] topScore = Leaderboard.getTopScore();
-            if(XPPanel == null){
-              XPPanel = gameFrame.getXPPanel();
-            }
             int XP = XPPanel.getXP();
             for (int i = 0; i< topScore.length; i++) {
                 if(XP > topScore[i]){
@@ -100,9 +97,6 @@ public class HighScorePanel extends JPanel implements ActionListener{
                 }
             }
             this.setVisible(false);
-            if(gameOverPanel == null){
-              gameOverPanel = gameFrame.getGameOverPanel();
-            }
             gameOverPanel.setVisible(true);
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();

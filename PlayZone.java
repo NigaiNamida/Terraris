@@ -704,8 +704,7 @@ public class PlayZone extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
-        BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        Image BGImage = new ImageIcon(Theme.Day.getBGImagePath()).getImage();
         g.drawImage(BGImage, 0, 0, null);
         int brightness = (int)(256 - 256 * this.brightness);
         g.setColor(new Color(0,0,0,brightness));
@@ -715,7 +714,8 @@ public class PlayZone extends JPanel{
         drawPhantomBlock(g);
         drawColorBlock(g);
         drawPile(g);
-
+        BossAttack.drawBossAttack(g);
+        
     }
 
 	//paint playzone Background gridline

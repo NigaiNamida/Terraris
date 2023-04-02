@@ -8,10 +8,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class BossAttack extends JPanel implements ActionListener{
+public class BossAttack implements ActionListener{
 
     private PlayZone playZone;
     private Boss boss;
@@ -114,7 +113,8 @@ public class BossAttack extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         playZone = GameFrame.getPlayZone();
         boss = GameFrame.getBossPanel().getBoss();
-        if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
+        if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == projectileTimer){
+            repaintPlayZone();
             if (boss != null){
                 switch (boss.getName()) {
                     case "KingSlime":
@@ -124,14 +124,11 @@ public class BossAttack extends JPanel implements ActionListener{
                         break;
                 }
             }
-            repaint();
         }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawBossAttack(g);
+    void repaintPlayZone(){
+        playZone.repaint();
     }
 
     public static void drawBossAttack(Graphics g){
@@ -149,11 +146,10 @@ public class BossAttack extends JPanel implements ActionListener{
 
     public static void drawKingSlimeAttack(Graphics g){
         Boss boss = GameFrame.getBossPanel().getBoss();
-        PlayZone playZone = GameFrame.getPlayZone();
         for(int i = 0; i < slimeFallsCount; i++){
             if(!isHit(i) && !slimePuddleSet[i]){
                 bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Slime_Falls.png").getImage();
-                g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, slimeFallsDelay[i], playZone);    
+                g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, slimeFallsDelay[i], null);    
             }
         }
     }

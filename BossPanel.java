@@ -32,7 +32,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = -5;
         canSpawn = false;
         
-        spawnTimer = new Timer(10000, this);
+        spawnTimer = new Timer(100, this);
         
         playZone = GameFrame.getPlayZone();
         bossAttack = new BossAttack();

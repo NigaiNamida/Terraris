@@ -173,7 +173,7 @@ public class BossPanel extends JPanel implements ActionListener{
         canSpawn = false;
         spawnChance = 0;
         stateTimer = 1;
-        System.out.println("Boss Spawn Deactive");
+        System.out.println("Boss Spawn DeActive");
         GameFrame.playMusic(0);
     }
 

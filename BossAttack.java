@@ -96,8 +96,6 @@ public class BossAttack implements ActionListener{
         for(int i = 0; i < slimeFallsCount; i++) {
             slimeFallsColumn[i] = list.get(i);
         }
-
-        System.out.println(Arrays.toString(slimeFallsColumn));
     }
 
     public void applyGravitySlimeRain(){
@@ -127,6 +125,8 @@ public class BossAttack implements ActionListener{
                 playZone.repaint();
             }
         }
+        playZone.checkFullLine();
+        playZone.repaint();
     }
 
 

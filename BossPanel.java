@@ -140,6 +140,7 @@ public class BossPanel extends JPanel implements ActionListener{
             if(phase == 2){
                 boss.setMaxHP(4000);
                 boss.setHP(4000);
+                GameFrame.playSE(9);
             }
             else if(phase >= 3){
                 exitFight();
@@ -189,6 +190,7 @@ public class BossPanel extends JPanel implements ActionListener{
         restartSpawnTimer();
         stage = stage.next();
         repaint();
+        GameFrame.playSE(9);
         GameFrame.playMusic(0);
     }
 

@@ -1,9 +1,12 @@
 import java.awt.Color;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class TetrisPiece {
-    private static ArrayList<String> blockSet = new ArrayList<String>();
+    //private static ArrayList<String> blockSet = new ArrayList<String>();
+    private static String[] blockSet = {"I","O","S","Z","T","L","J"};
     private String name;
     private int[][] shape;
     private Color color;
@@ -42,18 +45,28 @@ public class TetrisPiece {
         if(reset){
             blockQueue.clear();
         }
-        if(blockSet.isEmpty()){
-            blockSet.add("I");
-            blockSet.add("O");
-            blockSet.add("S");
-            blockSet.add("Z");
-            blockSet.add("T");
-            blockSet.add("L");
-            blockSet.add("J");
-        }
-        Collections.shuffle(blockSet);
-        for (int i = 0; i < blockSet.size(); i++) {
-            blockQueue.add(blockSet.get(i));
+        // if(blockSet.size() != 7){
+        //     blockSet.clear();
+        //     blockSet.add("I");
+        //     blockSet.add("O");
+        //     blockSet.add("S");
+        //     blockSet.add("Z");
+        //     blockSet.add("T");
+        //     blockSet.add("L");
+        //     blockSet.add("J");
+        // }
+        //Collections.shuffle(blockSet);
+        // for (int i = 0; i < blockSet.size(); i++) {
+        //     blockQueue.add(blockSet.get(i));
+        // }
+
+		List<String> blockList = Arrays.asList(blockSet);
+		Collections.shuffle(blockList);
+		blockSet = blockList.toArray(blockSet);
+
+        System.out.println(Arrays.toString(blockSet));
+        for (int i = 0; i < blockSet.length; i++) {
+            blockQueue.add(blockSet[i]);
         }
     }
 

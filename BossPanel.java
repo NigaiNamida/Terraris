@@ -19,6 +19,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Image bossImage;
     private Boss boss;
     private BossAttack bossAttack;
+    private Theme stage;
 
     public float spawnChance;
     private Random random;
@@ -28,11 +29,13 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
 
     public BossPanel(){
-        random = new Random();
+        stage = Theme.Day;
         spawnChance = -5;
         canSpawn = false;
+
+        random = new Random();
         
-        spawnTimer = new Timer(10000, this);
+        spawnTimer = new Timer(100, this);
         
         playZone = GameFrame.getPlayZone();
         bossAttack = new BossAttack();
@@ -99,11 +102,11 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void spawnBoss(){
         if(boss == null){
-            if(LevelPanel.getLevel() <= 5){
+            if(stage == Theme.Day){
                 boss = new Boss("KingSlime",5000,5000,8000);
                 bossTitle.setText("King Slime");
             }
-            else if (LevelPanel.getLevel() <= 10){
+            else if (stage == Theme.Night){
                 boss = new Boss("EyeOfCthulhu",4000,4000,15000);
                 bossTitle.setText("Eye Of Cthulhu");
             }
@@ -177,6 +180,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = 0;
         bossTitle.setText("");
         restartSpawnTimer();
+        stage = stage.next();
         repaint();
     }
 
@@ -238,6 +242,11 @@ public class BossPanel extends JPanel implements ActionListener{
         }
         bossImage = new ImageIcon(path).getImage();
         g.drawImage(bossImage ,x, y,null);
+    }
+
+    
+    public Theme getStage() {
+        return stage;
     }
 
     public Boss getBoss() {

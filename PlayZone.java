@@ -23,7 +23,7 @@ public class PlayZone extends JPanel{
     private TetrisPiece block;
     private static ArrayList<String> blockQueue = new ArrayList<String>();
     
-    private static Color[][] background;
+    private static Color[][] backgroundBlock;
 
     private int[][] testSet;
 
@@ -53,7 +53,7 @@ public class PlayZone extends JPanel{
         gridCols = 10;
         blockSize = this.getWidth()/ gridCols;
         gridRows = this.getHeight() / blockSize;
-        background = new Color[gridRows][gridCols];
+        backgroundBlock = new Color[gridRows][gridCols];
 
         TetrisPiece.queueBlock(blockQueue,true);
         
@@ -65,6 +65,20 @@ public class PlayZone extends JPanel{
         isRotated = false;
         isMiniTSpin = false;
         isTSpin = false;
+    }
+
+    
+
+    public int getGridCols() {
+        return gridCols;
+    }
+
+    public int getGridRows() {
+        return gridRows;
+    }
+
+    public static Color[][] getBackgroundBlock() {
+        return backgroundBlock;
     }
 
     public static Gravity getGravity() {
@@ -111,7 +125,7 @@ public class PlayZone extends JPanel{
                 for (int downRow = 0; y+blockHeight+downRow < gridRows ; downRow++) {
                     if(shape[blockHeight-1-row][col] == 1){
                         if(y+blockHeight+downRow-row >= 0 && x+col < gridCols && x+col >=0 && y+blockHeight+downRow-row < gridRows){
-                            if(background[y+blockHeight+downRow-row][x+col] != null){
+                            if(backgroundBlock[y+blockHeight+downRow-row][x+col] != null){
                                 if(y+blockHeight+downRow < lowestPointIndex){
                                     lowestPointIndex = y+blockHeight+downRow;
                                     break;
@@ -173,7 +187,7 @@ public class PlayZone extends JPanel{
         int y = block.getY();
         for(int row = 0; row < block.getHeight() && !isGameOver; row++) {
             for(int col = 0; col < block.getWidth(); col++) {
-                if(background[row+y][col+x] != null){
+                if(backgroundBlock[row+y][col+x] != null){
                     GameFrame.playSE(5);
                     gameOver();
                     break;
@@ -309,7 +323,7 @@ public class PlayZone extends JPanel{
             for (int row = 0; row < blockHeight; row++) {
                 for (int col = 0; col < blockWidth; col++){
                     if(y+row+yTest >= 0 && y+row+yTest < gridRows && x+col+xTest >= 0 && x+col+xTest < gridCols){
-                        if(rotated[row][col] == 1 && background[y+row+yTest][x+col+xTest] != null){
+                        if(rotated[row][col] == 1 && backgroundBlock[y+row+yTest][x+col+xTest] != null){
                             isPassCase = false;
                             break;
                         }
@@ -492,7 +506,7 @@ public class PlayZone extends JPanel{
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++){
                 if(y+row+yOffset >= 0 && y+row+yOffset < gridRows && x+col+xOffset >= 0 && x+col+xOffset < gridCols){
-                    if(shape[row][col] == 1 && background[y+row+yOffset][x+col+xOffset] != null){
+                    if(shape[row][col] == 1 && backgroundBlock[y+row+yOffset][x+col+xOffset] != null){
                         return false;
                     }
                 }
@@ -580,7 +594,7 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //update the new value of background to keep track of placed Tetris piece
+    //update the new value of backgroundBlock to keep track of placed Tetris piece
     public void updateBackGround(){
         int x = block.getX();
         int y = block.getY();
@@ -592,7 +606,7 @@ public class PlayZone extends JPanel{
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1 && y+row < gridRows && x+col < gridCols && y+row >= 0 && x+col >= 0)
-                    background[y+row][x+col] = color;
+                    backgroundBlock[y+row][x+col] = color;
             }
         }
     }
@@ -600,7 +614,7 @@ public class PlayZone extends JPanel{
     public boolean haveBlock(int r,int c){
         int x = block.getX();
         int y = block.getY();
-        if(y+r < gridRows && x+c < gridCols && y+r >= 0 && x+c >= 0 && background[y+r][x+c] == null ){
+        if(y+r < gridRows && x+c < gridCols && y+r >= 0 && x+c >= 0 && backgroundBlock[y+r][x+c] == null ){
             return false;
         }
         return true;
@@ -652,7 +666,7 @@ public class PlayZone extends JPanel{
         for(int row = 0; row < gridRows; row++) {
             boolean isFullRow = true;
             for (int col = 0; col < gridCols; col++) {
-                if(background[row][col] == null){
+                if(backgroundBlock[row][col] == null){
                     isFullRow = false;
                     break;
                 }
@@ -678,11 +692,11 @@ public class PlayZone extends JPanel{
         for (int row = bottomRow; row >= 1; row--) {
             // assign values of the previous row to current row
             for (int col = 0; col < gridCols; col++) {
-                background[row][col] = background[row - 1][col];
+                backgroundBlock[row][col] = backgroundBlock[row - 1][col];
             }
         }
         for (int col = 0; col < gridCols; col++) {
-            background[0][col] = null;
+            backgroundBlock[0][col] = null;
         }
     }
 
@@ -701,7 +715,7 @@ public class PlayZone extends JPanel{
         drawPhantomBlock(g);
         drawColorBlock(g);
         drawPile(g);
-        BossAttack.drawBossAtack(g);
+        BossAttack.drawBossAttack(g);
     }
 
 	//paint playzone Background gridline
@@ -726,7 +740,7 @@ public class PlayZone extends JPanel{
         while(lap<3){
             for (int row = 0; row < gridRows; row++) {
                 for (int col = 0; col < gridCols; col++) {
-                    color = background[row][col];
+                    color = backgroundBlock[row][col];
                     if(color != null && lap == 1){
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset

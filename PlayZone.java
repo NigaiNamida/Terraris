@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.border.LineBorder;
 
@@ -25,7 +26,7 @@ public class PlayZone extends JPanel{
     
     private Color[][] background;
 
-    private int[][] testSet;
+    private int[][] testSet;;
 
     public PlayZone(){
         isUseHold = false;
@@ -597,6 +598,9 @@ public class PlayZone extends JPanel{
             }
         }
         if(fullLineAmount > 0){
+            if(fullLineAmount == 4){
+                shake();
+            }
             GameFrame.playSE(4);
             ScorePanel.addFullLineScore(fullLineAmount);
         }
@@ -613,6 +617,36 @@ public class PlayZone extends JPanel{
         for (int col = 0; col < gridCols; col++) {
             background[0][col] = null;
         }
+    }
+
+    public void shake(){
+        int x = this.getLocation().x;
+        int y = this.getLocation().y;
+
+        Thread thread = new Thread(() -> {
+            int count = 0;
+            int maxCount = 10;
+            int dx = 5;
+
+            while (count < maxCount) {
+                int sign = (count % 2 == 0) ? 1 : -1;
+                int newX = x + sign * dx;
+
+                this.setLocation(newX, y);
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                count++;
+            }
+
+            this.setLocation(x, y);
+        });
+
+        thread.start();
     }
 
     //paint component once

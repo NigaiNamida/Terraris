@@ -24,6 +24,7 @@ public class PlayZone extends JPanel{
     private static ArrayList<String> blockQueue = new ArrayList<String>();
     
     private static Color[][] backgroundBlock;
+    private static Color slimePuddleColor;
 
     private int[][] testSet;
 
@@ -42,7 +43,8 @@ public class PlayZone extends JPanel{
         nextPanel = GameFrame.getNextPanel();
         XPPanel = GameFrame.getXPPanel();
 
-        gridLineColor = new Color(150, 150, 150);
+        gridLineColor = new Color(150, 150, 150, 125);
+        slimePuddleColor = new Color(255, 255, 255, 0);
 
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);
@@ -79,6 +81,14 @@ public class PlayZone extends JPanel{
 
     public static Color[][] getBackgroundBlock() {
         return backgroundBlock;
+    }
+
+    public void setBackgroundBlock(int row, int column, Color color) {
+        backgroundBlock[row][column] = color;
+    }
+
+    public Color getSlimePuddleColor() {
+        return slimePuddleColor;
     }
 
     public static Gravity getGravity() {
@@ -125,7 +135,7 @@ public class PlayZone extends JPanel{
                 for (int downRow = 0; y+blockHeight+downRow < gridRows ; downRow++) {
                     if(shape[blockHeight-1-row][col] == 1){
                         if(y+blockHeight+downRow-row >= 0 && x+col < gridCols && x+col >=0 && y+blockHeight+downRow-row < gridRows){
-                            if(backgroundBlock[y+blockHeight+downRow-row][x+col] != null){
+                            if(backgroundBlock[y+blockHeight+downRow-row][x+col] != null && backgroundBlock[y+blockHeight+downRow-row][x+col] != slimePuddleColor){
                                 if(y+blockHeight+downRow < lowestPointIndex){
                                     lowestPointIndex = y+blockHeight+downRow;
                                     break;
@@ -323,7 +333,7 @@ public class PlayZone extends JPanel{
             for (int row = 0; row < blockHeight; row++) {
                 for (int col = 0; col < blockWidth; col++){
                     if(y+row+yTest >= 0 && y+row+yTest < gridRows && x+col+xTest >= 0 && x+col+xTest < gridCols){
-                        if(rotated[row][col] == 1 && backgroundBlock[y+row+yTest][x+col+xTest] != null){
+                        if(rotated[row][col] == 1 && (backgroundBlock[y+row+yTest][x+col+xTest] != null && backgroundBlock[y+row+yTest][x+col+xTest] != slimePuddleColor)){
                             isPassCase = false;
                             break;
                         }
@@ -506,7 +516,7 @@ public class PlayZone extends JPanel{
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++){
                 if(y+row+yOffset >= 0 && y+row+yOffset < gridRows && x+col+xOffset >= 0 && x+col+xOffset < gridCols){
-                    if(shape[row][col] == 1 && backgroundBlock[y+row+yOffset][x+col+xOffset] != null){
+                    if(shape[row][col] == 1 && (backgroundBlock[y+row+yOffset][x+col+xOffset] != null && backgroundBlock[y+row+yOffset][x+col+xOffset] != slimePuddleColor)){
                         return false;
                     }
                 }
@@ -614,7 +624,7 @@ public class PlayZone extends JPanel{
     public boolean haveBlock(int r,int c){
         int x = block.getX();
         int y = block.getY();
-        if(y+r < gridRows && x+c < gridCols && y+r >= 0 && x+c >= 0 && backgroundBlock[y+r][x+c] == null ){
+        if(y+r < gridRows && x+c < gridCols && y+r >= 0 && x+c >= 0 && (backgroundBlock[y+r][x+c] == null || backgroundBlock[y+r][x+c] == slimePuddleColor)){
             return false;
         }
         return true;
@@ -666,7 +676,7 @@ public class PlayZone extends JPanel{
         for(int row = 0; row < gridRows; row++) {
             boolean isFullRow = true;
             for (int col = 0; col < gridCols; col++) {
-                if(backgroundBlock[row][col] == null){
+                if(backgroundBlock[row][col] == null || backgroundBlock[row][col] == slimePuddleColor){
                     isFullRow = false;
                     break;
                 }
@@ -716,6 +726,10 @@ public class PlayZone extends JPanel{
         drawColorBlock(g);
         drawPile(g);
         BossAttack.drawBossAttack(g);
+        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
+            g.setColor(new Color(0,0,0,90));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
     }
 	//paint playzone Background gridline
     private void drawGridLine(Graphics g){
@@ -734,9 +748,9 @@ public class PlayZone extends JPanel{
         int lap = 1;
         Color color;
         String middle;
-        String[][] blockCordinate = new String[20][10];
+        String[][] blockCoordinate = new String[20][10];
         boolean[][] sideCheck = new boolean[3][3];
-        while(lap<3){
+        while(lap<4){
             for (int row = 0; row < gridRows; row++) {
                 for (int col = 0; col < gridCols; col++) {
                     color = backgroundBlock[row][col];
@@ -745,25 +759,27 @@ public class PlayZone extends JPanel{
                         int y = row * blockSize; //coordinate + offset
                         paintBlocks(g,color,x,y);
                         if(color.equals(TetrisPiece.getBlock("O").getColor()))
-                            blockCordinate[row][col] = "O";
+                            blockCoordinate[row][col] = "O";
                         else if(color.equals(TetrisPiece.getBlock("I").getColor()))
-                            blockCordinate[row][col] = "I";
+                            blockCoordinate[row][col] = "I";
                         else if(color.equals(TetrisPiece.getBlock("T").getColor()))
-                            blockCordinate[row][col] = "T";
+                            blockCoordinate[row][col] = "T";
                         else if(color.equals(TetrisPiece.getBlock("L").getColor()))
-                            blockCordinate[row][col] = "L";
+                            blockCoordinate[row][col] = "L";
                         else if(color.equals(TetrisPiece.getBlock("J").getColor()))
-                            blockCordinate[row][col] = "J";
+                            blockCoordinate[row][col] = "J";
                         else if(color.equals(TetrisPiece.getBlock("S").getColor()))
-                            blockCordinate[row][col] = "S";
+                            blockCoordinate[row][col] = "S";
                         else if(color.equals(TetrisPiece.getBlock("Z").getColor()))
-                            blockCordinate[row][col] = "Z";
+                            blockCoordinate[row][col] = "Z";
+                        else if(color == slimePuddleColor)
+                            blockCoordinate[row][col] = "Slime_Puddle";
                     }
-                    if(blockCordinate[row][col] != "null" && lap == 2){
+                    if(blockCoordinate[row][col] != "null" && lap == 2){
                         for(int checkrow = 0; checkrow <= 2; checkrow++){
                             for(int checkcol = 0; checkcol <= 2; checkcol++){
                                 if(col+checkcol-1 >= 0 && col+checkcol-1 < gridCols && row+checkrow-1 >= 0 && row+checkrow-1 < gridRows){
-                                    if(blockCordinate[row+checkrow-1][col+checkcol-1] == blockCordinate[row][col]){
+                                    if(blockCoordinate[row+checkrow-1][col+checkcol-1] == blockCoordinate[row][col]){
                                         sideCheck[checkrow][checkcol] = true;
                                     }
                                 }
@@ -771,10 +787,21 @@ public class PlayZone extends JPanel{
                         }
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset
-                        middle = blockCordinate[row][col];
-                        TetrisTexture.mergePileTexture(g,middle,x,y,sideCheck); 
+                        middle = blockCoordinate[row][col];
+                        TetrisTexture.mergePileTexture(g, middle, x, y, sideCheck); 
                         sideCheck = new boolean[3][3];
-                    }               
+                    }
+                    if(blockCoordinate[row][col] != "null" && lap == 3){
+                        int x = col * blockSize; //coordinate + offset
+                        int y = row * blockSize; //coordinate + offset
+                        middle = blockCoordinate[row][col];
+                        if(row + 1 < gridRows){
+                            if (color == slimePuddleColor && blockCoordinate[row+1][col] == null){
+                                middle = null;
+                            }
+                        }
+                        TetrisTexture.drawPuddleTexture(g, middle, x, y);
+                    }             
                 }
             }
             lap++;
@@ -794,6 +821,9 @@ public class PlayZone extends JPanel{
                     int x = (block.getX() + col) * blockSize; //coordinate + offset
                     int y = (block.getY() + row) * blockSize; //coordinate + offset
                     paintBlocks(g,color,x,y);
+                    if (backgroundBlock[block.getY()+row][block.getX()+col] == slimePuddleColor){
+                        hardDrop();
+                    }
                 }
             }
         }

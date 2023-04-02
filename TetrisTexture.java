@@ -30,6 +30,13 @@ public class TetrisTexture extends JPanel{
         g.drawImage(blockImage ,x, y, null); 
     }
 
+    public static void drawPuddleTexture(Graphics g, String middle, int x, int y){
+        if(middle == "Slime_Puddle"){
+            pileImage = new ImageIcon("Assets/Image/Bosses/KingSlime/Attack/Slime_Puddle.png").getImage();
+            g.drawImage(pileImage,x,y,null);
+        }
+    }
+
     public static void mergePileTexture(Graphics g, String middle, int x, int y,boolean[][] sideCheck){
         boolean painted = false;
         boolean Top = sideCheck [0][1];

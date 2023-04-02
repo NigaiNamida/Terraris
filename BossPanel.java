@@ -69,6 +69,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void stopAllTimer(){
         spawnTimer.stop();
+        bossAttack.stopAllTimer();
         if(boss != null){
             boss.stopAnimateTimer();
             boss.stopAttackTimer();

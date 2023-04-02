@@ -1,8 +1,10 @@
 public enum Theme {
     Title,
     Day,
+    KingSlime,
     Night,
-    Crimson;
+    EyeOfCthulhu,
+    Corruption;
 
     private String BGImagePath;
     private String BGMusicPath;

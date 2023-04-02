@@ -20,14 +20,17 @@ public class Sound {
         soundURL[3] = getClass().getResource("Assets/Sound/HoldPiece.wav");//hold
         soundURL[4] = getClass().getResource("Assets/Sound/ClearLine.wav");//clear
         soundURL[5] = getClass().getResource("Assets/Sound/GameOver.wav");//over
-        soundURL[6] = getClass().getResource(Theme.Title.getBGMusicPath());//menu
+        soundURL[6] = getClass().getResource(Theme.Title.getBGMusicPath());//over
         soundURL[7] = getClass().getResource("Assets/Sound/OpenMenu.wav");//open pause menu
         soundURL[8] = getClass().getResource("Assets/Sound/CloseMenu.wav");//close pause menu
         
     }
 
     public void setFiles(int i){
-
+        Theme stage = GameFrame.getBossPanel().getStage();
+        if(i == 0){
+            soundURL[i] = getClass().getResource(stage.getBGMusicPath());//bgm
+        }
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();

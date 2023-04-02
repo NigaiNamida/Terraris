@@ -91,6 +91,7 @@ public class BossPanel extends JPanel implements ActionListener{
         if(canSpawn){
             float number = random.nextInt(1001)/10.0f;
             if(number <= spawnChance){
+                stage = stage.next();
                 spawnBoss();
             }
             else{
@@ -102,11 +103,11 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void spawnBoss(){
         if(boss == null){
-            if(stage == Theme.Day){
+            if(stage == Theme.KingSlime){
                 boss = new Boss("KingSlime",5000,5000,8000);
                 bossTitle.setText("King Slime");
             }
-            else if (stage == Theme.Night){
+            else if (stage == Theme.EyeOfCthulhu){
                 boss = new Boss("EyeOfCthulhu",4000,4000,15000);
                 bossTitle.setText("Eye Of Cthulhu");
             }
@@ -163,14 +164,17 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void enterFight(){
+        GameFrame.stopMusic();
         spawnTimer.stop();
         canSpawn = false;
         spawnChance = 0;
         stateTimer = 1;
         System.out.println("Boss Spawn Deactive");
+        GameFrame.playMusic(0);
     }
 
     public void exitFight(){
+        GameFrame.stopMusic();
         boss.stopAnimateTimer();
         boss.stopAttackTimer();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
@@ -182,6 +186,7 @@ public class BossPanel extends JPanel implements ActionListener{
         restartSpawnTimer();
         stage = stage.next();
         repaint();
+        GameFrame.playMusic(0);
     }
 
     public void damageToBoss(int damage){

@@ -98,11 +98,13 @@ public class BossAttack implements ActionListener{
         boss = GameFrame.getBossPanel().getBoss();
         if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
             repaintPlayZone();
-            switch (boss.getName()) {
-                case "KingSlime":
-                    break;
-                default:
-                    break;
+            if(boss != null){
+                switch (boss.getName()) {
+                    case "KingSlime":
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -130,7 +132,7 @@ public class BossAttack implements ActionListener{
             bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Slime_Falls.png").getImage();
             g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, slimeFallsDelay[i], null);
             if(isHit(i)){
-                System.out.println("HIT");
+                // System.out.println("HIT");
             }
             else{
                 slimeFallsDelay[i] ++;

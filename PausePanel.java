@@ -22,7 +22,7 @@ public class PausePanel extends JPanel implements ActionListener{
         exitButton = new RoundButton("EXIT TO MENU");
 
         this.setOpaque(true);
-        this.setBounds(645, 280, 250, 300);
+        this.setBounds(275, 120, 250, 300);
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setVisible(false);

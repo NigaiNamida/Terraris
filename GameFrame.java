@@ -52,9 +52,7 @@ public class GameFrame extends JFrame{
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Terraris");
         this.setLayout(null);
-        //this.setSize(800,600);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        this.setUndecorated(true);
+        this.setSize(800,600);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.getContentPane().setBackground(Color.black);

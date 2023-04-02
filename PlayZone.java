@@ -38,7 +38,7 @@ public class PlayZone extends JPanel{
         gridLineColor = new Color(36, 36, 36);
 
         this.setOpaque(true);
-        this.setBounds(645, 180, 250, 500);
+        this.setBounds(275, 20, 250, 500);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setDoubleBuffered(true);

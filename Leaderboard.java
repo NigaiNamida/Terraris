@@ -25,7 +25,7 @@ public class Leaderboard extends JPanel{
 
         font = new Font("Futura",Font.PLAIN,20);
         this.setOpaque(true);
-        this.setBounds(520, 220, 500, 400);
+        this.setBounds(150, 70, 500, 400);
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setLayout(null);

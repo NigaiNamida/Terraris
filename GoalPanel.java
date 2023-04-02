@@ -14,7 +14,7 @@ public class GoalPanel extends JPanel{
         goalLabel = new JLabel("LINES", SwingConstants.CENTER);
         goalScore = new JLabel(""+goal, SwingConstants.CENTER);
 
-        this.setBounds(515, 450, 100, 100);
+        this.setBounds(150, 400, 100, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
 

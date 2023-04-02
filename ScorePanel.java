@@ -15,7 +15,7 @@ public class ScorePanel extends JPanel{
         scoreLabel = new JLabel("SCORE", SwingConstants.CENTER);
         scorePoint = new JLabel(String.format("%,d",score), SwingConstants.CENTER);
         //setting panel
-        this.setBounds(925, 580, 200, 100);
+        this.setBounds(545, 340, 200, 100);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3));
         //add component

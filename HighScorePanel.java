@@ -29,7 +29,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
         okButton = new RoundButton("OK");
 
         this.setOpaque(true);
-        this.setBounds(570, 255, 400, 350);
+        this.setBounds(200, 90, 400, 350);
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setVisible(false);

@@ -20,7 +20,7 @@ public class GameOverPanel extends JPanel implements ActionListener{
         exitButton = new RoundButton("EXIT TO MENU");
         
         this.setOpaque(true);
-        this.setBounds(595, 305, 350, 250);
+        this.setBounds(225, 155, 350, 250);
         this.setBackground(Color.BLACK);
         this.setBorder(new LineBorder(Color.WHITE,3));
         this.setVisible(false);

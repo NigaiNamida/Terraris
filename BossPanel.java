@@ -215,7 +215,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void attack(){
-        bossAttack.BossesAttack(boss.getName(), boss.getPhase(), boss.getState());
+        bossAttack.attack(boss.getName(), boss.getPhase(), boss.getState());
     }
 
     public void animate(){

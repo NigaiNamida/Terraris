@@ -24,14 +24,14 @@ public class BossAttack implements ActionListener{
     
     public BossAttack(){
         playZone = GameFrame.getPlayZone();
-        projectileTimer = new Timer(5, this);
+        projectileTimer = new Timer(25, this);
         slimeFallsColumn = new int[1];
         slimeFallsDelay = new int[1];
         slimePuddleColumn = new boolean[1];
         slimeFallsCount = 0;
     }
 
-    public void BossesAttack(String bossName, int phase, int state) {
+    public void attack(String bossName, int phase, int state) {
         switch (bossName) {
             case "KingSlime":
                 KingSlimeAttack(phase, state);
@@ -100,7 +100,7 @@ public class BossAttack implements ActionListener{
     public void applyGravitySlimeRain(){
         for(int i = 0; i < slimeFallsCount; i++){
             if(!isHit(i) && !slimePuddleColumn[i]){        
-                slimeFallsDelay[i] ++;
+                slimeFallsDelay[i] += 5;
             }
             else {
                 slimePuddleColumn[i] = true;
@@ -118,12 +118,13 @@ public class BossAttack implements ActionListener{
             if (boss != null){
                 switch (boss.getName()) {
                     case "KingSlime":
-                    applyGravitySlimeRain();
+                        applyGravitySlimeRain();
                         break;
                     default:
                         break;
                 }
             }
+            repaintPlayZone();
         }
     }
 

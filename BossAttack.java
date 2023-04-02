@@ -17,7 +17,7 @@ public class BossAttack implements ActionListener{
     private Timer projectileTimer;
     private static int[] slimeFallsColumn;
     private static int[] slimeFallsDelay;
-    private static boolean[] slimePuddleSet;
+    private static boolean[] slimePuddleColumn;
     private static int slimeFallsCount;
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
@@ -27,7 +27,7 @@ public class BossAttack implements ActionListener{
         projectileTimer = new Timer(5, this);
         slimeFallsColumn = new int[1];
         slimeFallsDelay = new int[1];
-        slimePuddleSet = new boolean[1];
+        slimePuddleColumn = new boolean[1];
         slimeFallsCount = 0;
     }
 
@@ -46,7 +46,7 @@ public class BossAttack implements ActionListener{
             case "KingSlime":;
                 slimeFallsColumn = new int[1];
                 slimeFallsDelay = new int[1];
-                slimePuddleSet = new boolean[1];
+                slimePuddleColumn = new boolean[1];
                 slimeFallsCount = 0;
                 break;
             default:
@@ -55,11 +55,11 @@ public class BossAttack implements ActionListener{
     }
     
     public void KingSlimeAttack(int phase, int state){
-        SlimeRainColumnSet(phase, state);
+        setSlimeRainColumn(phase, state);
         projectileTimer.restart();
     }
 
-    public void SlimeRainColumnSet(int phase, int state){
+    public void setSlimeRainColumn(int phase, int state){
         slimeFallsCount = 0;
         
         switch (state) {
@@ -75,7 +75,7 @@ public class BossAttack implements ActionListener{
         }
 
         slimeFallsColumn = new int[slimeFallsCount];
-        slimePuddleSet = new boolean[slimeFallsCount];
+        slimePuddleColumn = new boolean[slimeFallsCount];
 
         slimeFallsDelay = new int[slimeFallsCount];
         for(int i = 0; i < slimeFallsCount; i++) {
@@ -99,11 +99,11 @@ public class BossAttack implements ActionListener{
 
     public void applyGravitySlimeRain(){
         for(int i = 0; i < slimeFallsCount; i++){
-            if(!isHit(i) && !slimePuddleSet[i]){        
+            if(!isHit(i) && !slimePuddleColumn[i]){        
                 slimeFallsDelay[i] ++;
             }
             else {
-                slimePuddleSet[i] = true;
+                slimePuddleColumn[i] = true;
             }
         }
     }
@@ -147,7 +147,7 @@ public class BossAttack implements ActionListener{
     public static void drawKingSlimeAttack(Graphics g){
         Boss boss = GameFrame.getBossPanel().getBoss();
         for(int i = 0; i < slimeFallsCount; i++){
-            if(!isHit(i) && !slimePuddleSet[i]){
+            if(!isHit(i) && !slimePuddleColumn[i]){
                 bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Slime_Falls.png").getImage();
                 g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, slimeFallsDelay[i], null);    
             }

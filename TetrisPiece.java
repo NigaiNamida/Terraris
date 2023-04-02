@@ -41,7 +41,6 @@ public class TetrisPiece {
     public static void queueBlock(ArrayList<String> blockQueue,boolean reset){
         if(reset){
             blockQueue.clear();
-            blockSet.clear();
         }
         if(blockSet.isEmpty()){
             blockSet.add("I");

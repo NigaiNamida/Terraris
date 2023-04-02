@@ -106,10 +106,12 @@ public class BossPanel extends JPanel implements ActionListener{
             if(stage == Theme.KingSlime){
                 boss = new Boss("KingSlime",5000,5000,8000);
                 bossTitle.setText("King Slime");
+                GameFrame.playSE(9);
             }
             else if (stage == Theme.EyeOfCthulhu){
                 boss = new Boss("EyeOfCthulhu",4000,4000,15000);
                 bossTitle.setText("Eye Of Cthulhu");
+                GameFrame.playSE(9);
             }
             enterFight();
         }

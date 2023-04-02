@@ -23,7 +23,7 @@ public class Sound {
         soundURL[6] = getClass().getResource(Theme.Title.getBGMusicPath());//over
         soundURL[7] = getClass().getResource("Assets/Sound/OpenMenu.wav");//open pause menu
         soundURL[8] = getClass().getResource("Assets/Sound/CloseMenu.wav");//close pause menu
-        
+        soundURL[9] = getClass().getResource("Assets/Sound/Roar_0.wav");//boss roar
     }
 
     public void setFiles(int i){

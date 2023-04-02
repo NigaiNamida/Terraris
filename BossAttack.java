@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -110,12 +111,12 @@ public class BossAttack implements ActionListener{
         playZone.repaint();
     }
 
-    public static void drawBossAtack(Graphics g){
+    public static void drawBossAttack(Graphics g){
         Boss boss = GameFrame.getBossPanel().getBoss();
         if(boss != null){
             switch (boss.getName()) {
                 case "KingSlime":
-                    drawKingSlimeAtack(g);
+                    drawKingSlimeAttack(g);
                     break;
                 default:
                     break;
@@ -123,13 +124,25 @@ public class BossAttack implements ActionListener{
         }
     }
 
-    public static void drawKingSlimeAtack(Graphics g){
+    public static void drawKingSlimeAttack(Graphics g){
         Boss boss = GameFrame.getBossPanel().getBoss();
         for(int i = 0; i < slimeFallsCount; i++){
             bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Slime_Falls.png").getImage();
             g.drawImage(bossAttackImage, slimeFallsColumn[i]*25, slimeFallsDelay[i], null);
-            slimeFallsDelay[i] ++;
+            if(isHit(i)){
+                System.out.println("HIT");
+            }
+            else{
+                slimeFallsDelay[i] ++;
+            }
         }
+    }
+    
+    public static boolean isHit(int i){
+        PlayZone playZone = GameFrame.getPlayZone();
+        Color[][] backgroundBlack = PlayZone.getBackgroundBlock();
+        
+        return slimeFallsDelay[i]/25 >= playZone.getGridRows() - 1 || (slimeFallsDelay[i]/25 >= 0 && backgroundBlack[slimeFallsDelay[i]/25 + 1][slimeFallsColumn[i]] != null);
     }
 
 }

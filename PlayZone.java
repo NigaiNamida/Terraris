@@ -630,9 +630,9 @@ public class PlayZone extends JPanel{
 
             while (count < maxCount) {
                 int sign = (count % 2 == 0) ? 1 : -1;
-                int newX = x + sign * dx;
+                int newY = y + sign * dx;
 
-                this.setLocation(newX, y);
+                this.setLocation(x, newY);
 
                 try {
                     TimeUnit.MILLISECONDS.sleep(50);

@@ -21,6 +21,7 @@ public class BossAttack implements ActionListener{
     private static int slimeFallsCount;
 
     private static Color slimePuddleColor;
+    private static Color slimeBlockColor;
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
     
@@ -103,14 +104,25 @@ public class BossAttack implements ActionListener{
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         slimePuddleColor = playZone.getSlimePuddleColor();
+        slimeBlockColor = playZone.getSlimeBlockColor();
         for(int i = 0; i < slimeFallsCount; i++){
             if(!isHit(i) && slimePuddleColumn[i] == 0){        
                 slimeFallsDelay[i] += 5;
             }
             else {
                 slimePuddleColumn[i] ++;
-                if(slimePuddleColumn[i] == 1 && backgroundBlock[slimeFallsDelay[i]/25][slimeFallsColumn[i]] == null){
-                    playZone.setBackgroundBlock(slimeFallsDelay[i]/25, slimeFallsColumn[i], slimePuddleColor);
+                if(slimePuddleColumn[i] == 1 ){
+                    Color backgroundColor = backgroundBlock[slimeFallsDelay[i]/25][slimeFallsColumn[i]];
+                    Color backgroundBelowColor = null;
+                    if(slimeFallsDelay[i]/25+1 < playZone.getGridRows()){
+                        backgroundBelowColor = backgroundBlock[slimeFallsDelay[i]/25+1][slimeFallsColumn[i]];
+                    }
+                    if (backgroundColor == null && backgroundBelowColor != slimeBlockColor){
+                        playZone.setBackgroundBlock(slimeFallsDelay[i]/25, slimeFallsColumn[i], slimePuddleColor);
+                    }
+                    else if (backgroundColor == slimePuddleColor){
+                        playZone.setBackgroundBlock(slimeFallsDelay[i]/25, slimeFallsColumn[i], slimeBlockColor);
+                    }
                 }
                 playZone.repaint();
             }

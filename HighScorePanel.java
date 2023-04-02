@@ -31,7 +31,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
         this.setOpaque(true);
         this.setBounds(200, 90, 400, 350);
         this.setBackground(Color.BLACK);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setVisible(false);
         this.setLayout(null);
 

@@ -29,7 +29,7 @@ public class Menu extends JPanel implements ActionListener{
         this.setVisible(true);
         this.setBounds(140, 20, 520, 520);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setLayout(null);
 
         startButton.setSize(200, 40);

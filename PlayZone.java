@@ -49,7 +49,7 @@ public class PlayZone extends JPanel{
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setDoubleBuffered(true);
 
         gridCols = 10;

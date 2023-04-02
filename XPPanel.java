@@ -17,7 +17,7 @@ public class XPPanel extends JPanel{
 
         this.setBounds(415, 20, 20, 500);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
     }
 
     @Override

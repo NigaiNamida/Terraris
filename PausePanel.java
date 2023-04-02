@@ -24,7 +24,7 @@ public class PausePanel extends JPanel implements ActionListener{
         this.setOpaque(true);
         this.setBounds(275, 120, 250, 300);
         this.setBackground(Color.BLACK);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setVisible(false);
         this.setLayout(null);
 

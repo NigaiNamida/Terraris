@@ -14,7 +14,7 @@ public class AnyKeyPanel extends JPanel{
         this.setOpaque(true);
         this.setBounds(100, 230, 600, 100);
         this.setBackground(Color.BLACK);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setVisible(false);
         this.setLayout(null);
 

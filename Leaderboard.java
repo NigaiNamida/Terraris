@@ -27,7 +27,7 @@ public class Leaderboard extends JPanel{
         this.setOpaque(true);
         this.setBounds(150, 70, 500, 400);
         this.setBackground(Color.BLACK);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setLayout(null);
 
         leaderboardLabel.setForeground(new Color(193,221,196,255));

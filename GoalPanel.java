@@ -16,7 +16,7 @@ public class GoalPanel extends JPanel{
 
         this.setBounds(20, 400, 100, 100);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
 
         //add component
         this.add(goalLabel);

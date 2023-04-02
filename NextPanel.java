@@ -20,7 +20,7 @@ public class NextPanel extends JPanel{
         //setting panel
         this.setBounds(20, 160, 100, 100);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
 
         //add component
         this.add(nextLabel);

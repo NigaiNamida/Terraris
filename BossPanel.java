@@ -46,7 +46,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
         this.setBounds(455, 20, 250, 250);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3));
+        this.setBorder(new LineBorder(Color.WHITE,3,true));
     }
 
     @Override

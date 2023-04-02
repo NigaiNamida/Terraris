@@ -821,8 +821,10 @@ public class PlayZone extends JPanel{
                     int x = (block.getX() + col) * blockSize; //coordinate + offset
                     int y = (block.getY() + row) * blockSize; //coordinate + offset
                     paintBlocks(g,color,x,y);
-                    if (backgroundBlock[block.getY()+row][block.getX()+col] == slimePuddleColor){
-                        hardDrop();
+                    if (block.getY() + row >= 0 && block.getX() + col >= 0 && block.getY() + row < gridRows && block.getX() + col < gridCols){
+                        if(backgroundBlock[block.getY() + row][block.getX() + col] == slimePuddleColor){
+                            hardDrop();
+                        }
                     }
                 }
             }

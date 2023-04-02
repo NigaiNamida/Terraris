@@ -63,8 +63,6 @@ public class TetrisPiece {
 		List<String> blockList = Arrays.asList(blockSet);
 		Collections.shuffle(blockList);
 		blockSet = blockList.toArray(blockSet);
-
-        System.out.println(Arrays.toString(blockSet));
         for (int i = 0; i < blockSet.length; i++) {
             blockQueue.add(blockSet[i]);
         }

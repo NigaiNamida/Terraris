@@ -25,6 +25,7 @@ public class PlayZone extends JPanel{
     
     private static Color[][] backgroundBlock;
     private static Color slimePuddleColor;
+    private static Color slimeBlockColor;
 
     private int[][] testSet;
 
@@ -45,6 +46,7 @@ public class PlayZone extends JPanel{
 
         gridLineColor = new Color(150, 150, 150, 125);
         slimePuddleColor = new Color(255, 255, 255, 0);
+        slimeBlockColor = new Color(255, 255, 254, 0);
 
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);
@@ -89,6 +91,10 @@ public class PlayZone extends JPanel{
 
     public Color getSlimePuddleColor() {
         return slimePuddleColor;
+    }
+
+    public Color getSlimeBlockColor() {
+        return slimeBlockColor;
     }
 
     public static Gravity getGravity() {
@@ -774,6 +780,8 @@ public class PlayZone extends JPanel{
                             blockCoordinate[row][col] = "Z";
                         else if(color == slimePuddleColor)
                             blockCoordinate[row][col] = "Slime_Puddle";
+                        else if(color == slimeBlockColor)
+                            blockCoordinate[row][col] = "Slime_Block";
                     }
                     if(blockCoordinate[row][col] != "null" && lap == 2){
                         for(int checkrow = 0; checkrow <= 2; checkrow++){

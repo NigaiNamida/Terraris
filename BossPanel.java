@@ -19,6 +19,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Image bossImage;
     private Boss boss;
     private BossAttack bossAttack;
+    private Theme stage;
 
     public float spawnChance;
     private Random random;
@@ -28,9 +29,11 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
 
     public BossPanel(){
-        random = new Random();
+        stage = Theme.Day;
         spawnChance = -5;
         canSpawn = false;
+
+        random = new Random();
         
         spawnTimer = new Timer(100, this);
         
@@ -89,6 +92,7 @@ public class BossPanel extends JPanel implements ActionListener{
         if(canSpawn){
             float number = random.nextInt(1001)/10.0f;
             if(number <= spawnChance){
+                stage = stage.next();
                 spawnBoss();
             }
             else{
@@ -100,13 +104,15 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void spawnBoss(){
         if(boss == null){
-            if(LevelPanel.getLevel() <= 5){
+            if(stage == Theme.KingSlime){
                 boss = new Boss("KingSlime",5000,5000,8000);
                 bossTitle.setText("King Slime");
+                GameFrame.playSE(9);
             }
-            else if (LevelPanel.getLevel() <= 10){
+            else if (stage == Theme.EyeOfCthulhu){
                 boss = new Boss("EyeOfCthulhu",4000,4000,15000);
                 bossTitle.setText("Eye Of Cthulhu");
+                GameFrame.playSE(9);
             }
             enterFight();
         }
@@ -161,14 +167,17 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void enterFight(){
+        GameFrame.stopMusic();
         spawnTimer.stop();
         canSpawn = false;
         spawnChance = 0;
         stateTimer = 1;
         System.out.println("Boss Spawn Deactive");
+        GameFrame.playMusic(0);
     }
 
     public void exitFight(){
+        GameFrame.stopMusic();
         boss.stopAnimateTimer();
         boss.stopAttackTimer();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
@@ -178,7 +187,9 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = 0;
         bossTitle.setText("");
         restartSpawnTimer();
+        stage = stage.next();
         repaint();
+        GameFrame.playMusic(0);
     }
 
     public void damageToBoss(int damage){
@@ -239,6 +250,11 @@ public class BossPanel extends JPanel implements ActionListener{
         }
         bossImage = new ImageIcon(path).getImage();
         g.drawImage(bossImage ,x, y,null);
+    }
+
+    
+    public Theme getStage() {
+        return stage;
     }
 
     public Boss getBoss() {

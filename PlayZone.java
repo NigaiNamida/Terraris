@@ -733,12 +733,11 @@ public class PlayZone extends JPanel{
 
         drawGridLine(g);
         drawPhantomBlock(g);
-        drawColorBlock(g);
         drawPile(g);
+        drawColorBlock(g);
         BossAttack.drawBossAttack(g);
         if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
-            g.setColor(new Color(0,0,0,90));
-            g.fillRect(0, 0, getWidth(), getHeight());
+            drawShadow(g);
         }
     }
 	//paint playzone Background gridline
@@ -890,5 +889,45 @@ public class PlayZone extends JPanel{
     private void paintBlocks(Graphics g,Color color,int x,int y){
         g.setColor(color);
         g.fillRect(x, y, blockSize, blockSize);
+    }
+
+    private void drawShadow(Graphics g){
+        int lap = 1;
+        int glow = 1;
+        int checkGlow = 3;
+        boolean dark = true;
+        boolean[][] blockCoordinate = new boolean[20][10];
+        while (lap < 4){
+            for (int row = 0; row < gridRows; row++) {
+                for (int col = 0; col < gridCols; col++) {
+                    if((row == block.getY() && col == block.getX()) || (row == block.getY() + block.getHeight()-1 && col == block.getX() + block.getWidth()-1) ||
+                       (row == block.getY() && col == block.getX() + block.getWidth()-1) || (row == block.getY() + block.getHeight()-1 && col == block.getX()) && lap == 1){
+                        blockCoordinate[row][col] = true;
+                    }
+                    if(lap > 1){
+                        if(lap == 3){
+                            glow = 3;
+                            checkGlow = 7;
+                        }
+                        for (int checkRow = 0; checkRow < checkGlow; checkRow++) {
+                            for (int checkCol = 0; checkCol < checkGlow; checkCol++) {
+                                if(col+checkCol-glow >= 0 && col+checkCol-glow < gridCols && row+checkRow-glow >= 0 && row+checkRow-glow < gridRows){
+                                    if(blockCoordinate[row+checkRow-glow][col+checkCol-glow] == true){
+                                        dark = false;
+                                    }
+                                }
+                            }
+                        }
+                        if(dark == true){
+                            g.setColor(new Color(0, 0, 0,100));
+                            g.fillRect(col * 25 ,row * 25, 25 , 25);
+                        }
+                        dark = true;
+
+                    }
+                }
+            }
+            lap++;
+        }
     }
 }

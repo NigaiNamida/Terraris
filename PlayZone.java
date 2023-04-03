@@ -7,7 +7,12 @@ public class PlayZone extends JPanel{
     private XPPanel XPPanel;
     private NextPanel nextPanel;
     private static Gravity gravity;
+
+    private static Color[][] backgroundBlock;
+    private static Color slimePuddleColor;
+    private static Color slimeBlockColor;
     private Color gridLineColor;
+
     private int gridCols;
     private int gridRows;
     private static int blockSize;
@@ -21,11 +26,9 @@ public class PlayZone extends JPanel{
     private boolean isRotated;
 
     private TetrisPiece block;
+
     private static ArrayList<Tetris> blockQueue = new ArrayList<Tetris>();
     
-    private static Color[][] backgroundBlock;
-    private static Color slimePuddleColor;
-    private static Color slimeBlockColor;
 
     private int[][] testSet;
 
@@ -71,62 +74,22 @@ public class PlayZone extends JPanel{
         isTSpin = false;
     }
 
-    public int getGridCols() {
-        return gridCols;
-    }
-
-    public int getGridRows() {
-        return gridRows;
-    }
-
-    public static Color[][] getBackgroundBlock() {
-        return backgroundBlock;
-    }
-
-    public void setBackgroundBlock(int row, int column, Color color) {
-        backgroundBlock[row][column] = color;
-    }
-
-    public static Color getSlimePuddleColor() {
-        return slimePuddleColor;
-    }
-
-    public static Color getSlimeBlockColor() {
-        return slimeBlockColor;
-    }
-
-    public static Gravity getGravity() {
-        return gravity;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    public void setGameOver(boolean isGameOver) {
-        this.isGameOver = isGameOver;
-    }
-
-    //check if tetris piece reach the bottom
     public boolean isBottom(){  
         return block.getY() + block.getHeight() == gridRows;
     }
 
-    //add more 7 shuffle piece to queue
     public static void addQueueIfLow(){
         if(blockQueue.size() <= 1){
             TetrisPiece.queueBlock(blockQueue,false);
         }
     }
 
-    //return Tetris piece in queue next order and reset Hold usage
     public static TetrisPiece getNextPiece(){
         isUseHold = false;
         addQueueIfLow();
         return TetrisPiece.getBlock(blockQueue.get(0));
     }
 
-    //find the lowest point index point (y) of obstacle that playing Tetris piece will hit
     public int lowestPoint(){
         int lowestPointIndex = gridRows;
         int x = block.getX();
@@ -187,7 +150,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //get a new playable Tetris piece from queue and set position
     public void createBlock(){
         resetTSpin();
         addQueueIfLow();
@@ -235,7 +197,6 @@ public class PlayZone extends JPanel{
         GameFrame.getBossPanel().stopAllTimer();
     }
 
-    //hold the current playing Tetris piece
     public void holdBlock(){
         if(!isUseHold){
             if(holdPanel.getBlock() == null){
@@ -359,8 +320,6 @@ public class PlayZone extends JPanel{
         return -1;
     }
 
-
-    //rotate array
     public int[][] rotateShape(String direction){
         int [][] shape = block.getShape();
         final int blockHeight = block.getHeight();
@@ -384,15 +343,13 @@ public class PlayZone extends JPanel{
         }
         return rotated;
     }
-    //rotate current playing Tetris piece 90 degree clockwise
+
     public void rotate(String direction) {
-        //rotate 2D array of shape
 
         int xOffset = 0;
         int yOffset = 0;
         int rotateResult = 0;
         
-        //offset for block new position after rotate
         if(direction == "CW"){
             if(block.getName() != Tetris.O && block.getName() != Tetris.I){
                 switch (block.getVariant()) {
@@ -494,7 +451,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //check if playing Tetris piece can move without stack with other placed Tetris piece in desire direction
     public boolean canGo(String direction){
         int yOffset = 0;
         int xOffset = 0;
@@ -529,7 +485,6 @@ public class PlayZone extends JPanel{
         return true;
     }
 
-    //instant drop playing Tetris piece to bottom
     public void hardDrop(){
         int m = (lowestPoint()-block.getHeight()) - block.getY();
         if(m != 0){
@@ -548,7 +503,6 @@ public class PlayZone extends JPanel{
         repaint();  
     }
 
-    //move playing Tetris piece to the right
     public void moveRight(){
         if(block.getX() + block.getWidth() < gridCols && canGo("Right")){
             if(isBottom() || !canGo("Down")){
@@ -564,7 +518,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //move playing Tetris piece to the left
     public void moveLeft(){
         if(block.getX() > 0 && canGo("Left")){
             if(isBottom() || !canGo("Down")){
@@ -580,7 +533,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //constantly pull down the playing Tetris piece to the bottom
     public void softDrop(){
         if(!isBottom() && canGo("Down")){
             applyGravity();
@@ -596,7 +548,7 @@ public class PlayZone extends JPanel{
             lastTimerTrigger();
             repaint();
         }
-        else{//reach the end (bottom or hit block)
+        else{
             lockAndSpawnBlock();
         }
     }
@@ -612,7 +564,6 @@ public class PlayZone extends JPanel{
         repaint();       
     }
 
-    //update the new value of backgroundBlock to keep track of placed Tetris piece
     public void updateBackGround(){
         int x = block.getX();
         int y = block.getY();
@@ -620,7 +571,6 @@ public class PlayZone extends JPanel{
         int blockWidth = block.getWidth();
         int[][] shape = block.getShape();
         Color color = block.getColor();
-        //assign last placed Tetris piece to Background
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1 && y+row < gridRows && x+col < gridCols && y+row >= 0 && x+col >= 0)
@@ -669,7 +619,6 @@ public class PlayZone extends JPanel{
         return sideCheck;
     }
 
-    //check for the row full of block to delete and get XP
     public void checkFullLine(){
         if(block.getName() == Tetris.T && isRotated){
             boolean[] sideCheck = checkSide();
@@ -705,7 +654,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //delete a full row and shift all Background block downward by 1
     public void shiftRow(int bottomRow){
         for (int row = bottomRow; row >= 1; row--) {
             // assign values of the previous row to current row
@@ -718,7 +666,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //paint component once
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
@@ -738,7 +685,7 @@ public class PlayZone extends JPanel{
             drawShadow(g);
         }
     }
-	//paint playzone Background gridline
+
     private void drawGridLine(Graphics g){
         for (int row = -1; row < gridRows; row++) {
             for (int col = 0; col < gridCols; col++) {
@@ -750,7 +697,6 @@ public class PlayZone extends JPanel{
         }
     }
     
-    //paint all placed Tetris pieces in the Background
     private void drawPile(Graphics g){
         int lap = 1;
         Color color;
@@ -795,7 +741,6 @@ public class PlayZone extends JPanel{
         }
     }
 
-    //paint current playing Tetris piece
     private void drawBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
@@ -833,7 +778,6 @@ public class PlayZone extends JPanel{
         TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
     }
 
-    //paint predicted phantom piece of current playing Tetris piece
     private void drawPhantomBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
@@ -894,5 +838,41 @@ public class PlayZone extends JPanel{
             }
             lap++;
         }
+    }
+
+    public int getGridCols() {
+        return gridCols;
+    }
+
+    public int getGridRows() {
+        return gridRows;
+    }
+
+    public static Color[][] getBackgroundBlock() {
+        return backgroundBlock;
+    }
+
+    public void setBackgroundBlock(int row, int column, Color color) {
+        backgroundBlock[row][column] = color;
+    }
+
+    public static Color getSlimePuddleColor() {
+        return slimePuddleColor;
+    }
+
+    public static Color getSlimeBlockColor() {
+        return slimeBlockColor;
+    }
+
+    public static Gravity getGravity() {
+        return gravity;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
     }
 }

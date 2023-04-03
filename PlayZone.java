@@ -668,14 +668,9 @@ public class PlayZone extends JPanel{
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);//not have = no panel bg color
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
-        g.drawImage(BGImage, 0, 0, null);
-        int brightness = (int)(256 - 256 * this.brightness);
-        g.setColor(new Color(0,0,0,brightness));
-        g.fillRect(0, 0, getWidth(), getHeight());
-
+        super.paintComponent(g);
+        drawBackgroundImage(g);
         drawGridLine(g);
         drawPhantomBlock(g);
         drawPile(g);
@@ -684,6 +679,16 @@ public class PlayZone extends JPanel{
         if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
             drawShadow(g);
         }
+    }
+
+    private void drawBackgroundImage(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+        int brightness = (int)(256 - 256 * this.brightness);
+        
+        g.setColor(new Color(0,0,0,brightness));
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
 
     private void drawGridLine(Graphics g){

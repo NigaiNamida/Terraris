@@ -21,7 +21,7 @@ public class PlayZone extends JPanel{
     private boolean isRotated;
 
     private TetrisPiece block;
-    private static ArrayList<String> blockQueue = new ArrayList<String>();
+    private static ArrayList<Tetris> blockQueue = new ArrayList<Tetris>();
     
     private static Color[][] backgroundBlock;
     private static Color slimePuddleColor;
@@ -32,7 +32,7 @@ public class PlayZone extends JPanel{
     public PlayZone(){
         lastAction = 0;
         brightness = (60)/100.0f;
-        blockQueue = new ArrayList<String>();
+        blockQueue = new ArrayList<Tetris>();
         isUseHold = false;
         isGameOver = false;
 
@@ -71,8 +71,6 @@ public class PlayZone extends JPanel{
         isTSpin = false;
     }
 
-    
-
     public int getGridCols() {
         return gridCols;
     }
@@ -89,11 +87,11 @@ public class PlayZone extends JPanel{
         backgroundBlock[row][column] = color;
     }
 
-    public Color getSlimePuddleColor() {
+    public static Color getSlimePuddleColor() {
         return slimePuddleColor;
     }
 
-    public Color getSlimeBlockColor() {
+    public static Color getSlimeBlockColor() {
         return slimeBlockColor;
     }
 
@@ -265,7 +263,7 @@ public class PlayZone extends JPanel{
     public int wallKickTest(String direction,int xOffset,int yOffset){
         int x = block.getX() + xOffset;
         int y = block.getY() + yOffset;
-        if(direction == "CW" && block.getName() != "I"){
+        if(direction == "CW" && block.getName() != Tetris.I){
             switch (block.getVariant()) {
                 case 0:
                     testSet = new int[][]{{0,0},{-1,0},{-1,-1},{0,2},{-1,2}};
@@ -281,7 +279,7 @@ public class PlayZone extends JPanel{
                     break;
             }
         }
-        else if(direction == "CT-CW" && block.getName() != "I"){
+        else if(direction == "CT-CW" && block.getName() != Tetris.I){
             switch (block.getVariant()) {
                 case 0:
                     testSet = new int[][]{{0,0},{1,0},{1,-1},{0,2},{1,2}};
@@ -297,7 +295,7 @@ public class PlayZone extends JPanel{
                     break;
             }
         }
-        else if(direction == "CW" && block.getName() == "I"){
+        else if(direction == "CW" && block.getName() == Tetris.I){
             switch (block.getVariant()) {
                 case 0:
                     testSet = new int[][]{{0,0},{-2,0},{1,0},{-2,1},{1,-2}};
@@ -396,7 +394,7 @@ public class PlayZone extends JPanel{
         
         //offset for block new position after rotate
         if(direction == "CW"){
-            if(block.getName() != "O" && block.getName() != "I"){
+            if(block.getName() != Tetris.O && block.getName() != Tetris.I){
                 switch (block.getVariant()) {
                     case 0:
                         xOffset = 1;
@@ -410,7 +408,7 @@ public class PlayZone extends JPanel{
                         break;
                 }
             }
-            if(block.getName() == "I"){
+            if(block.getName() == Tetris.I){
                 switch (block.getVariant()) {
                     case 0:
                         xOffset = 2;
@@ -432,7 +430,7 @@ public class PlayZone extends JPanel{
             }
         }
         else{
-            if(block.getName() != "O" && block.getName() != "I"){
+            if(block.getName() != Tetris.I && block.getName() != Tetris.I){
                 switch (block.getVariant()) {
                     case 1:
                         xOffset = -1;
@@ -446,7 +444,7 @@ public class PlayZone extends JPanel{
                         break;
                 }
             }
-            if(block.getName() == "I"){
+            if(block.getName() == Tetris.I){
                 switch (block.getVariant()) {
                     case 1:
                         xOffset = -2;
@@ -673,7 +671,7 @@ public class PlayZone extends JPanel{
 
     //check for the row full of block to delete and get XP
     public void checkFullLine(){
-        if(block.getName() == "T" && isRotated){
+        if(block.getName() == Tetris.T && isRotated){
             boolean[] sideCheck = checkSide();
             if(sideCheck[0] && sideCheck[1] && (sideCheck[2] || sideCheck[3])){
                 isTSpin = true;
@@ -734,7 +732,7 @@ public class PlayZone extends JPanel{
         drawGridLine(g);
         drawPhantomBlock(g);
         drawPile(g);
-        drawColorBlock(g);
+        drawBlock(g);
         BossAttack.drawBossAttack(g);
         if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
             drawShadow(g);
@@ -756,58 +754,36 @@ public class PlayZone extends JPanel{
     private void drawPile(Graphics g){
         int lap = 1;
         Color color;
-        String middle;
-        String[][] blockCoordinate = new String[20][10];
+        Color middle;
         boolean[][] sideCheck = new boolean[3][3];
         while(lap<4){
             for (int row = 0; row < gridRows; row++) {
                 for (int col = 0; col < gridCols; col++) {
                     color = backgroundBlock[row][col];
-                    if(color != null && lap == 1){
-                        int x = col * blockSize; //coordinate + offset
-                        int y = row * blockSize; //coordinate + offset
-                        paintBlocks(g,color,x,y);
-                        if(color.equals(TetrisPiece.getBlock("O").getColor()))
-                            blockCoordinate[row][col] = "O";
-                        else if(color.equals(TetrisPiece.getBlock("I").getColor()))
-                            blockCoordinate[row][col] = "I";
-                        else if(color.equals(TetrisPiece.getBlock("T").getColor()))
-                            blockCoordinate[row][col] = "T";
-                        else if(color.equals(TetrisPiece.getBlock("L").getColor()))
-                            blockCoordinate[row][col] = "L";
-                        else if(color.equals(TetrisPiece.getBlock("J").getColor()))
-                            blockCoordinate[row][col] = "J";
-                        else if(color.equals(TetrisPiece.getBlock("S").getColor()))
-                            blockCoordinate[row][col] = "S";
-                        else if(color.equals(TetrisPiece.getBlock("Z").getColor()))
-                            blockCoordinate[row][col] = "Z";
-                        else if(color == slimePuddleColor)
-                            blockCoordinate[row][col] = "Slime_Puddle";
-                        else if(color == slimeBlockColor)
-                            blockCoordinate[row][col] = "Slime_Block";
-                    }
-                    if(blockCoordinate[row][col] != "null" && lap == 2){
+                    if(backgroundBlock[row][col] != null && lap == 2){
                         for(int checkRow = 0; checkRow <= 2; checkRow++){
                             for(int checkCol = 0; checkCol <= 2; checkCol++){
                                 if(col+checkCol-1 >= 0 && col+checkCol-1 < gridCols && row+checkRow-1 >= 0 && row+checkRow-1 < gridRows){
-                                    if(blockCoordinate[row+checkRow-1][col+checkCol-1] == blockCoordinate[row][col]){
-                                        sideCheck[checkRow][checkCol] = true;
+                                    if(backgroundBlock[row+checkRow-1][col+checkCol-1] != null){
+                                        if(backgroundBlock[row+checkRow-1][col+checkCol-1].equals(backgroundBlock[row][col])){
+                                            sideCheck[checkRow][checkCol] = true;
+                                        }
                                     }
                                 }
                             }
                         }
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset
-                        middle = blockCoordinate[row][col];
+                        middle = backgroundBlock[row][col];
                         TetrisTexture.mergePileTexture(g, middle, x, y, sideCheck); 
                         sideCheck = new boolean[3][3];
                     }
-                    if(blockCoordinate[row][col] != "null" && lap == 3){
+                    if(backgroundBlock[row][col] != null && lap == 3){
                         int x = col * blockSize; //coordinate + offset
                         int y = row * blockSize; //coordinate + offset
-                        middle = blockCoordinate[row][col];
+                        middle = backgroundBlock[row][col];
                         if(row + 1 < gridRows){
-                            if (color == slimePuddleColor && blockCoordinate[row+1][col] == null){
+                            if (color == slimePuddleColor && backgroundBlock[row+1][col] == null){
                                 middle = null;
                             }
                         }
@@ -820,18 +796,14 @@ public class PlayZone extends JPanel{
     }
 
     //paint current playing Tetris piece
-    private void drawColorBlock(Graphics g){
+    private void drawBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
-        Color color = block.getColor();
         int[][] shape = block.getShape();
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++) {
                 //paint where block == 1
                 if(shape[row][col] == 1){
-                    int x = (block.getX() + col) * blockSize; //coordinate + offset
-                    int y = (block.getY() + row) * blockSize; //coordinate + offset
-                    paintBlocks(g,color,x,y);
                     if(backgroundBlock[block.getY() + row][block.getX() + col] == slimePuddleColor){
                         hardDrop();
                     }
@@ -882,13 +854,6 @@ public class PlayZone extends JPanel{
                 }
             }
         }
-    }
-
-
-    //paint a single square block on desire position
-    private void paintBlocks(Graphics g,Color color,int x,int y){
-        g.setColor(color);
-        g.fillRect(x, y, blockSize, blockSize);
     }
 
     private void drawShadow(Graphics g){

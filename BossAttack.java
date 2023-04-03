@@ -100,8 +100,8 @@ public class BossAttack implements ActionListener{
     public void applyGravitySlimeRain(){
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = playZone.getSlimePuddleColor();
-        slimeBlockColor = playZone.getSlimeBlockColor();
+        slimePuddleColor = PlayZone.getSlimePuddleColor();
+        slimeBlockColor = PlayZone.getSlimeBlockColor();
         for(int i = 0; i < slimeFallsCount; i++){
             if(!isHit(i) && slimePuddleColumn[i] == 0){        
                 slimeFallsDelay[i] += 5;
@@ -178,7 +178,7 @@ public class BossAttack implements ActionListener{
     public static boolean isHit(int i){
         PlayZone playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = playZone.getSlimePuddleColor();
+        slimePuddleColor = PlayZone.getSlimePuddleColor();
         
         return slimeFallsDelay[i]/25 >= playZone.getGridRows() - 1 || (slimeFallsDelay[i]/25 >= 0 && backgroundBlock[slimeFallsDelay[i]/25 + 1][slimeFallsColumn[i]] != null && backgroundBlock[slimeFallsDelay[i]/25 + 1][slimeFallsColumn[i]] != slimePuddleColor);
     }

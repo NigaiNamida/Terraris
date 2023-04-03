@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -8,16 +9,16 @@ public class TetrisTexture extends JPanel{
     private static Image blockImage;
     private static Image pileImage;
     
-    public static void drawBlockTexture(Graphics g, String name, int variant, int x, int y){
+    public static void drawBlockTexture(Graphics g, Tetris name, int variant, int x, int y){
         String imagePath = null;
-        if(name == "O")
+        if(name == Tetris.O)
             imagePath = path+name+"/Full_Block.png";
-        else if(name == "I" || name == "S" || name == "Z")
+        else if(name == Tetris.I || name == Tetris.S || name == Tetris.Z)
             if(variant % 2 == 0)
                 imagePath = path+name+"/Horizontal.png";
             else
                 imagePath = path+name+"/Vertical.png";
-        else if(name == "T" || name == "L" || name == "J")
+        else if(name == Tetris.T || name == Tetris.L || name == Tetris.J)
             if(variant == 0)
                 imagePath = path+name+"/Horizontal_Up.png";
             else if(variant == 1)
@@ -30,12 +31,20 @@ public class TetrisTexture extends JPanel{
         g.drawImage(blockImage ,x, y, null); 
     }
 
-    public static void drawPuddleTexture(Graphics g, String middle, int x, int y){
-        pileImage = new ImageIcon("Assets/Image/Bosses/KingSlime/Attack/" + middle + ".png").getImage();
+    public static void drawPuddleTexture(Graphics g, Color middle, int x, int y){
+        String color = null;
+        if(middle == PlayZone.getSlimePuddleColor()){
+            color = "Slime_Puddle";
+        }
+        else if(middle == PlayZone.getSlimeBlockColor()){
+            color = "Slime_Block";
+        }
+
+        pileImage = new ImageIcon(path+"Bosses/KingSlime/Attack/" + color + ".png").getImage();
         g.drawImage(pileImage,x,y,null);
     }
 
-    public static void mergePileTexture(Graphics g, String middle, int x, int y,boolean[][] sideCheck){
+    public static void mergePileTexture(Graphics g, Color middle, int x, int y,boolean[][] sideCheck){
         boolean painted = false;
         boolean Top = sideCheck [0][1];
         boolean Left = sideCheck [1][0];
@@ -45,7 +54,7 @@ public class TetrisTexture extends JPanel{
         boolean Top_Right = sideCheck [0][2];
         boolean Bottom_Left = sideCheck [2][0];
         boolean Bottom_Right = sideCheck [2][2];
-        if(!painted && middle == "O"){
+        if(!painted && middle.equals(Tetris.O.getColor())){
             if(!painted && Top && Left && Right && Bottom){
                 pileImage = new ImageIcon("Assets/Image/O/Middle.png").getImage();
                 g.drawImage(pileImage,x,y,null);
@@ -128,7 +137,7 @@ public class TetrisTexture extends JPanel{
             }
 
         }
-        else if(!painted && middle == "T"){
+        else if(!painted && middle.equals(Tetris.T.getColor())){
             if(!painted && Top && Left && Right && Bottom){
                 pileImage = new ImageIcon("Assets/Image/T/Middle.png").getImage();
                 g.drawImage(pileImage,x,y,null);
@@ -211,7 +220,7 @@ public class TetrisTexture extends JPanel{
             }
 
         }
-        else if(!painted && middle == "I"){
+        else if(!painted && middle.equals(Tetris.I.getColor())){
             if(!painted && Top && Left && Right && Bottom){
                 pileImage = new ImageIcon("Assets/Image/I/Middle.png").getImage();
                 g.drawImage(pileImage,x,y,null);
@@ -293,7 +302,7 @@ public class TetrisTexture extends JPanel{
                 painted = true;
             }
         }
-        else if(!painted && middle == "L"){
+        else if(!painted && middle.equals(Tetris.L.getColor())){
             if(!painted && Top && Left && Right & Bottom){
                 if(!painted && Top_Left && Top_Right && Bottom_Left && Bottom_Right){
                     pileImage = new ImageIcon("Assets/Image/L/Middle.png").getImage();
@@ -548,7 +557,7 @@ public class TetrisTexture extends JPanel{
                 painted = true;
             }
         }
-        else if(!painted && middle == "J"){
+        else if(!painted && middle.equals(Tetris.J.getColor())){
             if(!painted && Top && Left && Right & Bottom){
                 if(!painted && Top_Left && Top_Right && Bottom_Left && Bottom_Right){
                     pileImage = new ImageIcon("Assets/Image/J/Middle.png").getImage();
@@ -803,7 +812,7 @@ public class TetrisTexture extends JPanel{
                 painted = true;
             }
         }
-        else if(!painted && middle == "S"){
+        else if(!painted && middle.equals(Tetris.S.getColor())){
             if(!painted && Top && Left && Right & Bottom){
                 if(!painted && Top_Left && Top_Right && Bottom_Left && Bottom_Right){
                     pileImage = new ImageIcon("Assets/Image/S/Middle.png").getImage();
@@ -1058,7 +1067,7 @@ public class TetrisTexture extends JPanel{
                 painted = true;
             }
         }
-        else if(!painted && middle == "Z"){
+        else if(!painted && middle.equals(Tetris.Z.getColor())){
             if(!painted && Top && Left && Right && Bottom){
                 pileImage = new ImageIcon("Assets/Image/Z/Middle.png").getImage();
                 g.drawImage(pileImage,x,y,null);

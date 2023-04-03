@@ -599,15 +599,19 @@ public class PlayZone extends JPanel{
             repaint();
         }
         else{//reach the end (bottom or hit block)
-            nextPanel.repaint();
-            nextPanel.setBlock(getNextPiece());
-            updateBackGround();
-            GameFrame.playSE(2);
-            checkFullLine();
-            createBlock();
-            lastTimerTrigger();
-            repaint();       
+            lockAndSpawnBlock();
         }
+    }
+
+    public void lockAndSpawnBlock(){
+        nextPanel.repaint();
+        nextPanel.setBlock(getNextPiece());
+        updateBackGround();
+        GameFrame.playSE(2);
+        checkFullLine();
+        createBlock();
+        lastTimerTrigger();
+        repaint();       
     }
 
     //update the new value of backgroundBlock to keep track of placed Tetris piece
@@ -784,11 +788,11 @@ public class PlayZone extends JPanel{
                             blockCoordinate[row][col] = "Slime_Block";
                     }
                     if(blockCoordinate[row][col] != "null" && lap == 2){
-                        for(int checkrow = 0; checkrow <= 2; checkrow++){
-                            for(int checkcol = 0; checkcol <= 2; checkcol++){
-                                if(col+checkcol-1 >= 0 && col+checkcol-1 < gridCols && row+checkrow-1 >= 0 && row+checkrow-1 < gridRows){
-                                    if(blockCoordinate[row+checkrow-1][col+checkcol-1] == blockCoordinate[row][col]){
-                                        sideCheck[checkrow][checkcol] = true;
+                        for(int checkRow = 0; checkRow <= 2; checkRow++){
+                            for(int checkCol = 0; checkCol <= 2; checkCol++){
+                                if(col+checkCol-1 >= 0 && col+checkCol-1 < gridCols && row+checkRow-1 >= 0 && row+checkRow-1 < gridRows){
+                                    if(blockCoordinate[row+checkRow-1][col+checkCol-1] == blockCoordinate[row][col]){
+                                        sideCheck[checkRow][checkCol] = true;
                                     }
                                 }
                             }
@@ -829,12 +833,30 @@ public class PlayZone extends JPanel{
                     int x = (block.getX() + col) * blockSize; //coordinate + offset
                     int y = (block.getY() + row) * blockSize; //coordinate + offset
                     paintBlocks(g,color,x,y);
-                    if (block.getY() + row >= 0 && block.getX() + col >= 0 && block.getY() + row < gridRows && block.getX() + col < gridCols){
-                        if(backgroundBlock[block.getY() + row][block.getX() + col] == slimePuddleColor){
-                            hardDrop();
+                    if(backgroundBlock[block.getY() + row][block.getX() + col] == slimePuddleColor){
+                        hardDrop();
+                    }
+                    if(block.getY() + row + 1 < gridRows){
+                        if(backgroundBlock[block.getY() + row + 1][block.getX() + col] == slimeBlockColor){
+                            lockAndSpawnBlock();
                         }
                     }
-                }
+                    if(block.getY() + row  - 1 >= 0){
+                        if(backgroundBlock[block.getY() + row - 1][block.getX() + col] == slimeBlockColor){
+                            lockAndSpawnBlock();
+                        }
+                    }
+                    if(block.getX() + col + 1 < gridCols){
+                        if(backgroundBlock[block.getY() + row][block.getX() + col + 1] == slimeBlockColor){
+                            lockAndSpawnBlock();
+                        }
+                    }
+                    if(block.getX() + col - 1 >= 0){
+                        if(backgroundBlock[block.getY() + row][block.getX() + col - 1] == slimeBlockColor){
+                            lockAndSpawnBlock();
+                        }
+                    }
+                }   
             }
         }
         TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);

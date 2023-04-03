@@ -18,7 +18,7 @@ public class NextPanel extends JPanel{
         nextLabel.setFont(new Font("Futura",Font.BOLD,20));
 
         //setting panel
-        this.setBounds(20, 160, 100, 100);
+        this.setBounds(10, 150, 125, 125);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3,true));
 
@@ -33,14 +33,6 @@ public class NextPanel extends JPanel{
 
     }
 
-    public TetrisPiece getBlock() {
-        return block;
-    }
-
-    public void setBlock(TetrisPiece block) {
-        this.block = block;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -51,25 +43,16 @@ public class NextPanel extends JPanel{
     private void drawBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
-        Color color = block.getColor();
-        int[][] shape = block.getShape();
-
-        for (int row = 0; row < blockHeight; row++) {
-            for (int col = 0; col < blockWidth; col++) {
-                //paint where block == 1
-                if(shape[row][col] == 1){
-                    int x = (int)(((gridCols-blockWidth)/2.0 + col) * blockSize); //coordinate + offset
-                    int y = (int)(((gridRows-blockHeight)*(2/3.0)+ row) * blockSize); //coordinate + offset
-                    paintBlocks(g,color,x,y);
-                }
-            }
-        }
+        int x = (int)(((gridCols-blockWidth)/2.0) * blockSize); //coordinate + offset
+        int y = (int)(((gridRows-blockHeight)*(2/3.0)) * blockSize); //coordinate + offset
+        TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),x,y);
     }
 
-    private void paintBlocks(Graphics g,Color color,int x,int y){
-        g.setColor(color);
-        g.fillRect(x, y, blockSize, blockSize);
-        g.setColor(Color.WHITE);
-        g.drawRect(x, y, blockSize, blockSize);    
+    public TetrisPiece getBlock() {
+        return block;
+    }
+
+    public void setBlock(TetrisPiece block) {
+        this.block = block;
     }
 }

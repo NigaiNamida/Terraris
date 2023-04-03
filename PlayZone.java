@@ -799,44 +799,29 @@ public class PlayZone extends JPanel{
             }
         }
     }
-
+    
     private void drawShadow(Graphics g){
-        int lap = 1;
-        int glow = 1;
-        int checkGlow = 3;
-        boolean dark = true;
-        boolean[][] blockCoordinate = new boolean[20][10];
-        while (lap < 4){
-            for (int row = 0; row < gridRows; row++) {
-                for (int col = 0; col < gridCols; col++) {
-                    if((row == block.getY() && col == block.getX()) || (row == block.getY() + block.getHeight()-1 && col == block.getX() + block.getWidth()-1) ||
-                       (row == block.getY() && col == block.getX() + block.getWidth()-1) || (row == block.getY() + block.getHeight()-1 && col == block.getX()) && lap == 1){
-                        blockCoordinate[row][col] = true;
-                    }
-                    if(lap > 1){
-                        if(lap == 3){
-                            glow = 3;
-                            checkGlow = 7;
-                        }
-                        for (int checkRow = 0; checkRow < checkGlow; checkRow++) {
-                            for (int checkCol = 0; checkCol < checkGlow; checkCol++) {
-                                if(col+checkCol-glow >= 0 && col+checkCol-glow < gridCols && row+checkRow-glow >= 0 && row+checkRow-glow < gridRows){
-                                    if(blockCoordinate[row+checkRow-glow][col+checkCol-glow] == true){
-                                        dark = false;
-                                    }
-                                }
+        int radius = 20;
+        int darkness = 4;
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    for (int k = -radius; k <= radius; k++) {
+                        for (int l = -radius; l <= radius; l++) {
+                            if(!(k==0 && l==0)){
+                                g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness));
+                                g.fillRect((x+col+l)*25,(y+row+k)*25, 25 , 25);
                             }
                         }
-                        if(dark == true){
-                            g.setColor(new Color(0, 0, 0,100));
-                            g.fillRect(col * 25 ,row * 25, 25 , 25);
-                        }
-                        dark = true;
-
                     }
                 }
             }
-            lap++;
         }
     }
 

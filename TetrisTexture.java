@@ -36,22 +36,7 @@ public class TetrisTexture extends JPanel{
                     imagePath = path+name+"/Vertical_Left.png";
                 break;
         }
-        // if(name == Tetris.O)
-        //     imagePath = path+name+"/Full_Block.png";
-        // else if(name == Tetris.I || name == Tetris.S || name == Tetris.Z)
-        //     if(variant % 2 == 0)
-        //         imagePath = path+name+"/Horizontal.png";
-        //     else
-        //         imagePath = path+name+"/Vertical.png";
-        // else if(name == Tetris.T || name == Tetris.L || name == Tetris.J)
-        //     if(variant == 0)
-        //         imagePath = path+name+"/Horizontal_Up.png";
-        //     else if(variant == 1)
-        //         imagePath = path+name+"/Vertical_Right.png";
-        //     else if(variant == 2)
-        //         imagePath = path+name+"/Horizontal_Down.png";
-        //     else
-        //         imagePath = path+name+"/Vertical_Left.png";
+
         blockImage = new ImageIcon(imagePath).getImage();
         g.drawImage(blockImage ,x, y, null); 
     }

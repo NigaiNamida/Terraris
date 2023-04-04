@@ -44,7 +44,12 @@ public class TetrisTexture extends JPanel{
     public static void drawPuddleTexture(Graphics g, Color middle, int x, int y){
         String imageName = null;
         if(middle == PlayZone.getSlimePuddleColor()){
-            imageName = "Slime_Puddle";
+            if(y<19*25){
+                imageName = "Slime_Puddle";
+            }
+            else{
+                imageName = "Slime_Puddle_Floor";
+            }
         }
         else if(middle == PlayZone.getSlimeBlockColor()){
             imageName = "Slime_Block";

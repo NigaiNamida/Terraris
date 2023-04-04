@@ -640,8 +640,8 @@ public class PlayZone extends JPanel{
             }
             if(isFullRow){
                 fullLineAmount++;
-                GoalPanel.addGoal();
-                GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
+                //GoalPanel.addGoal();
+                //GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
                 shiftRow(row);//bottom row to shift
             }
         }

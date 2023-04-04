@@ -30,13 +30,13 @@ public class GameThread extends Thread{
                     } catch (InterruptedException e) {}
                 }
             }
+        }
+        while(playZone.isGameOver()){
+            if(GameFrame.getHighScorePanel().isVisible()){
+                GameFrame.getHighScorePanel().repaint();
+            }
             else{
-                if(GameFrame.getHighScorePanel().isVisible()){
-                    GameFrame.getHighScorePanel().repaint();
-                }
-                else{
-                    GameFrame.getGameOverPanel().repaint();
-                }
+                GameFrame.getGameOverPanel().repaint();
             }
         }
     }

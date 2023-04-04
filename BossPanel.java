@@ -110,7 +110,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 GameFrame.playSE(9);
             }
             else if (stage == Theme.EyeOfCthulhu){
-                boss = new Boss("EyeOfCthulhu",4000,4000,15000);
+                boss = new Boss("EyeOfCthulhu",6000,6000,5000);
                 bossTitle.setText("Eye Of Cthulhu");
                 GameFrame.playSE(9);
             }
@@ -126,6 +126,9 @@ public class BossPanel extends JPanel implements ActionListener{
         else if(HP <= maxHP*0.5)
             boss.setState(2);
         updateCooldownTimer();
+        if(boss.getName() == "EyeOfCthulhu" && boss.getPhase()==1){
+            bossAttack.applyBlindness(boss.getState());
+        }
     }
 
     public void updatePhase(){
@@ -138,9 +141,13 @@ public class BossPanel extends JPanel implements ActionListener{
         }
         else if(name == "EyeOfCthulhu"){
             if(phase == 2){
-                boss.setMaxHP(4000);
-                boss.setHP(4000);
+                bossAttack.stopAllTimer();
+                boss.setMaxHP(3000);
+                boss.setHP(3000);
+                boss.setCooldown(15000);
                 GameFrame.playSE(9);
+                playZone = GameFrame.getPlayZone();
+                playZone.setBlindness(0);
             }
             else if(phase >= 3){
                 exitFight();
@@ -162,6 +169,20 @@ public class BossPanel extends JPanel implements ActionListener{
                     stateTimer = 3;
                 }
                 break;
+            case "EyeOfCthulhu" :
+                if(boss.getPhase() == 1){
+                    if(boss.getState() == 2 && stateTimer != 2){
+                        boss.attackTimer = new Timer(7500, this);
+                        boss.attackTimer.restart();
+                        stateTimer = 2;
+                    }
+                    else if(boss.getState() == 3  && stateTimer != 3){
+                        boss.attackTimer = new Timer(10000, this);
+                        boss.attackTimer.restart();
+                        stateTimer = 3;
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -178,7 +199,6 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void exitFight(){
-        PlayZone.setBlindness(0);
         GameFrame.stopMusic();
         boss.stopAnimateTimer();
         boss.stopAttackTimer();

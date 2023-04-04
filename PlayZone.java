@@ -832,11 +832,11 @@ public class PlayZone extends JPanel{
         }
     }
 
-    public static int getBlindness() {
+    public int getBlindness() {
         return blindness;
     }
 
-    public static void setBlindness(int blindness) {
+    public void setBlindness(int blindness) {
         PlayZone.blindness = blindness;
     }
 

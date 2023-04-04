@@ -668,7 +668,6 @@ public class PlayZone extends JPanel{
 
     @Override
     protected void paintComponent(Graphics g) {
-        BossPanel bossPanel = GameFrame.getBossPanel();
         super.paintComponent(g);
         drawBackgroundImage(g);
         drawGridLine(g);
@@ -676,10 +675,8 @@ public class PlayZone extends JPanel{
         drawPile(g);
         drawSlime(g);
         drawBlock(g);
-        BossAttack.drawBossAttack(g);
-        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
-            drawShadow(g);
-        }
+        drawBossAttack(g);
+        drawShadow(g);
     }
 
     private void drawBackgroundImage(Graphics g){
@@ -699,6 +696,28 @@ public class PlayZone extends JPanel{
                 int y = row * blockSize; //coordinate + offset
                 g.setColor(gridLineColor);
                 g.drawRect(x, y, blockSize, blockSize);  
+            }
+        }
+    }
+
+    private void drawPhantomBlock(Graphics g){
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        // Color color = block.getColor();
+        int[][] shape = block.getShape();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                //paint where block == 1
+                if(row < blockHeight && col < blockWidth){
+                    if(shape[row][col] == 1){
+                        int x = (block.getX() + col) * blockSize; //coordinate + offset
+                        int y = (lowestPoint() + row - blockHeight) * blockSize; //coordinate + offset
+                        g.setColor(new Color(255, 255, 255,125));
+                        g.fillRect(x, y, blockSize, blockSize);
+                        g.setColor(new Color(100, 100, 100));
+                        g.drawRect(x, y, blockSize, blockSize);  
+                    }
+                }
             }
         }
     }
@@ -780,45 +799,30 @@ public class PlayZone extends JPanel{
         TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
     }
 
-    private void drawPhantomBlock(Graphics g){
-        int blockHeight = block.getHeight();
-        int blockWidth = block.getWidth();
-        // Color color = block.getColor();
-        int[][] shape = block.getShape();
-        for (int row = 0; row < blockHeight; row++) {
-            for (int col = 0; col < blockWidth; col++) {
-                //paint where block == 1
-                if(row < blockHeight && col < blockWidth){
-                    if(shape[row][col] == 1){
-                        int x = (block.getX() + col) * blockSize; //coordinate + offset
-                        int y = (lowestPoint() + row - blockHeight) * blockSize; //coordinate + offset
-                        g.setColor(new Color(255, 255, 255,125));
-                        g.fillRect(x, y, blockSize, blockSize);
-                        g.setColor(new Color(100, 100, 100));
-                        g.drawRect(x, y, blockSize, blockSize);  
-                    }
-                }
-            }
-        }
+    private void drawBossAttack(Graphics g){
+        BossAttack.drawBossAttack(g);
     }
     
     private void drawShadow(Graphics g){
-        int radius = gridRows;
-        int darkness = 4;
-        int blockHeight = block.getHeight();
-        int blockWidth = block.getWidth();
-        int[][] shape = block.getShape();
-        int x = block.getX();
-        int y = block.getY();
-
-        for (int row = 0; row < blockHeight; row++) {
-            for (int col = 0; col < blockWidth; col++) {
-                if(shape[row][col] == 1){
-                    for (int k = -radius; k <= radius; k++) {
-                        for (int l = -radius; l <= radius; l++) {
-                            if(!(k==0 && l==0)){
-                                g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness));
-                                g.fillRect((x+col+l)*blockSize,(y+row+k)*blockSize, blockSize , blockSize);
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
+            int radius = gridRows;
+            int darkness = 4;
+            int blockHeight = block.getHeight();
+            int blockWidth = block.getWidth();
+            int[][] shape = block.getShape();
+            int x = block.getX();
+            int y = block.getY();
+    
+            for (int row = 0; row < blockHeight; row++) {
+                for (int col = 0; col < blockWidth; col++) {
+                    if(shape[row][col] == 1){
+                        for (int k = -radius; k <= radius; k++) {
+                            for (int l = -radius; l <= radius; l++) {
+                                if(!(k==0 && l==0)){
+                                    g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness));
+                                    g.fillRect((x+col+l)*blockSize,(y+row+k)*blockSize, blockSize , blockSize);
+                                }
                             }
                         }
                     }

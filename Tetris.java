@@ -1,22 +1,26 @@
 import java.awt.Color;
 
 public enum Tetris {
-    O(Color.YELLOW),
-    T(Color.MAGENTA),
-    I(Color.CYAN),
-    L(Color.BLUE),
-    J(Color.ORANGE),
-    S(Color.GREEN),
-    Z(Color.RED);
+    O,
+    T,
+    I,
+    L,
+    J,
+    S,
+    Z;
     
     private Color color;
 
-    private Tetris(Color color){
-        this.color = color;
+    private Tetris(){
+        this.color = Color.RED;
     }
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
 }

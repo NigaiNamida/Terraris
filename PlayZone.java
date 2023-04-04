@@ -12,7 +12,7 @@ public class PlayZone extends JPanel{
     private static Color slimePuddleColor;
     private static Color slimeBlockColor;
     private Color gridLineColor;
-
+    private static int blindness;
     private int gridCols;
     private int gridRows;
     private static int blockSize;
@@ -33,6 +33,7 @@ public class PlayZone extends JPanel{
     private int[][] testSet;
 
     public PlayZone(){
+        blindness = 0;
         lastAction = 0;
         brightness = (60)/100.0f;
         blockQueue = new ArrayList<Tetris>();
@@ -820,7 +821,7 @@ public class PlayZone extends JPanel{
                         for (int k = -radius; k <= radius; k++) {
                             for (int l = -radius; l <= radius; l++) {
                                 if(!(k==0 && l==0)){
-                                    g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness));
+                                    g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness+blindness));
                                     g.fillRect((x+col+l)*blockSize,(y+row+k)*blockSize, blockSize , blockSize);
                                 }
                             }
@@ -829,6 +830,14 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+    }
+
+    public static int getBlindness() {
+        return blindness;
+    }
+
+    public static void setBlindness(int blindness) {
+        PlayZone.blindness = blindness;
     }
 
     public int getGridCols() {

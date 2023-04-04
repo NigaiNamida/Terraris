@@ -178,6 +178,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void exitFight(){
+        PlayZone.setBlindness(0);
         GameFrame.stopMusic();
         boss.stopAnimateTimer();
         boss.stopAttackTimer();

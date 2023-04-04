@@ -12,7 +12,7 @@ public class PlayZone extends JPanel{
     private static Color slimePuddleColor;
     private static Color slimeBlockColor;
     private Color gridLineColor;
-
+    private static int blindness;
     private int gridCols;
     private int gridRows;
     private static int blockSize;
@@ -33,6 +33,7 @@ public class PlayZone extends JPanel{
     private int[][] testSet;
 
     public PlayZone(){
+        blindness = 0;
         lastAction = 0;
         brightness = (60)/100.0f;
         blockQueue = new ArrayList<Tetris>();
@@ -640,8 +641,8 @@ public class PlayZone extends JPanel{
             }
             if(isFullRow){
                 fullLineAmount++;
-                GoalPanel.addGoal();
-                GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
+                //GoalPanel.addGoal();
+                //GoalPanel.getGoalScore().setText(""+GoalPanel.getGoal());
                 shiftRow(row);//bottom row to shift
             }
         }
@@ -668,22 +669,25 @@ public class PlayZone extends JPanel{
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);//not have = no panel bg color
+        super.paintComponent(g);
+        drawBackgroundImage(g);
+        drawGridLine(g);
+        drawPhantomBlock(g);
+        drawPile(g);
+        drawSlime(g);
+        drawBlock(g);
+        drawBossAttack(g);
+        drawShadow(g);
+    }
+
+    private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
         Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
         g.drawImage(BGImage, 0, 0, null);
         int brightness = (int)(256 - 256 * this.brightness);
+        
         g.setColor(new Color(0,0,0,brightness));
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        drawGridLine(g);
-        drawPhantomBlock(g);
-        drawPile(g);
-        drawBlock(g);
-        BossAttack.drawBossAttack(g);
-        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
-            drawShadow(g);
-        }
     }
 
     private void drawGridLine(Graphics g){
@@ -695,87 +699,6 @@ public class PlayZone extends JPanel{
                 g.drawRect(x, y, blockSize, blockSize);  
             }
         }
-    }
-    
-    private void drawPile(Graphics g){
-        int lap = 1;
-        Color color;
-        Color middle;
-        boolean[][] sideCheck = new boolean[3][3];
-        while(lap<4){
-            for (int row = 0; row < gridRows; row++) {
-                for (int col = 0; col < gridCols; col++) {
-                    color = backgroundBlock[row][col];
-                    if(backgroundBlock[row][col] != null && lap == 2){
-                        for(int checkRow = 0; checkRow <= 2; checkRow++){
-                            for(int checkCol = 0; checkCol <= 2; checkCol++){
-                                if(col+checkCol-1 >= 0 && col+checkCol-1 < gridCols && row+checkRow-1 >= 0 && row+checkRow-1 < gridRows){
-                                    if(backgroundBlock[row+checkRow-1][col+checkCol-1] != null){
-                                        if(backgroundBlock[row+checkRow-1][col+checkCol-1].equals(backgroundBlock[row][col])){
-                                            sideCheck[checkRow][checkCol] = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        int x = col * blockSize; //coordinate + offset
-                        int y = row * blockSize; //coordinate + offset
-                        middle = backgroundBlock[row][col];
-                        TetrisTexture.mergePileTexture(g, middle, x, y, sideCheck); 
-                        sideCheck = new boolean[3][3];
-                    }
-                    if(backgroundBlock[row][col] != null && lap == 3){
-                        int x = col * blockSize; //coordinate + offset
-                        int y = row * blockSize; //coordinate + offset
-                        middle = backgroundBlock[row][col];
-                        if(row + 1 < gridRows){
-                            if (color == slimePuddleColor && backgroundBlock[row+1][col] == null){
-                                middle = null;
-                            }
-                        }
-                        TetrisTexture.drawPuddleTexture(g, middle, x, y);
-                    }             
-                }
-            }
-            lap++;
-        }
-    }
-
-    private void drawBlock(Graphics g){
-        int blockHeight = block.getHeight();
-        int blockWidth = block.getWidth();
-        int[][] shape = block.getShape();
-        for (int row = 0; row < blockHeight; row++) {
-            for (int col = 0; col < blockWidth; col++) {
-                //paint where block == 1
-                if(shape[row][col] == 1){
-                    if(backgroundBlock[block.getY() + row][block.getX() + col] == slimePuddleColor){
-                        hardDrop();
-                    }
-                    if(block.getY() + row + 1 < gridRows){
-                        if(backgroundBlock[block.getY() + row + 1][block.getX() + col] == slimeBlockColor){
-                            lockAndSpawnBlock();
-                        }
-                    }
-                    if(block.getY() + row  - 1 >= 0){
-                        if(backgroundBlock[block.getY() + row - 1][block.getX() + col] == slimeBlockColor){
-                            lockAndSpawnBlock();
-                        }
-                    }
-                    if(block.getX() + col + 1 < gridCols){
-                        if(backgroundBlock[block.getY() + row][block.getX() + col + 1] == slimeBlockColor){
-                            lockAndSpawnBlock();
-                        }
-                    }
-                    if(block.getX() + col - 1 >= 0){
-                        if(backgroundBlock[block.getY() + row][block.getX() + col - 1] == slimeBlockColor){
-                            lockAndSpawnBlock();
-                        }
-                    }
-                }   
-            }
-        }
-        TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
     }
 
     private void drawPhantomBlock(Graphics g){
@@ -800,29 +723,121 @@ public class PlayZone extends JPanel{
         }
     }
     
-    private void drawShadow(Graphics g){
-        int radius = 20;
-        int darkness = 4;
+    private void drawPile(Graphics g){
+        Color color;
+        char[][] isAround = {{'0','0','0'},{'0','0','0'},{'0','0','0'}};
+        for (int row = 0; row < gridRows; row++) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if(color != null){
+                    for(int offRow = -1;offRow <= 1;offRow++){
+                        for (int offCol = -1; offCol <= 1; offCol++) {
+                            if(col+offCol>= 0 && col+offCol < gridCols && row+offRow >= 0 && row+offRow < gridRows){
+                                Color offBGColor = backgroundBlock[row+offRow][col+offCol];
+                                if(offBGColor != null){
+                                    if(offBGColor.equals(color)){
+                                        isAround[offRow+1][offCol+1] = '1';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    int x = col * blockSize; //coordinate + offset
+                    int y = row * blockSize; //coordinate + offset
+                    TetrisTexture.mergePileTexture(g, color, x, y, isAround); 
+                    isAround = new char[][]{{'0','0','0'},{'0','0','0'},{'0','0','0'}};
+                }
+            }
+        }
+    }
+    private void drawSlime(Graphics g){
+        Color color;
+        for (int row = 0; row < gridRows; row++) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if(color != null){
+                    int x = col * blockSize; //coordinate + offset
+                    int y = row * blockSize; //coordinate + offset
+                    if(row + 1 < gridRows){
+                        if (color == slimePuddleColor && backgroundBlock[row+1][col] == null){
+                            color = null;
+                        }
+                    }
+                    TetrisTexture.drawPuddleTexture(g, color, x, y);  
+                }
+            }
+        }
+    }
+
+    private void drawBlock(Graphics g){
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
         int[][] shape = block.getShape();
-        int x = block.getX();
-        int y = block.getY();
-
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++) {
+                //paint where block == 1
                 if(shape[row][col] == 1){
-                    for (int k = -radius; k <= radius; k++) {
-                        for (int l = -radius; l <= radius; l++) {
-                            if(!(k==0 && l==0)){
-                                g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness));
-                                g.fillRect((x+col+l)*25,(y+row+k)*25, 25 , 25);
+                    int x = block.getX() + col;
+                    int y = block.getY() + row;
+                    if(backgroundBlock[y][x] == slimePuddleColor){
+                        hardDrop();
+                    }
+                    if(y + 1 < gridRows && backgroundBlock[y + 1][x] == slimeBlockColor){
+                        lockAndSpawnBlock();
+                    }
+                    else if(x + 1 < gridCols && backgroundBlock[y][x + 1] == slimeBlockColor){
+                        lockAndSpawnBlock();
+                    }
+                    else if(y - 1 >= 0 && backgroundBlock[y - 1][x] == slimeBlockColor){
+                        lockAndSpawnBlock();
+                    }
+                    else if(x - 1 >= 0 && backgroundBlock[y][x - 1] == slimeBlockColor){
+                        lockAndSpawnBlock();
+                    }
+                }   
+            }
+        }
+        TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
+    }
+
+    private void drawBossAttack(Graphics g){
+        BossAttack.drawBossAttack(g);
+    }
+    
+    private void drawShadow(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
+            int radius = gridRows;
+            int darkness = 4;
+            int blockHeight = block.getHeight();
+            int blockWidth = block.getWidth();
+            int[][] shape = block.getShape();
+            int x = block.getX();
+            int y = block.getY();
+    
+            for (int row = 0; row < blockHeight; row++) {
+                for (int col = 0; col < blockWidth; col++) {
+                    if(shape[row][col] == 1){
+                        for (int k = -radius; k <= radius; k++) {
+                            for (int l = -radius; l <= radius; l++) {
+                                if(!(k==0 && l==0)){
+                                    g.setColor(new Color(0, 0,0,(Math.abs(k)+Math.abs(l))*darkness+blindness));
+                                    g.fillRect((x+col+l)*blockSize,(y+row+k)*blockSize, blockSize , blockSize);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    public static int getBlindness() {
+        return blindness;
+    }
+
+    public static void setBlindness(int blindness) {
+        PlayZone.blindness = blindness;
     }
 
     public int getGridCols() {

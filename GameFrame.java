@@ -10,7 +10,7 @@ public class GameFrame extends JFrame{
     private static PlayZone playZone;
     private static HoldPanel holdPanel;
     private static NextPanel nextPanel;
-    private static GoalPanel goalPanel;
+    //private static GoalPanel goalPanel;
     private static LevelPanel levelPanel;
     private static BossPanel bossPanel;
     private static XPPanel XPPanel;
@@ -35,7 +35,7 @@ public class GameFrame extends JFrame{
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        goalPanel = new GoalPanel();
+        //goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -68,7 +68,7 @@ public class GameFrame extends JFrame{
         this.add(gameOverPanel);
         this.add(pausePanel);
         this.add(settingPanel);
-        this.add(goalPanel);
+        //this.add(goalPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -82,7 +82,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        goalPanel.setVisible(false);
+        //goalPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -105,7 +105,7 @@ public class GameFrame extends JFrame{
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
         this.remove(pausePanel);
-        this.remove(goalPanel);
+        //this.remove(goalPanel);
         this.remove(holdPanel);
         this.remove(nextPanel);
         this.remove(levelPanel);
@@ -118,7 +118,7 @@ public class GameFrame extends JFrame{
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        goalPanel = new GoalPanel();
+        //goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -132,7 +132,7 @@ public class GameFrame extends JFrame{
         this.add(highscorePanel);
         this.add(gameOverPanel);
         this.add(pausePanel);
-        this.add(goalPanel);
+        //this.add(goalPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -145,7 +145,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        goalPanel.setVisible(false);
+        //goalPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -166,7 +166,7 @@ public class GameFrame extends JFrame{
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
         this.remove(pausePanel);
-        this.remove(goalPanel);
+        //this.remove(goalPanel);
         this.remove(holdPanel);
         this.remove(nextPanel);
         this.remove(levelPanel);
@@ -179,7 +179,7 @@ public class GameFrame extends JFrame{
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        goalPanel = new GoalPanel();
+        //goalPanel = new GoalPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -193,7 +193,7 @@ public class GameFrame extends JFrame{
         this.add(highscorePanel);
         this.add(gameOverPanel);
         this.add(pausePanel);
-        this.add(goalPanel);
+        //this.add(goalPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -207,7 +207,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        goalPanel.setVisible(false);
+        //goalPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -268,9 +268,9 @@ public class GameFrame extends JFrame{
         return nextPanel;
     }
 
-    public static GoalPanel getGoalPanel() {
-        return goalPanel;
-    }
+    // public static GoalPanel getGoalPanel() {
+    //     return goalPanel;
+    // }
 
     public static PlayZone getPlayZone() {
         return playZone;
@@ -331,7 +331,7 @@ public class GameFrame extends JFrame{
 
     public static void startGame(){
         bossPanel.setVisible(true);
-        goalPanel.setVisible(true);
+        //goalPanel.setVisible(true);
         holdPanel.setVisible(true);
         nextPanel.setVisible(true);
         levelPanel.setVisible(true);

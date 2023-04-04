@@ -44,13 +44,9 @@ public class TetrisPiece {
         if(reset){
             blockQueue.clear();
         }
-
 		List<Tetris> blockList = Arrays.asList(blockSet);
 		Collections.shuffle(blockList);
-		blockSet = blockList.toArray(blockSet);
-        for (int i = 0; i < blockSet.length; i++) {
-            blockQueue.add(blockSet[i]);
-        }
+        blockQueue.addAll(blockList);
     }
 
     public void spawnTetris(int gameColumns){

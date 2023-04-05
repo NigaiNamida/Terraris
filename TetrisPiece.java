@@ -7,7 +7,6 @@ import java.util.Collections;
 public class TetrisPiece {
     public static Tetris[] blockSet = Tetris.values();
     public static BlockTexture[] textureSet = BlockTexture.values();
-    private static ArrayList<BlockTexture> textureQueue = new ArrayList<>();
     private Tetris name;
     private int[][] shape;
     private Color color;
@@ -22,16 +21,7 @@ public class TetrisPiece {
         this.color = color;
     }
 
-    public static TetrisPiece getBlock(Tetris tetris,boolean isPlayingBlock){
-        if(textureQueue.size() == 0){
-            queueTexture();
-        }
-        System.out.println(textureQueue);
-        BlockTexture t = textureQueue.get(0);
-        if(!isPlayingBlock){
-            t = textureQueue.remove(0);
-        }
-        System.out.println("Texture = "+t);
+    public static TetrisPiece getBlock(Tetris tetris,Color color,boolean isPlayingBlock){
         int[][] blockShape = null;
         if(tetris == Tetris.I)
             blockShape = new int[][]{{1,1,1,1}};
@@ -47,10 +37,32 @@ public class TetrisPiece {
             blockShape = new int[][]{{0,0,1},{1,1,1}};
         else
             blockShape = new int[][]{{1,0,0},{1,1,1}};
-        return new TetrisPiece(tetris,blockShape,t.getColor());
+        return new TetrisPiece(tetris,blockShape,color);
     }
 
-    public static void queueTexture(){
+    public static TetrisPiece getBlock(Tetris tetris,BlockTexture texture,boolean isPlayingBlock){
+        int[][] blockShape = null;
+        if(tetris == Tetris.I)
+            blockShape = new int[][]{{1,1,1,1}};
+        else if(tetris == Tetris.O)
+            blockShape = new int[][]{{1,1},{1,1}};
+        else if(tetris == Tetris.S)
+            blockShape = new int[][]{{0,1,1},{1,1,0}};
+        else if(tetris == Tetris.Z)
+            blockShape = new int[][]{{1,1,0},{0,1,1}};
+        else if(tetris == Tetris.T)
+            blockShape = new int[][]{{0,1,0},{1,1,1}};
+        else if(tetris == Tetris.L)
+            blockShape = new int[][]{{0,0,1},{1,1,1}};
+        else
+            blockShape = new int[][]{{1,0,0},{1,1,1}};
+        return new TetrisPiece(tetris,blockShape,texture.getColor());
+    }
+
+    public static void queueTexture(ArrayList<BlockTexture> textureQueue,boolean reset){
+        if(reset){
+            textureQueue.clear();
+        }
 		List<BlockTexture> textureList = Arrays.asList(textureSet);
 		Collections.shuffle(textureList);
         textureQueue.addAll(textureList);
@@ -59,7 +71,6 @@ public class TetrisPiece {
     public static void queueBlock(ArrayList<Tetris> blockQueue,boolean reset){
         if(reset){
             blockQueue.clear();
-            textureQueue.clear();
         }
 		List<Tetris> blockList = Arrays.asList(blockSet);
 		Collections.shuffle(blockList);

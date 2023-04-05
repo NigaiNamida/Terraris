@@ -27,7 +27,8 @@ public class PlayZone extends JPanel{
 
     private TetrisPiece block;
 
-    private static ArrayList<Tetris> blockQueue = new ArrayList<Tetris>();
+    private static ArrayList<Tetris> blockQueue = new ArrayList<>();
+    private static ArrayList<BlockTexture> textureQueue = new ArrayList<>();
     
 
     private int[][] testSet;
@@ -36,7 +37,8 @@ public class PlayZone extends JPanel{
         blindness = 0;
         lastAction = 0;
         brightness = (60)/100.0f;
-        blockQueue = new ArrayList<Tetris>();
+        blockQueue = new ArrayList<>();
+        textureQueue = new ArrayList<>();
         isUseHold = false;
         isGameOver = false;
 
@@ -64,6 +66,7 @@ public class PlayZone extends JPanel{
         backgroundBlock = new Color[gridRows][gridCols];
 
         TetrisPiece.queueBlock(blockQueue,true);
+        TetrisPiece.queueTexture(textureQueue, true);
         
         gravity = new Gravity(this,1);
         createBlock();
@@ -83,12 +86,15 @@ public class PlayZone extends JPanel{
         if(blockQueue.size() <= 1){
             TetrisPiece.queueBlock(blockQueue,false);
         }
+        if(textureQueue.size() <= 1){
+            TetrisPiece.queueTexture(textureQueue,false);
+        }
     }
 
     public static TetrisPiece getNextPiece(){
         isUseHold = false;
         addQueueIfLow();
-        return TetrisPiece.getBlock(blockQueue.get(0),false);
+        return TetrisPiece.getBlock(blockQueue.get(0),textureQueue.get(0),false);
     }
 
     public int lowestPoint(){
@@ -155,7 +161,7 @@ public class PlayZone extends JPanel{
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
-        block = TetrisPiece.getBlock(blockQueue.remove(0),true);
+        block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0),true);
         block.spawnTetris(gridCols);
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
@@ -201,14 +207,14 @@ public class PlayZone extends JPanel{
     public void holdBlock(){
         if(!isUseHold){
             if(holdPanel.getBlock() == null){
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
                 holdPanel.getBlock().spawnTetris(gridCols);
                 createBlock();
             }
             else{
                 TetrisPiece temp;
                 temp = holdPanel.getBlock();
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
                 block = temp;
                 holdPanel.getBlock().spawnTetris(gridCols);
                 resetTSpin();
@@ -764,6 +770,8 @@ public class PlayZone extends JPanel{
     }
 
     private void drawBlock(Graphics g){
+        Color color = block.getColor();
+        char[][] isAround = {{'0','0','0'},{'0','0','0'},{'0','0','0'}};
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();
         int[][] shape = block.getShape();
@@ -788,10 +796,23 @@ public class PlayZone extends JPanel{
                     else if(x - 1 >= 0 && backgroundBlock[y][x - 1] == slimeBlockColor){
                         lockAndSpawnBlock();
                     }
+                    for(int offRow = -1;offRow <= 1;offRow++){
+                        for (int offCol = -1; offCol <= 1; offCol++) {
+                            if(col+offCol >= 0 && col+offCol < blockWidth && row+offRow >= 0 && row+offRow < blockHeight){
+                                if(shape[row+offRow][col+offCol] == 1){
+                                    isAround[offRow+1][offCol+1] = '1';
+                                }
+                            }
+                        }
+                    }
+                    x *= blockSize; //coordinate + offset
+                    y *= blockSize; //coordinate + offset
+                    TetrisTexture.mergePileTexture(g, color, x, y, isAround); 
+                    //TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
+                    isAround = new char[][]{{'0','0','0'},{'0','0','0'},{'0','0','0'}};
                 }   
             }
         }
-        TetrisTexture.drawBlockTexture(g,block.getName(),block.getVariant(),block.getX()*blockSize,block.getY()*blockSize);
     }
 
     private void drawBossAttack(Graphics g){

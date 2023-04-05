@@ -148,6 +148,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 GameFrame.playSE(9);
                 playZone = GameFrame.getPlayZone();
                 playZone.setBlindness(0);
+                bossAttack.setProjectileDelay(1000);
             }
             else if(phase >= 3){
                 exitFight();
@@ -203,7 +204,6 @@ public class BossPanel extends JPanel implements ActionListener{
         boss.stopAnimateTimer();
         boss.stopAttackTimer();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
-        repaint();
         bossAttack.BossesDefeat(boss.getName());
         boss = null;
         spawnChance = 0;
@@ -266,7 +266,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 if (phase == 1){
                     path += "/Idle_" + phase + "_" + frame + ".png";  
                 }
-                else if (phase == 2){
+                else if (phase == 2 && (bossAttack.getProjectileDelay() < -100 || bossAttack.getProjectileDelay() > 350)){
                     path += "/Idle_" + phase + "_" + (frame % 4)+ ".png"; 
                 }
                 break;

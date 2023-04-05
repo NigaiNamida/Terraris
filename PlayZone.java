@@ -806,7 +806,7 @@ public class PlayZone extends JPanel{
     
     private void drawShadow(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
+        if (bossPanel.getStage() == Theme.Night /*|| bossPanel.getStage() == Theme.EyeOfCthulhu*/){
             int radius = gridRows;
             int darkness = 4;
             int blockHeight = block.getHeight();

@@ -171,6 +171,7 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+        gravity.restartTimer();
     }
     
     public void gameOver(){
@@ -487,6 +488,7 @@ public class PlayZone extends JPanel{
     }
 
     public void hardDrop(){
+        gravity.stopTimer();
         int m = (lowestPoint()-block.getHeight()) - block.getY();
         if(m != 0){
             resetTSpin();
@@ -830,6 +832,10 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+    }
+
+    public TetrisPiece getBlock() {
+        return block;
     }
 
     public int getBlindness() {

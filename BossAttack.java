@@ -238,8 +238,28 @@ public class BossAttack implements ActionListener{
         repaintPlayZone();
     }
 
-    public void movingDemonEye(){
+    public void movingDemonEye(){   
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
         for (int i = 0; i < projectileCount; i++) {
+            for (int row = 0; row < blockHeight; row++) {
+                for (int col = 0; col < blockWidth; col++) {
+                    if(shape[row][col] == 1){
+                        if(projectileDirection[i] == 1 && col+x == (projectileDelay[i]+36)/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveRight();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                        else if(projectileDirection[i] != 1 && col+x == projectileDelay[i]/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveLeft();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                    }
+                }
+            }
             if(projectileDirection[i] == 1){
                 projectileDelay[i] += 10;
             }

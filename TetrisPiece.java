@@ -22,12 +22,16 @@ public class TetrisPiece {
         this.color = color;
     }
 
-    public static TetrisPiece getBlock(Tetris tetris){
-        if(textureQueue.size() <= 1){
+    public static TetrisPiece getBlock(Tetris tetris,boolean isPlayingBlock){
+        if(textureQueue.size() == 0){
             queueTexture();
         }
-        BlockTexture t = textureQueue.remove(0);
-
+        System.out.println(textureQueue);
+        BlockTexture t = textureQueue.get(0);
+        if(!isPlayingBlock){
+            t = textureQueue.remove(0);
+        }
+        System.out.println("Texture = "+t);
         int[][] blockShape = null;
         if(tetris == Tetris.I)
             blockShape = new int[][]{{1,1,1,1}};

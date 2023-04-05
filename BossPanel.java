@@ -266,7 +266,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 if (phase == 1){
                     path += "/Idle_" + phase + "_" + frame + ".png";  
                 }
-                else if (phase == 2 && (bossAttack.getProjectileDelay() < -100 || bossAttack.getProjectileDelay() > 350)){
+                else if (phase == 2 && (bossAttack.getProjectileDelay() < -250 || bossAttack.getProjectileDelay() > 500)){
                     path += "/Idle_" + phase + "_" + (frame % 4)+ ".png"; 
                 }
                 break;

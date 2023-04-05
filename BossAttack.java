@@ -22,6 +22,8 @@ public class BossAttack implements ActionListener{
     private static int[] slimePuddleColumn;
 
     private static int[] projectileDirection;
+    private static boolean isHealed;
+    private static boolean isDashed;
 
     private static Color slimePuddleColor;
     private static Color slimeBlockColor;
@@ -37,6 +39,8 @@ public class BossAttack implements ActionListener{
 
         slimePuddleColumn = new int[1];
         projectileDirection = new int[1];
+        isHealed = false;
+        isDashed = false;
         
     }
 
@@ -142,7 +146,7 @@ public class BossAttack implements ActionListener{
         }
 
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for(int i = 3; i < 11; i++) {
+        for(int i = 0; i <= 10; i++) {
             list.add(i);
         }
 
@@ -166,6 +170,8 @@ public class BossAttack implements ActionListener{
 
     public void setEoCDashRow(){
         Random ran;
+        isHealed = false;
+        isDashed = false;
 
         ran = new Random();
         projectileCoordinate[0] = ran.nextInt(3)+5;
@@ -174,10 +180,10 @@ public class BossAttack implements ActionListener{
         projectileDirection[0] = ran.nextInt(2);
 
         if(projectileDirection[0] == 1){
-            projectileDelay[0] = -100;
+            projectileDelay[0] = -250;
         }
         else{
-            projectileDelay[0] = 350;
+            projectileDelay[0] = 500;
         }
 
     }
@@ -288,6 +294,13 @@ public class BossAttack implements ActionListener{
                             else if(projectileDirection[i] != 1){
                                 playZone.moveLeft();
                             }
+                            if(!isHealed){
+                                boss.setHP(boss.getHP()+300);
+                                isHealed = true;
+                                if(boss.getHP()>boss.getMaxHP()){
+                                    boss.setHP((int)(boss.getMaxHP()));
+                                }
+                            }
                         }
                     }
                 }
@@ -351,7 +364,11 @@ public class BossAttack implements ActionListener{
     }
 
     public static void drawEoCDash(Graphics g, String name) {
-        if(projectileDelay[0] >= -100 && projectileDelay[0] <= 350){
+        if(!isDashed){
+            g.setColor(new Color(255, 0, 0, 100));
+            g.fillRect(0 , projectileCoordinate[0]*25, 250 , 100);
+        }
+        if(projectileDelay[0] >= -250 && projectileDelay[0] <= 500){
             if(projectileDirection[0] == 0){
                 bossAttackImage = new ImageIcon(path + name + "/Attack/Right_EoC.png").getImage();  
             }
@@ -359,6 +376,9 @@ public class BossAttack implements ActionListener{
                 bossAttackImage = new ImageIcon(path + name + "/Attack/Left_EoC.png").getImage();   
             }
             g.drawImage(bossAttackImage, projectileDelay[0], projectileCoordinate[0]*25 - 5, null);
+        }
+        else{
+            isDashed = true;
         }
     }
     

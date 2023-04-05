@@ -29,7 +29,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Night;
         spawnChance = -5;
         canSpawn = false;
 

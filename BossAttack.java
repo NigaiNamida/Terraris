@@ -238,27 +238,8 @@ public class BossAttack implements ActionListener{
     }
 
     public void movingDemonEye(){   
-        TetrisPiece block = playZone.getBlock();
-        int blockHeight = block.getHeight();
-        int blockWidth = block.getWidth();
-        int[][] shape = block.getShape();
-        int x = block.getX();
-        int y = block.getY();
         for (int i = 0; i < projectileCount; i++) {
-            for (int row = 0; row < blockHeight; row++) {
-                for (int col = 0; col < blockWidth; col++) {
-                    if(shape[row][col] == 1){
-                        if(projectileDirection[i] == 1 && col+x == (projectileDelay[i]+36)/25 && row+y ==  projectileCoordinate[i]){
-                            playZone.moveRight();
-                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
-                        }
-                        else if(projectileDirection[i] != 1 && col+x == projectileDelay[i]/25 && row+y ==  projectileCoordinate[i]){
-                            playZone.moveLeft();
-                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
-                        }
-                    }
-                }
-            }
+            pushBlock(i);
             if(projectileDirection[i] == 1){
                 projectileDelay[i] += 10;
             }
@@ -269,12 +250,49 @@ public class BossAttack implements ActionListener{
     }
 
     public void movingEoC(){
-            if(projectileDirection[0] == 1){
-                projectileDelay[0] += 30;
+        pushBlock(0);
+        if(projectileDirection[0] == 1){
+            projectileDelay[0] += 30;
+        }
+        else{
+            projectileDelay[0] -= 30;
+        }
+    }
+
+    public void pushBlock(int i) {
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+        int phase = boss.getPhase();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    if(phase==1){
+                        if(projectileDirection[i] == 1 && col+x == (projectileDelay[i]+36)/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveRight();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                        else if(projectileDirection[i] != 1 && col+x == projectileDelay[i]/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveLeft();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                    }
+                    else{
+                        if((col+x <= (projectileDelay[i]+146)/25 && col+x >= projectileDelay[i]/25) && (row+y <= projectileCoordinate[i]+3 && row+y >= projectileCoordinate[i])){
+                            if(projectileDirection[i] == 1){
+                                playZone.moveRight();
+                            }
+                            else if(projectileDirection[i] != 1){
+                                playZone.moveLeft();
+                            }
+                        }
+                    }
+                }
             }
-            else{
-                projectileDelay[0] -= 30;
-            }
+        }
     }
 
     void repaintPlayZone(){

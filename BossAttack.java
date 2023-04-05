@@ -205,6 +205,7 @@ public class BossAttack implements ActionListener{
                 }
             }
         }
+        repaintPlayZone();
     }
     
     public void movingSlimeRain(){

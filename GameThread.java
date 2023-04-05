@@ -24,7 +24,7 @@ public class GameThread extends Thread{
                             remainingTime = 0;
                         }
                         update();
-                        repaintPlayZone();
+                        // repaintPlayZone();
                         Thread.sleep((long) remainingTime);
                         nextTime += interval;
                     } catch (InterruptedException e) {}

@@ -139,7 +139,6 @@ public class PlayZone extends JPanel{
                 int m = (lowestPoint()-block.getHeight()) - block.getY();
                 XPPanel.deductXP(m);
                 hardDrop();
-                repaint();
             }
             gravity.restartTimer();
             gravity.stopTimer();
@@ -202,7 +201,6 @@ public class PlayZone extends JPanel{
         if(!isUseHold){
             if(holdPanel.getBlock() == null){
                 holdPanel.setBlock(TetrisPiece.getBlock(block.getName()));
-                nextPanel.setBlock(getNextPiece()); 
                 holdPanel.getBlock().spawnTetris(gridCols);
                 createBlock();
             }
@@ -215,7 +213,6 @@ public class PlayZone extends JPanel{
                 resetTSpin();
             }
             isUseHold = true;
-            nextPanel.repaint();
             holdPanel.repaint();
             repaint();
             GameFrame.playSE(3);
@@ -493,9 +490,6 @@ public class PlayZone extends JPanel{
         }
         XPPanel.addHardDropXP(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
-        repaint();
-        nextPanel.repaint();
-        nextPanel.setBlock(getNextPiece());
         updateBackGround();
         GameFrame.playSE(2);
         checkFullLine();
@@ -555,8 +549,6 @@ public class PlayZone extends JPanel{
     }
 
     public void lockAndSpawnBlock(){
-        nextPanel.repaint();
-        nextPanel.setBlock(getNextPiece());
         updateBackGround();
         GameFrame.playSE(2);
         checkFullLine();

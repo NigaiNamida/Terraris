@@ -14,10 +14,6 @@ public class Gravity implements ActionListener{
         lastTimer = new Timer(500, this);
         startTimer();
     }
-
-    void repaintPlayZone(){
-        playZone.repaint();
-    }
     
     void increaseFallSpeed(int level){
         fallSpeed = Math.pow(0.8-((level-1)*0.007),(level-1));
@@ -30,7 +26,6 @@ public class Gravity implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(!playZone.isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying()){
             playZone.applyGravity();
-            repaintPlayZone();
         }
     }
 

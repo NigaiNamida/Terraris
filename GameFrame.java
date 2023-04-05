@@ -101,10 +101,10 @@ public class GameFrame extends JFrame{
     }
 
     public void retry(){
+        this.remove(pausePanel);
         this.remove(bossPanel);
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
-        this.remove(pausePanel);
         //this.remove(goalPanel);
         this.remove(holdPanel);
         this.remove(nextPanel);
@@ -128,10 +128,10 @@ public class GameFrame extends JFrame{
         isPlaying = false;
         
         //add component
+        this.add(pausePanel);
         this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
-        this.add(pausePanel);
         //this.add(goalPanel);
         this.add(holdPanel);
         this.add(nextPanel);
@@ -189,10 +189,10 @@ public class GameFrame extends JFrame{
         isPlaying = false;
         
         //add component
+        this.add(pausePanel);
         this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
-        this.add(pausePanel);
         //this.add(goalPanel);
         this.add(holdPanel);
         this.add(nextPanel);
@@ -322,6 +322,7 @@ public class GameFrame extends JFrame{
     public static void pauseGame(){
         GameFrame.playSE(7);
         pausePanel.setVisible(true);
+        pausePanel.repaint();
     }
 
     public static void continueGame(){

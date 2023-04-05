@@ -203,9 +203,9 @@ public class BossAttack implements ActionListener{
                     default:
                         break;
                 }
+                repaintPlayZone();
             }
         }
-        repaintPlayZone();
     }
     
     public void movingSlimeRain(){
@@ -235,7 +235,6 @@ public class BossAttack implements ActionListener{
             }
         }
         playZone.checkFullLine();
-        repaintPlayZone();
     }
 
     public void movingDemonEye(){
@@ -334,7 +333,9 @@ public class BossAttack implements ActionListener{
     }
 
     public void stopAllTimer(){
-        projectileTimer.stop();
+        if(projectileTimer != null){
+            projectileTimer.stop();
+        }
     }
 
     public int getProjectileDelay() {

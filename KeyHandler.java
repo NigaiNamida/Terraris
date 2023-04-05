@@ -14,6 +14,125 @@ public class KeyHandler implements KeyListener{
         isHoldingPause = false;
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        if(SettingPanel.isSetting()){
+            if(code != 27 && !SettingPanel.Duplicate(code)){
+                SettingPanel.setNewKey(code);
+                SettingPanel.setNewKey();
+                GameFrame.getAnyKeyPanel().setVisible(false);
+            }
+        }
+        else{
+            if((code == 27) && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
+            (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
+                GameFrame.getMenu().setVisible(true);
+                GameFrame.getSettingPanel().setVisible(false);
+                SettingPanel.saveSetting();
+                GameFrame.getLeaderboard().setVisible(false);
+            }
+            else if((code == 27 || code == 112) && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
+                GameFrame.getPausePanel().setVisible(true);
+                SettingPanel.saveSetting();
+                GameFrame.getSettingPanel().setVisible(false);
+                GameFrame.getLeaderboard().setVisible(false);
+            }
+            else if(!playZone.isGameOver()){
+                if((code == 27 || code == 112) && !isHoldingPause && GameFrame.isPlaying()){
+                    isHoldingPause = true;
+                    isPause = !isPause;
+                    if(isPause){
+                        if(GameFrame.getMusic().getClip() != null)
+                            GameFrame.getMusic().pauseSound();
+                        GameFrame.pauseGame();
+                    }
+                    else{
+                        if(GameFrame.getMusic().getClip() != null)
+                            GameFrame.getMusic().resumeSound();
+                        GameFrame.continueGame();
+                    }
+                }
+                if(!isPause){
+                    if(code == SettingPanel.getKeyBind("Right")){
+                        isRightPressed = true;
+                        if(!isRightFirst && !isLeftFirst){
+                            isRightFirst = true;
+                        }
+                        else{
+                            isRightFirst = !isLeftFirst;
+                        }
+                    }
+                    else if(code == SettingPanel.getKeyBind("Left")){
+                        isLeftPressed = true;
+                        if(!isRightFirst && !isLeftFirst){
+                            isLeftFirst = true;
+                        }
+                        else{
+                            isLeftFirst = !isRightFirst;
+                        }
+                    }
+                    else if(code == SettingPanel.getKeyBind("SoftDrop")){
+                        isSoftDropPressed = true;
+                    }
+                    else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
+                        isRotateCWPressed = true;
+                    }
+                    else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
+                        isRotateCT_CWPressed = true;
+                    }
+                    else if(code ==  SettingPanel.getKeyBind("HardDrop")){
+                        isHardDropPressed = true;
+                    }
+                    else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
+                        isHoldPressed = true;
+                    }
+                }
+            }  
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        if(!playZone.isGameOver()){
+            if(code == 27 || code == 112){
+                isHoldingPause = false;
+            }
+            else if(code == SettingPanel.getKeyBind("Right")){
+                isRightPressed = false;
+                isRightFirst = false;
+                GameThread.resetRightHoldingTime();
+            }
+            else if(code == SettingPanel.getKeyBind("Left")){
+                isLeftPressed = false;
+                isLeftFirst = false;
+                GameThread.resetLeftHoldingTime();
+            }
+            else if(code == SettingPanel.getKeyBind("SoftDrop")){
+                isSoftDropPressed = false;
+            }
+            else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
+                isRotateCWPressed = false;
+                isHoldingCWRotate = false;
+            }
+            else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
+                isRotateCT_CWPressed = false;
+                isHoldingCT_CWRotate = false;
+            }
+            else if(code ==  SettingPanel.getKeyBind("HardDrop")){
+                isHardDropPressed = false;
+                isHoldingHardDrop = false;
+            }
+            else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
+                isHoldPressed = false;
+            }
+        }
+    }
+
     public boolean isRightPressed() {
         return isRightPressed;
     }
@@ -124,120 +243,5 @@ public class KeyHandler implements KeyListener{
 
     public static void setPause(boolean isPause) {
         KeyHandler.isPause = isPause;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
-        if(code != 27 && SettingPanel.isSetting() && !SettingPanel.Duplicate(code)){
-            SettingPanel.setNewKey(code);
-            SettingPanel.setNewKey();
-            GameFrame.getAnyKeyPanel().setVisible(false);
-        }
-        if((code == 27) && !SettingPanel.isSetting() && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
-        (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
-            GameFrame.getMenu().setVisible(true);
-            GameFrame.getSettingPanel().setVisible(false);
-            SettingPanel.saveSetting();
-            GameFrame.getLeaderboard().setVisible(false);
-        }
-        else if((code == 27 || code == 112) && !SettingPanel.isSetting() && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
-            GameFrame.getPausePanel().setVisible(true);
-            SettingPanel.saveSetting();
-            GameFrame.getSettingPanel().setVisible(false);
-            GameFrame.getLeaderboard().setVisible(false);
-        }
-        else if(!playZone.isGameOver() && !SettingPanel.isSetting()){
-            if((code == 27 || code == 112) && !isHoldingPause && GameFrame.isPlaying()){
-                isHoldingPause = true;
-                isPause = !isPause;
-                if(isPause){
-                    if(GameFrame.getMusic().getClip() != null)
-                        GameFrame.getMusic().pauseSound();
-                    GameFrame.pauseGame();
-                }
-                else{
-                    if(GameFrame.getMusic().getClip() != null)
-                        GameFrame.getMusic().resumeSound();
-                    GameFrame.continueGame();
-                }
-            }
-            if(!isPause){
-                if(code == SettingPanel.getKeyBind("Right")){
-                    isRightPressed = true;
-                    if(!isRightFirst && !isLeftFirst){
-                        isRightFirst = true;
-                    }
-                    else{
-                        isRightFirst = !isLeftFirst;
-                    }
-                }
-                else if(code == SettingPanel.getKeyBind("Left")){
-                    isLeftPressed = true;
-                    if(!isRightFirst && !isLeftFirst){
-                        isLeftFirst = true;
-                    }
-                    else{
-                        isLeftFirst = !isRightFirst;
-                    }
-                }
-                else if(code == SettingPanel.getKeyBind("SoftDrop")){
-                    isSoftDropPressed = true;
-                }
-                else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
-                    isRotateCWPressed = true;
-                }
-                else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
-                    isRotateCT_CWPressed = true;
-                }
-                else if(code ==  SettingPanel.getKeyBind("HardDrop")){
-                    isHardDropPressed = true;
-                }
-                else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
-                    isHoldPressed = true;
-                }
-            }
-        }  
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();
-        if(!playZone.isGameOver()){
-            if(code == 27 || code == 112){
-                isHoldingPause = false;
-            }
-            else if(code == SettingPanel.getKeyBind("Right")){
-                isRightPressed = false;
-                isRightFirst = false;
-                GameThread.resetRightHoldingTime();
-            }
-            else if(code == SettingPanel.getKeyBind("Left")){
-                isLeftPressed = false;
-                isLeftFirst = false;
-                GameThread.resetLeftHoldingTime();
-            }
-            else if(code == SettingPanel.getKeyBind("SoftDrop")){
-                isSoftDropPressed = false;
-            }
-            else if(code == SettingPanel.getKeyBind("RotateCW") || code == 88){
-                isRotateCWPressed = false;
-                isHoldingCWRotate = false;
-            }
-            else if(code ==  SettingPanel.getKeyBind("RotateCT_CW") || code == 17){
-                isRotateCT_CWPressed = false;
-                isHoldingCT_CWRotate = false;
-            }
-            else if(code ==  SettingPanel.getKeyBind("HardDrop")){
-                isHardDropPressed = false;
-                isHoldingHardDrop = false;
-            }
-            else if(code ==  SettingPanel.getKeyBind("Hold") || code == 16){
-                isHoldPressed = false;
-            }
-        }
     }
 }

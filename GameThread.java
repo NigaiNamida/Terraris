@@ -2,7 +2,6 @@ public class GameThread extends Thread{
 
     private static PlayZone playZone;
     private static KeyHandler keyHandler;
-    private static PausePanel pausePanel;
     private static int FPS;
     private static long leftHoldingTime;
     private static long rightHoldingTime;
@@ -15,7 +14,6 @@ public class GameThread extends Thread{
             if(!playZone.isGameOver()){
                 if(GameFrame.getEffect().getClip() != null)
                     GameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
-                pausePanel.repaint();
                 if(!KeyHandler.isPause()){
                     try{
                         double remainingTime = nextTime - System.nanoTime();
@@ -31,20 +29,17 @@ public class GameThread extends Thread{
                 }
             }
         }
-        while(playZone.isGameOver()){
-            if(GameFrame.getHighScorePanel().isVisible()){
-                GameFrame.getHighScorePanel().repaint();
-            }
-            else{
-                GameFrame.getGameOverPanel().repaint();
-            }
+        if(GameFrame.getHighScorePanel().isVisible()){
+            GameFrame.getHighScorePanel().repaint();
+        }
+        else{
+            GameFrame.getGameOverPanel().repaint();
         }
     }
 
     public static void setInitialValue(){
         keyHandler = GameFrame.getKeyHandler();
         playZone = GameFrame.getPlayZone();
-        pausePanel = GameFrame.getPausePanel();
 
         FPS = 60;
         interval = 1000000000/FPS;

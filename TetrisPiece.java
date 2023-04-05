@@ -1,13 +1,13 @@
 import java.awt.Color;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 public class TetrisPiece {
-    //private static ArrayList<String> blockSet = new ArrayList<String>();
     public static Tetris[] blockSet = Tetris.values();
+    public static BlockTexture[] textureSet = BlockTexture.values();
+    private static ArrayList<BlockTexture> textureQueue = new ArrayList<>();
     private Tetris name;
     private int[][] shape;
     private Color color;
@@ -23,9 +23,10 @@ public class TetrisPiece {
     }
 
     public static TetrisPiece getBlock(Tetris tetris){
-        Random random = new Random();
-        int n = random.nextInt(BlockTexture.values().length);
-        BlockTexture t = BlockTexture.values()[n];
+        if(textureQueue.size() <= 1){
+            queueTexture();
+        }
+        BlockTexture t = textureQueue.remove(0);
 
         int[][] blockShape = null;
         if(tetris == Tetris.I)
@@ -45,9 +46,16 @@ public class TetrisPiece {
         return new TetrisPiece(tetris,blockShape,t.getColor());
     }
 
+    public static void queueTexture(){
+		List<BlockTexture> textureList = Arrays.asList(textureSet);
+		Collections.shuffle(textureList);
+        textureQueue.addAll(textureList);
+    }
+
     public static void queueBlock(ArrayList<Tetris> blockQueue,boolean reset){
         if(reset){
             blockQueue.clear();
+            textureQueue.clear();
         }
 		List<Tetris> blockList = Arrays.asList(blockSet);
 		Collections.shuffle(blockList);

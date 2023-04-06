@@ -29,7 +29,7 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Corruption;
         spawnChance = -5;
         canSpawn = false;
 
@@ -104,15 +104,24 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void spawnBoss(){
         if(boss == null){
-            if(stage == Theme.KingSlime){
-                boss = new Boss("KingSlime",5000,5000,8000);
-                bossTitle.setText("King Slime");
-                GameFrame.playSE(9);
-            }
-            else if (stage == Theme.EyeOfCthulhu){
-                boss = new Boss("EyeOfCthulhu",6000,6000,5000);
-                bossTitle.setText("Eye Of Cthulhu");
-                GameFrame.playSE(9);
+            switch (stage) {
+                case KingSlime:
+                    boss = new Boss("KingSlime",5000,5000,8000);
+                    bossTitle.setText("King Slime");
+                    GameFrame.playSE(9);
+                    break;
+                case EyeOfCthulhu:
+                    boss = new Boss("EyeOfCthulhu",6000,6000,5000);
+                    bossTitle.setText("Eye Of Cthulhu");
+                    GameFrame.playSE(9);
+                    break;
+                case EaterOfWorld:
+                    boss = new Boss("EaterOfWorld",15000,15000,10000);
+                    bossTitle.setText("Eater Of World");
+                    GameFrame.playSE(9);
+                    break;
+                default:
+                    break;
             }
             enterFight();
         }
@@ -121,38 +130,43 @@ public class BossPanel extends JPanel implements ActionListener{
     public void updateState(){
         int HP = boss.getHP();
         double maxHP = boss.getMaxHP();
-        if(HP <= maxHP*0.25)
+        if(HP <= maxHP*0.3)
             boss.setState(3);
-        else if(HP <= maxHP*0.5)
+        else if(HP <= maxHP*0.6)
             boss.setState(2);
         updateCooldownTimer();
-        if(boss.getName() == "EyeOfCthulhu" && boss.getPhase()==1){
-            bossAttack.applyBlindness(boss.getState());
-        }
     }
 
     public void updatePhase(){
         String name = boss.getName();
         int phase = boss.getPhase();
-        if(name == "KingSlime"){
-            if(phase >= 2){
-                exitFight();
-            }
-        }
-        else if(name == "EyeOfCthulhu"){
-            if(phase == 2){
-                bossAttack.stopAllTimer();
-                boss.setMaxHP(3000);
-                boss.setHP(3000);
-                boss.setCooldown(15000);
-                GameFrame.playSE(9);
-                playZone = GameFrame.getPlayZone();
-                playZone.setBlindness(0);
-                bossAttack.setProjectileDelay(1000);
-            }
-            else if(phase >= 3){
-                exitFight();
-            }
+        switch (name) {
+            case "KingSlime":
+                if(phase >= 2){
+                    exitFight();
+                }
+                break;
+            case "EyeOfCthulhu":
+                if(phase == 2){
+                    bossAttack.stopAllTimer();
+                    boss.setMaxHP(3000);
+                    boss.setHP(3000);
+                    boss.setCooldown(15000);
+                    GameFrame.playSE(9);
+                    playZone = GameFrame.getPlayZone();
+                    playZone.setBlindness(0);
+                    bossAttack.setProjectileDelay(1000);
+                }
+                else if(phase >= 3){
+                    exitFight();
+                }
+                break;
+            case "EaterOfWorld" :
+                if(phase >= 2){
+                    exitFight();
+                }
+            default:
+                break;
         }
     }
 
@@ -173,15 +187,28 @@ public class BossPanel extends JPanel implements ActionListener{
             case "EyeOfCthulhu" :
                 if(boss.getPhase() == 1){
                     if(boss.getState() == 2 && stateTimer != 2){
-                        boss.attackTimer = new Timer(7500, this);
+                        boss.attackTimer = new Timer(6000, this);
                         boss.attackTimer.restart();
                         stateTimer = 2;
                     }
                     else if(boss.getState() == 3  && stateTimer != 3){
-                        boss.attackTimer = new Timer(10000, this);
+                        boss.attackTimer = new Timer(7000, this);
                         boss.attackTimer.restart();
                         stateTimer = 3;
                     }
+                    bossAttack.applyBlindness(boss.getState());
+                }
+                break;
+            case "EaterOfWorld":
+                if(boss.getState() == 2 && stateTimer != 2){
+                    boss.attackTimer = new Timer(15000, this);
+                    boss.attackTimer.restart();
+                    stateTimer = 2;
+                }
+                else if(boss.getState() == 3  && stateTimer != 3){
+                    boss.attackTimer = new Timer(20000, this);
+                    boss.attackTimer.restart();
+                    stateTimer = 3;
                 }
                 break;
             default:
@@ -253,22 +280,27 @@ public class BossPanel extends JPanel implements ActionListener{
         int phase = boss.getPhase();
         int x = 0;
         int y = 0;
-        String path = "Assets/Image/Bosses/" + name;
+        String path = "Assets/Image/Bosses/" + name + "/Idle_" + phase + "_" + state + "_" ;
         switch (name) {
             case "KingSlime":
                 x = 28;
                 y = 50;
-                path += "/Idle_" + state + "_" + (frame % 4)+ ".png"; 
+                path += (frame % 4)+ ".png"; 
                 break;
             case "EyeOfCthulhu":
                 x = 40;
                 y = 50;
                 if (phase == 1){
-                    path += "/Idle_" + phase + "_" + frame + ".png";  
+                    path += frame + ".png";  
                 }
                 else if (phase == 2 && (bossAttack.getProjectileDelay() < -250 || bossAttack.getProjectileDelay() > 500)){
-                    path += "/Idle_" + phase + "_" + (frame % 4)+ ".png"; 
+                    path += (frame % 4)+ ".png"; 
                 }
+                break;
+            case "EaterOfWorld":
+                x = 50;
+                y = 50;
+                path += (frame % 4)+ ".png"; 
                 break;
         }
         bossImage = new ImageIcon(path).getImage();

@@ -4,7 +4,8 @@ public enum Theme {
     KingSlime,
     Night,
     EyeOfCthulhu,
-    Corruption;
+    Corruption,
+    EaterOfWorld;
 
     private String BGImagePath;
     private String BGMusicPath;

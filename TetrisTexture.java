@@ -59,6 +59,9 @@ public class TetrisTexture extends JPanel{
             case KingSlime:
             case EyeOfCthulhu:
                 break;
+            case EaterOfWorld:
+                stage = "Corruption";
+                break;
             default:
                 stage = ""+bossStage;
                 break;

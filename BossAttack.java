@@ -25,6 +25,9 @@ public class BossAttack implements ActionListener{
     private static boolean isHealed;
     private static boolean isDashed;
 
+    private static int[] projectileLength;
+    private static int[] isBlocked;
+
     private static Color slimePuddleColor;
     private static Color slimeBlockColor;
     private static Image bossAttackImage;
@@ -39,8 +42,11 @@ public class BossAttack implements ActionListener{
 
         slimePuddleColumn = new int[1];
         projectileDirection = new int[1];
+
         isHealed = false;
-        isDashed = false;
+        isDashed = true;
+
+        isBlocked = new int[1];
         
     }
 
@@ -51,6 +57,9 @@ public class BossAttack implements ActionListener{
                 break;
             case "EyeOfCthulhu":
                 EyeOfCthulhuAttack(phase, state);
+                break;
+            case "EaterOfWorld":
+                EaterOfWorldAttack(state);
                 break;
             default:
                 break;
@@ -67,6 +76,9 @@ public class BossAttack implements ActionListener{
                 break;
             case "EyeOfCthulhu":;
                 projectileDirection = new int[1];
+                isDashed = true;
+                break;
+            case "EaterOfWorld":
                 break;
             default:
                 break;
@@ -92,12 +104,13 @@ public class BossAttack implements ActionListener{
             GameFrame.playSE(9);
         }
     }
-
-    public void applyBlindness(int state){
-        playZone = GameFrame.getPlayZone();
-        playZone.setBlindness((state-1)*15);
-    }
     
+    public void EaterOfWorldAttack(int state){
+        setDevourerColumn(state);
+        projectileTimer = new Timer(50, this);
+        projectileTimer.restart();
+    }
+
     public void setSlimeRainColumn(int state){
         
         switch (state) {
@@ -137,7 +150,6 @@ public class BossAttack implements ActionListener{
 
         projectileCount = state+1;
         
-        projectileCoordinate = new int[projectileCount];
         projectileDirection = new int[projectileCount];
         
         projectileDelay = new int[projectileCount];
@@ -151,7 +163,8 @@ public class BossAttack implements ActionListener{
         }
 
         Collections.shuffle(list);
-
+        
+        projectileCoordinate = new int[projectileCount];
         for(int i = 0; i < projectileCount; i++) {
             projectileCoordinate[i] = list.get(i);
         }
@@ -175,8 +188,6 @@ public class BossAttack implements ActionListener{
 
         ran = new Random();
         projectileCoordinate[0] = ran.nextInt(3)+5;
-
-        ran = new Random();
         projectileDirection[0] = ran.nextInt(2);
 
         if(projectileDirection[0] == 1){
@@ -188,6 +199,36 @@ public class BossAttack implements ActionListener{
 
     }
     
+    public void setDevourerColumn(int state) {
+        Random ran = new Random();
+        projectileCount = state;
+
+        isBlocked = new int[projectileCount];
+        
+        projectileDelay = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileDelay[i] = -i*75;
+        }
+
+        projectileLength = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileLength[i] = ran.nextInt(3)+5;
+        }
+
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(int i = 0; i < 10; i++) {
+            list.add(i);
+        }
+        
+        Collections.shuffle(list);
+        
+        projectileCoordinate = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileCoordinate[i] = list.get(i);
+        }
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         playZone = GameFrame.getPlayZone();
@@ -205,6 +246,9 @@ public class BossAttack implements ActionListener{
                         else{
                             movingEoC();
                         }
+                        break;
+                    case "EaterOfWorld":
+                        movingDevourer();
                         break;
                     default:
                         break;
@@ -265,45 +309,14 @@ public class BossAttack implements ActionListener{
         }
     }
 
-    public void pushBlock(int i) {
-        TetrisPiece block = playZone.getBlock();
-        int blockHeight = block.getHeight();
-        int blockWidth = block.getWidth();
-        int[][] shape = block.getShape();
-        int x = block.getX();
-        int y = block.getY();
-        int phase = boss.getPhase();
-        for (int row = 0; row < blockHeight; row++) {
-            for (int col = 0; col < blockWidth; col++) {
-                if(shape[row][col] == 1){
-                    if(phase==1){
-                        if(projectileDirection[i] == 1 && col+x == (projectileDelay[i]+36)/25 && row+y ==  projectileCoordinate[i]){
-                            playZone.moveRight();
-                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
-                        }
-                        else if(projectileDirection[i] != 1 && col+x == projectileDelay[i]/25 && row+y ==  projectileCoordinate[i]){
-                            playZone.moveLeft();
-                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
-                        }
-                    }
-                    else{
-                        if((col+x <= (projectileDelay[i]+146)/25 && col+x >= projectileDelay[i]/25) && (row+y <= projectileCoordinate[i]+3 && row+y >= projectileCoordinate[i])){
-                            if(projectileDirection[i] == 1){
-                                playZone.moveRight();
-                            }
-                            else if(projectileDirection[i] != 1){
-                                playZone.moveLeft();
-                            }
-                            if(!isHealed){
-                                boss.setHP(boss.getHP()+300);
-                                isHealed = true;
-                                if(boss.getHP()>boss.getMaxHP()){
-                                    boss.setHP((int)(boss.getMaxHP()));
-                                }
-                            }
-                        }
-                    }
-                }
+    public void movingDevourer() {
+        playZone = GameFrame.getPlayZone();
+        Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
+        for (int i = 0; i < projectileCount; i++) {
+            projectileDelay[i] += 7;
+            blockBlock(i);
+            if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] != null && isBlocked[i] != 1){
+                backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] = null;
             }
         }
     }
@@ -321,6 +334,9 @@ public class BossAttack implements ActionListener{
                     break;
                 case "EyeOfCthulhu":
                     drawEyeOfCthulhuAttack(g);
+                    break;
+                case "EaterOfWorld":
+                    drawEaterOfWorldAttack(g);
                     break;
                 default:
                     break;
@@ -382,12 +398,107 @@ public class BossAttack implements ActionListener{
         }
     }
     
+    public static void drawEaterOfWorldAttack(Graphics g) {
+        Boss boss = GameFrame.getBossPanel().getBoss();;
+        for (int i = 0; i < projectileCount; i++) {
+            int offset = 0;
+            if(isBlocked[i] == 0){
+                g.setColor(new Color(255, 0, 0, 100));
+            }
+            else{
+                g.setColor(new Color(50, 255, 0, 100));
+            }
+            g.fillRect(projectileCoordinate[i]*25 , projectileDelay[i], 25 , 25);
+            for (int part = projectileLength[i]; part >= 0 ; part--) {
+                if(part == projectileLength[i]){
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head_" + isBlocked[i] + ".png").getImage(); 
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)-2 , projectileDelay[i]-offset, null);
+                }
+                else if(part == 0){
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail_" + isBlocked[i] + ".png").getImage(); 
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)+2 , projectileDelay[i]-offset-7, null);
+                }
+                else{
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body_" + isBlocked[i] + ".png").getImage(); 
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)+2 , projectileDelay[i]-offset, null);
+                }
+                offset += 25;
+            }
+        }
+    }
+
     public static boolean isHit(int i){
         PlayZone playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         slimePuddleColor = PlayZone.getSlimePuddleColor();
         
         return projectileDelay[i]/25 >= playZone.getGridRows() - 1 || (projectileDelay[i]/25 >= 0 && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != null && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != slimePuddleColor);
+    }
+
+    public void applyBlindness(int state){
+        playZone = GameFrame.getPlayZone();
+        playZone.setBlindness((state-1)*15);
+    }
+
+    public void pushBlock(int i) {
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+        int phase = boss.getPhase();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    if(phase==1){
+                        if(projectileDirection[i] == 1 && col+x == (projectileDelay[i]+36)/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveRight();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                        else if(projectileDirection[i] != 1 && col+x == projectileDelay[i]/25 && row+y ==  projectileCoordinate[i]){
+                            playZone.moveLeft();
+                            projectileDirection[i] = Math.abs(projectileDirection[i]-1);
+                        }
+                    }
+                    else{
+                        if((col+x <= (projectileDelay[i]+146)/25 && col+x >= projectileDelay[i]/25) && (row+y <= projectileCoordinate[i]+3 && row+y >= projectileCoordinate[i])){
+                            if(projectileDirection[i] == 1){
+                                playZone.moveRight();
+                            }
+                            else if(projectileDirection[i] != 1){
+                                playZone.moveLeft();
+                            }
+                            if(!isHealed){
+                                boss.setHP(boss.getHP()+300);
+                                isHealed = true;
+                                if(boss.getHP()>boss.getMaxHP()){
+                                    boss.setHP((int)(boss.getMaxHP()));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void blockBlock(int i) {
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    if(col+x == projectileCoordinate[i] && row+y == projectileDelay[i]/25){
+                        isBlocked[i]=1;
+                    } 
+                }
+            }
+        }
     }
 
     public void stopAllTimer(){

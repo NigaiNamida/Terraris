@@ -71,6 +71,7 @@ public class PlayZone extends JPanel{
         gravity = new Gravity(this,1);
         createBlock();
     }
+    
 
     public void resetTSpin() {
         isRotated = false;
@@ -91,10 +92,14 @@ public class PlayZone extends JPanel{
         }
     }
 
+    public static void queueSpecialTexture(BlockTexture texture){
+        TetrisPiece.queueSpecialTexture(textureQueue,texture);
+    }
+
     public static TetrisPiece getNextPiece(){
         isUseHold = false;
         addQueueIfLow();
-        return TetrisPiece.getBlock(blockQueue.get(0),textureQueue.get(0),false);
+        return TetrisPiece.getBlock(blockQueue.get(0),textureQueue.get(0));
     }
 
     public int lowestPoint(){
@@ -157,11 +162,12 @@ public class PlayZone extends JPanel{
     }
 
     public void createBlock(){
+        applySandGravity();
         resetTSpin();
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
-        block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0),true);
+        block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
         block.spawnTetris(gridCols);
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
@@ -207,14 +213,14 @@ public class PlayZone extends JPanel{
     public void holdBlock(){
         if(!isUseHold){
             if(holdPanel.getBlock() == null){
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor()));
                 holdPanel.getBlock().spawnTetris(gridCols);
                 createBlock();
             }
             else{
                 TetrisPiece temp;
                 temp = holdPanel.getBlock();
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor()));
                 block = temp;
                 holdPanel.getBlock().spawnTetris(gridCols);
                 resetTSpin();
@@ -750,6 +756,34 @@ public class PlayZone extends JPanel{
             }
         }
     }
+
+    private void applySandGravity() {
+        Color sandColor = BlockTexture.Sand.getColor();
+        Color color;
+        for (int row = gridRows-1; row >= 0; row--) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if (color != null && color.equals(sandColor)){
+                    int tempRow = row;
+                    while(tempRow+1 < gridRows){
+                        if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddleColor)){
+                            backgroundBlock[tempRow][col] = null;
+                            backgroundBlock[tempRow+1][col] = sandColor;
+                            tempRow++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(block != null){
+            checkFullLine();
+        }
+        repaint();
+    }
+
     private void drawSlime(Graphics g){
         Color color;
         for (int row = 0; row < gridRows; row++) {

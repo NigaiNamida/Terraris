@@ -124,6 +124,7 @@ public class XPPanel extends JPanel{
                 point = 350;
                 break;
             default:
+                PlayZone.queueSpecialTexture(BlockTexture.Sand);
                 point = 500;
                 break;
         }

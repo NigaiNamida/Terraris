@@ -47,6 +47,10 @@ public class TetrisPiece {
         return new int[][]{{1,0,0},{1,1,1}};
     }
 
+    public static void queueSpecialTexture(ArrayList<BlockTexture> textureQueue, BlockTexture texture){
+        textureQueue.add(texture);
+    }
+
     public static void queueTexture(ArrayList<BlockTexture> textureQueue,boolean reset){
         if(reset){
             textureQueue.clear();

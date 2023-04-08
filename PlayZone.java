@@ -71,6 +71,7 @@ public class PlayZone extends JPanel{
         gravity = new Gravity(this,1);
         createBlock();
     }
+    
 
     public void resetTSpin() {
         isRotated = false;
@@ -89,6 +90,10 @@ public class PlayZone extends JPanel{
         if(textureQueue.size() <= 1){
             TetrisPiece.queueTexture(textureQueue,false);
         }
+    }
+
+    public static void queueSpecialTexture(BlockTexture texture){
+        TetrisPiece.queueSpecialTexture(textureQueue,texture);
     }
 
     public static TetrisPiece getNextPiece(){

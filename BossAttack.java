@@ -217,7 +217,7 @@ public class BossAttack implements ActionListener{
 
         ArrayList<Integer> list = new ArrayList<Integer>();
         for(int i = 0; i < 10; i++) {
-            list.add(i);
+            list.add(i*25);
         }
         
         Collections.shuffle(list);
@@ -313,10 +313,20 @@ public class BossAttack implements ActionListener{
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         for (int i = 0; i < projectileCount; i++) {
+            if(isBlocked[i] != 1){
             projectileDelay[i] += 7;
             blockBlock(i);
-            if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] != null && isBlocked[i] != 1){
-                backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] = null;
+                if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] != null){
+                    backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] = null;
+                }
+            }
+            else{
+                if(projectileCoordinate[i]<=100){
+                    projectileCoordinate[i] -= 7;
+                }
+                else{
+                    projectileCoordinate[i] += 7;
+                }
             }
         }
     }
@@ -408,19 +418,19 @@ public class BossAttack implements ActionListener{
             else{
                 g.setColor(new Color(50, 255, 0, 100));
             }
-            g.fillRect(projectileCoordinate[i]*25 , projectileDelay[i], 25 , 25);
+            g.fillRect(projectileCoordinate[i] , projectileDelay[i], 25 , 25);
             for (int part = projectileLength[i]; part >= 0 ; part--) {
                 if(part == projectileLength[i]){
                     bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)-2 , projectileDelay[i]-offset, null);
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i])-2 , projectileDelay[i]-offset, null);
                 }
                 else if(part == 0){
                     bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)+2 , projectileDelay[i]-offset-7, null);
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset-7, null);
                 }
                 else{
                     bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i]*25)+2 , projectileDelay[i]-offset, null);
+                    g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset, null);
                 }
                 offset += 25;
             }
@@ -493,7 +503,7 @@ public class BossAttack implements ActionListener{
         for (int row = 0; row < blockHeight; row++) {
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1){
-                    if(col+x == projectileCoordinate[i] && row+y == projectileDelay[i]/25){
+                    if(col+x == projectileCoordinate[i]/25 && row+y == projectileDelay[i]/25){
                         isBlocked[i]=1;
                     } 
                 }

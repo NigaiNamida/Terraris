@@ -74,6 +74,9 @@ public class TetrisTexture extends JPanel{
         else if(middle.equals(BlockTexture.Stone.getColor())){
             block = "Stone";
         }
+        else if(middle.equals(BlockTexture.Sand.getColor())){
+            block = "Sand";
+        }
 
         String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];
         if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){

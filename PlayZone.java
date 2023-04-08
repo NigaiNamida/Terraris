@@ -94,7 +94,7 @@ public class PlayZone extends JPanel{
     public static TetrisPiece getNextPiece(){
         isUseHold = false;
         addQueueIfLow();
-        return TetrisPiece.getBlock(blockQueue.get(0),textureQueue.get(0),false);
+        return TetrisPiece.getBlock(blockQueue.get(0),textureQueue.get(0));
     }
 
     public int lowestPoint(){
@@ -161,7 +161,7 @@ public class PlayZone extends JPanel{
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
-        block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0),true);
+        block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
         block.spawnTetris(gridCols);
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
@@ -207,14 +207,14 @@ public class PlayZone extends JPanel{
     public void holdBlock(){
         if(!isUseHold){
             if(holdPanel.getBlock() == null){
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor()));
                 holdPanel.getBlock().spawnTetris(gridCols);
                 createBlock();
             }
             else{
                 TetrisPiece temp;
                 temp = holdPanel.getBlock();
-                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor(),false));
+                holdPanel.setBlock(TetrisPiece.getBlock(block.getName(),block.getColor()));
                 block = temp;
                 holdPanel.getBlock().spawnTetris(gridCols);
                 resetTSpin();

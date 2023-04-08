@@ -766,10 +766,13 @@ public class PlayZone extends JPanel{
                 if (color != null && color.equals(sandColor)){
                     int tempRow = row;
                     while(tempRow+1 < gridRows){
-                        if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddleColor)){
-                            backgroundBlock[tempRow][col] = null;
-                            backgroundBlock[tempRow+1][col] = sandColor;
-                            tempRow++;
+                        if((col+1 < gridCols && col-1 > 0 && tempRow-1 > 0) && (backgroundBlock[tempRow][col+1] == slimeBlockColor || backgroundBlock[tempRow][col-1] == slimeBlockColor || backgroundBlock[tempRow-1][col] == slimeBlockColor)){
+                            break;
+                        }
+                        else if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddleColor)){
+                                backgroundBlock[tempRow][col] = null;
+                                backgroundBlock[tempRow+1][col] = sandColor;
+                                tempRow++;
                         }
                         else{
                             break;

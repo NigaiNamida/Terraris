@@ -162,6 +162,7 @@ public class PlayZone extends JPanel{
     }
 
     public void createBlock(){
+        applySandGravity();
         resetTSpin();
         addQueueIfLow();
         lastTimerReset();
@@ -755,6 +756,34 @@ public class PlayZone extends JPanel{
             }
         }
     }
+
+    private void applySandGravity() {
+        Color sandColor = BlockTexture.Sand.getColor();
+        Color color;
+        for (int row = gridRows-1; row >= 0; row--) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if (color != null && color.equals(sandColor)){
+                    int tempRow = row;
+                    while(tempRow+1 < gridRows){
+                        if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddleColor)){
+                            backgroundBlock[tempRow][col] = null;
+                            backgroundBlock[tempRow+1][col] = sandColor;
+                            tempRow++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(block != null){
+            checkFullLine();
+        }
+        repaint();
+    }
+
     private void drawSlime(Graphics g){
         Color color;
         for (int row = 0; row < gridRows; row++) {

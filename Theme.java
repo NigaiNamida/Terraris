@@ -17,10 +17,18 @@ public enum Theme {
     }
 
     public Theme next() {
-        return vals[(this.ordinal() + 1) % vals.length];
+        Theme next = vals[(this.ordinal() + 1) % vals.length];
+        if(next == Title){
+            next = Day;
+        }
+        return next;
     }
 
     public Theme previous() {
+        Theme previous = vals[(this.ordinal() - 1) % vals.length];
+        if(previous == Title){
+            previous = Corruption;
+        }
         return vals[(this.ordinal() - 1) % vals.length];
     }
 

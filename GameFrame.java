@@ -2,6 +2,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import java.awt.*;
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -10,7 +11,7 @@ public class GameFrame extends JFrame{
     private static PlayZone playZone;
     private static HoldPanel holdPanel;
     private static NextPanel nextPanel;
-    //private static GoalPanel goalPanel;
+    private static ChatPanel chatPanel;
     private static LevelPanel levelPanel;
     private static BossPanel bossPanel;
     private static XPPanel XPPanel;
@@ -28,14 +29,24 @@ public class GameFrame extends JFrame{
 
     private static boolean isPlaying;
 
+    private static Font terrariaFont;
+
     public GameFrame(){
+        try {
+            terrariaFont = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Font/ANDYB.TTF")).deriveFont(20f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Font/ANDYB.TTF")));
+        } catch (Exception e) {
+            System.err.println("NO FONT");
+        }
+        
         effect = new Sound();
         music = new Sound();
         highscorePanel = new HighScorePanel();
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        //goalPanel = new GoalPanel();
+        chatPanel = new ChatPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -68,7 +79,7 @@ public class GameFrame extends JFrame{
         this.add(gameOverPanel);
         this.add(pausePanel);
         this.add(settingPanel);
-        //this.add(goalPanel);
+        this.add(chatPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -82,7 +93,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        //goalPanel.setVisible(false);
+        chatPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -105,7 +116,7 @@ public class GameFrame extends JFrame{
         this.remove(bossPanel);
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
-        //this.remove(goalPanel);
+        this.remove(chatPanel);
         this.remove(holdPanel);
         this.remove(nextPanel);
         this.remove(levelPanel);
@@ -118,7 +129,7 @@ public class GameFrame extends JFrame{
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        //goalPanel = new GoalPanel();
+        chatPanel = new ChatPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -132,7 +143,7 @@ public class GameFrame extends JFrame{
         this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
-        //this.add(goalPanel);
+        this.add(chatPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -145,7 +156,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        //goalPanel.setVisible(false);
+        chatPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -166,7 +177,7 @@ public class GameFrame extends JFrame{
         this.remove(highscorePanel);
         this.remove(gameOverPanel);
         this.remove(pausePanel);
-        //this.remove(goalPanel);
+        this.remove(chatPanel);
         this.remove(holdPanel);
         this.remove(nextPanel);
         this.remove(levelPanel);
@@ -179,7 +190,7 @@ public class GameFrame extends JFrame{
         gameOverPanel = new GameOverPanel();
         holdPanel = new HoldPanel();
         nextPanel = new NextPanel();
-        //goalPanel = new GoalPanel();
+        chatPanel = new ChatPanel();
         levelPanel = new LevelPanel();
         bossPanel = new BossPanel();
         XPPanel = new XPPanel();
@@ -193,7 +204,7 @@ public class GameFrame extends JFrame{
         this.add(bossPanel);
         this.add(highscorePanel);
         this.add(gameOverPanel);
-        //this.add(goalPanel);
+        this.add(chatPanel);
         this.add(holdPanel);
         this.add(nextPanel);
         this.add(levelPanel);
@@ -207,7 +218,7 @@ public class GameFrame extends JFrame{
         gameOverPanel.setVisible(false);
         settingPanel.setVisible(false);
         pausePanel.setVisible(false);
-        //goalPanel.setVisible(false);
+        chatPanel.setVisible(false);
         holdPanel.setVisible(false);
         nextPanel.setVisible(false);
         levelPanel.setVisible(false);
@@ -244,6 +255,52 @@ public class GameFrame extends JFrame{
         catch (Exception e) {}
     }
 
+    public static void pauseGame(){
+        GameFrame.playSE(7);
+        pausePanel.setVisible(true);
+        pausePanel.repaint();
+    }
+
+    public static void continueGame(){
+        GameFrame.playSE(8);
+        pausePanel.setVisible(false);
+    }
+
+    public static void startGame(){
+        bossPanel.setVisible(true);
+        chatPanel.setVisible(true);
+        holdPanel.setVisible(true);
+        nextPanel.setVisible(true);
+        levelPanel.setVisible(true);
+        XPPanel.setVisible(true);
+        playZone.setVisible(true);
+        isPlaying = true;
+        
+        gameThread = new GameThread();
+        gameThread.start();
+        if(music.getClip() != null){
+            music.stopSound();
+        }
+        playMusic(0);
+    }
+
+    public static void playMusic(int i){
+        music.setFiles(i);
+        music.playSound();
+        music.setVolume(SettingPanel.getMusicVolume());
+        music.loopSound();
+    }
+
+    public static void stopMusic(){
+        music.stopSound();
+    }
+
+    public static void playSE(int i){
+        effect.setFiles(i);
+        effect.setVolume(SettingPanel.getFXVolume());
+        effect.playSound();
+    }
+
     public static Menu getMenu() {
         return menu;
     }
@@ -268,9 +325,9 @@ public class GameFrame extends JFrame{
         return nextPanel;
     }
 
-    // public static GoalPanel getGoalPanel() {
-    //     return goalPanel;
-    // }
+    public static ChatPanel getChatPanel() {
+        return chatPanel;
+    }
 
     public static PlayZone getPlayZone() {
         return playZone;
@@ -319,50 +376,9 @@ public class GameFrame extends JFrame{
         GameFrame.isPlaying = isPlaying;
     }
 
-    public static void pauseGame(){
-        GameFrame.playSE(7);
-        pausePanel.setVisible(true);
-        pausePanel.repaint();
+    public static Font getTerrariaFont(float size) {
+        return terrariaFont.deriveFont(size);
     }
-
-    public static void continueGame(){
-        GameFrame.playSE(8);
-        pausePanel.setVisible(false);
-    }
-
-    public static void startGame(){
-        bossPanel.setVisible(true);
-        //goalPanel.setVisible(true);
-        holdPanel.setVisible(true);
-        nextPanel.setVisible(true);
-        levelPanel.setVisible(true);
-        XPPanel.setVisible(true);
-        playZone.setVisible(true);
-        isPlaying = true;
-        
-        gameThread = new GameThread();
-        gameThread.start();
-        if(music.getClip() != null){
-            music.stopSound();
-        }
-        playMusic(0);
-    }
-
-    public static void playMusic(int i){
-        music.setFiles(i);
-        music.playSound();
-        music.setVolume(SettingPanel.getMusicVolume());
-        music.loopSound();
-    }
-
-    public static void stopMusic(){
-        music.stopSound();
-    }
-
-    public static void playSE(int i){
-        effect.setFiles(i);
-        effect.setVolume(SettingPanel.getFXVolume());
-        effect.playSound();
-    }
+    
 }
 

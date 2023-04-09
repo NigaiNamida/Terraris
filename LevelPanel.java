@@ -15,7 +15,7 @@ public class LevelPanel extends JPanel{
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
-        this.setBounds(20, 280, 100, 100);
+        this.setBounds(10, 395, 125, 125);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3,true));
 
@@ -27,8 +27,8 @@ public class LevelPanel extends JPanel{
         levelScore.setForeground(new Color(193,221,196,255));
         levelLabel.setPreferredSize(new Dimension(80, 30));
         levelScore.setPreferredSize(new Dimension(80, 30));
-        levelLabel.setFont(new Font("Futura",Font.BOLD,20));
-        levelScore.setFont(new Font("Futura",Font.BOLD,30));
+        levelLabel.setFont(GameFrame.getTerrariaFont(25));
+        levelScore.setFont(GameFrame.getTerrariaFont(35));
         levelScore.setText(""+level);
 
         bossPanel = GameFrame.getBossPanel();

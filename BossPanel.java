@@ -25,6 +25,8 @@ public class BossPanel extends JPanel implements ActionListener{
     private Random random;
     public boolean canSpawn;
     private int stateTimer;
+    private int tickCount;
+    private int spawnDelay;
 
     public Timer spawnTimer;
     
@@ -33,7 +35,9 @@ public class BossPanel extends JPanel implements ActionListener{
     public BossPanel(){
         stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
+        spawnDelay = 100;
         spawnChance = -5;
+        tickCount = 0;
         canSpawn = false;
 
         random = new Random();
@@ -95,8 +99,22 @@ public class BossPanel extends JPanel implements ActionListener{
         if(canSpawn){
             float number = random.nextInt(1001)/10.0f;
             if(number <= spawnChance){
-                stage = stage.next();
-                spawnBoss();
+                switch (stage) {
+                    case Day:
+                    case Night:
+                    case Corruption:
+                        ChatPanel.newMessage(stage, false);
+                        stage = stage.next();
+                        spawnChance = 100;
+                        break;
+                    default:
+                        tickCount++;
+                        if(tickCount == 15000/spawnDelay){
+                            tickCount = 0;
+                            spawnBoss();
+                        }
+                        break;
+                }
             }
             else{
                 spawnChance+=0.5;
@@ -220,6 +238,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void enterFight(){
+        ChatPanel.newMessage(stage, false);
         GameFrame.stopMusic();
         spawnTimer.stop();
         canSpawn = false;
@@ -230,6 +249,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void exitFight(){
+        ChatPanel.newMessage(stage, true);
         GameFrame.stopMusic();
         boss.stopAnimateTimer();
         boss.stopAttackTimer();

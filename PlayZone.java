@@ -818,19 +818,19 @@ public class PlayZone extends JPanel{
                 if(shape[row][col] == 1){
                     int x = block.getX() + col;
                     int y = block.getY() + row;
-                    if(backgroundBlock[y][x] == slimePuddleColor){
+                    if(x < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x] == slimePuddleColor){
                         hardDrop();
                     }
-                    if(y + 1 < gridRows && backgroundBlock[y + 1][x] == slimeBlockColor){
+                    if(x < gridCols && y + 1 < gridRows && y+1 >= 0 && backgroundBlock[y + 1][x] == slimeBlockColor){
                         lockAndSpawnBlock();
                     }
-                    else if(x + 1 < gridCols && backgroundBlock[y][x + 1] == slimeBlockColor){
+                    else if(x + 1 < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x + 1] == slimeBlockColor){
                         lockAndSpawnBlock();
                     }
-                    else if(y - 1 >= 0 && backgroundBlock[y - 1][x] == slimeBlockColor){
+                    else if(x < gridCols && y - 1 >= 0 && backgroundBlock[y - 1][x] == slimeBlockColor){
                         lockAndSpawnBlock();
                     }
-                    else if(x - 1 >= 0 && backgroundBlock[y][x - 1] == slimeBlockColor){
+                    else if(x - 1 >= 0 && y < gridRows && y >= 0 &&  backgroundBlock[y][x - 1] == slimeBlockColor){
                         lockAndSpawnBlock();
                     }
                     for(int offRow = -1;offRow <= 1;offRow++){

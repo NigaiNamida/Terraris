@@ -15,10 +15,10 @@ public class NextPanel extends JPanel{
     public NextPanel(){
         nextLabel = new JLabel("NEXT");
         nextLabel.setForeground(new Color(193,221,196,255));
-        nextLabel.setFont(new Font("Futura",Font.BOLD,20));
+        nextLabel.setFont(GameFrame.getTerrariaFont(25));
 
         //setting panel
-        this.setBounds(10, 150, 125, 125);
+        this.setBounds(10, 208, 125, 125);
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3,true));
 

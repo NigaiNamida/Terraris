@@ -27,9 +27,12 @@ public class BossPanel extends JPanel implements ActionListener{
     private int stateTimer;
 
     public Timer spawnTimer;
+    
+    private Font terrariaFont;
 
     public BossPanel(){
-        stage = Theme.Corruption;
+        stage = Theme.Day;
+        terrariaFont = GameFrame.getTerrariaFont(20);
         spawnChance = -5;
         canSpawn = false;
 
@@ -41,7 +44,7 @@ public class BossPanel extends JPanel implements ActionListener{
         bossAttack = new BossAttack();
         bossTitle = new JLabel();
         bossTitle.setForeground(new Color(193,221,196,255));
-        bossTitle.setFont(new Font("Futura",Font.BOLD,15));
+        bossTitle.setFont(terrariaFont);
         this.add(bossTitle);
 
         this.setBounds(455, 20, 250, 250);

@@ -15,17 +15,7 @@ public class GameThread extends Thread{
                 if(GameFrame.getEffect().getClip() != null)
                     GameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
                 if(!KeyHandler.isPause()){
-                    try{
-                        double remainingTime = nextTime - System.nanoTime();
-                        remainingTime /= 1000000;
-                        if(remainingTime < 0){
-                            remainingTime = 0;
-                        }
-                        update();
-                        // repaintPlayZone();
-                        Thread.sleep((long) remainingTime);
-                        nextTime += interval;
-                    } catch (InterruptedException e) {}
+                    updateGame();
                 }
             }
         }
@@ -35,6 +25,19 @@ public class GameThread extends Thread{
         else{
             GameFrame.getGameOverPanel().repaint();
         }
+    }
+
+    public static void updateGame(){
+        try{
+            double remainingTime = nextTime - System.nanoTime();
+            remainingTime /= 1000000;
+            if(remainingTime < 0){
+                remainingTime = 0;
+            }
+            updateInput();
+            Thread.sleep((long) remainingTime);
+            nextTime += interval;
+        } catch (InterruptedException e) {}
     }
 
     public static void setInitialValue(){
@@ -57,7 +60,7 @@ public class GameThread extends Thread{
     }
 
 
-    void update() throws InterruptedException{
+    public static void updateInput() throws InterruptedException{
         if(!keyHandler.isLeftFirst() && !keyHandler.isRightFirst()){
             if(keyHandler.isRightPressed())
                 keyHandler.setRightFirst(true);

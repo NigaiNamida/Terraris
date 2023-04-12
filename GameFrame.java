@@ -24,6 +24,7 @@ public class GameFrame extends JFrame{
     private static KeyHandler keyHandler;
     private static Leaderboard leaderboard;
     private static GameThread gameThread;
+    private static AnimationThread animationThread;
     private static Sound effect;
     private static Sound music;
 
@@ -277,7 +278,9 @@ public class GameFrame extends JFrame{
         isPlaying = true;
         
         gameThread = new GameThread();
+        animationThread = new AnimationThread();
         gameThread.start();
+        animationThread.start();
         if(music.getClip() != null){
             music.stopSound();
         }

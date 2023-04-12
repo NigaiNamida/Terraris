@@ -1,5 +1,3 @@
-import javax.swing.Timer;
-
 public class Boss{
     private String name;
     private double maxHP;
@@ -7,64 +5,24 @@ public class Boss{
     private int state;   
     private int phase;
     private int frame;
-    private int cooldown;
-    private Timer animateTimer;
-    public Timer attackTimer;
+    private int cooldownSeconds;
 
-    Boss(String name,int HP,double maxHP,int cooldown){
-        BossPanel bossPanel;
-        bossPanel = GameFrame.getBossPanel();
+    Boss(String name,int HP,double maxHP,int cooldownSeconds){
         this.name = name;
         this.maxHP = maxHP;
         this.HP = HP;
-        this.cooldown = cooldown;
+        this.cooldownSeconds = cooldownSeconds;
         state = 1;
         phase = 1;
         frame = 0;
-        animateTimer = new Timer(200, bossPanel);
-        attackTimer = new Timer(cooldown, bossPanel);
-        startAnimateTimer();
-        startAttackTimer();
     }
 
-    public int getCooldown() {
-        return cooldown;
+    public int getCooldownSeconds() {
+        return cooldownSeconds;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
-    }
-
-    public Timer getAnimateTimer() {
-        return animateTimer;
-    }
-
-    public void setAnimateTimer(Timer animateTimer) {
-        this.animateTimer = animateTimer;
-    }
-
-    public Timer getAttackTimer() {
-        return attackTimer;
-    }
-
-    public void setAttackTimer(Timer attackTimer) {
-        this.attackTimer = attackTimer;
-    }
-
-    public void startAnimateTimer(){
-        animateTimer.start();
-    }
-
-    public void stopAnimateTimer(){
-        animateTimer.stop();
-    }
-
-    public void startAttackTimer(){
-        attackTimer.start();
-    }
-
-    public void stopAttackTimer(){
-        attackTimer.stop();
+    public void setCooldownSeconds(int cooldownSeconds) {
+        this.cooldownSeconds = cooldownSeconds;
     }
 
     public int getFrame() {

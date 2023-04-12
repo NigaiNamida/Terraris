@@ -33,7 +33,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Font terrariaFont;
 
     public BossPanel(){
-        stage = Theme.Corruption;
+        stage = Theme.Night;
         terrariaFont = GameFrame.getTerrariaFont(20);
         spawnDelay = 100;
         spawnChance = -5;
@@ -63,14 +63,6 @@ public class BossPanel extends JPanel implements ActionListener{
             if (e.getSource() == spawnTimer){
                 attemptSpawn();
             }
-            if(boss != null){
-                if (e.getSource() == boss.getAnimateTimer()){
-                    animate();
-                }
-                if (e.getSource() == boss.getAttackTimer()){
-                    attack();
-                }
-            }
         }
         if (playZone.isGameOver()){
             stopAllTimer();
@@ -80,10 +72,6 @@ public class BossPanel extends JPanel implements ActionListener{
     public void stopAllTimer(){
         spawnTimer.stop();
         bossAttack.stopAllTimer();
-        if(boss != null){
-            boss.stopAnimateTimer();
-            boss.stopAttackTimer();
-        }
     }
 
     @Override
@@ -127,17 +115,17 @@ public class BossPanel extends JPanel implements ActionListener{
         if(boss == null){
             switch (stage) {
                 case KingSlime:
-                    boss = new Boss("KingSlime",5000,5000,8000);
+                    boss = new Boss("KingSlime",5000,5000,8);
                     bossTitle.setText("King Slime");
                     GameFrame.playSE(9);
                     break;
                 case EyeOfCthulhu:
-                    boss = new Boss("EyeOfCthulhu",6000,6000,5000);
+                    boss = new Boss("EyeOfCthulhu",6000,6000,5);
                     bossTitle.setText("Eye Of Cthulhu");
                     GameFrame.playSE(9);
                     break;
                 case EaterOfWorld:
-                    boss = new Boss("EaterOfWorld",15000,15000,10000);
+                    boss = new Boss("EaterOfWorld",15000,15000,10);
                     bossTitle.setText("Eater Of World");
                     GameFrame.playSE(9);
                     break;
@@ -172,7 +160,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossAttack.stopAllTimer();
                     boss.setMaxHP(3000);
                     boss.setHP(3000);
-                    boss.setCooldown(15000);
+                    boss.setCooldownSeconds(10);
                     GameFrame.playSE(9);
                     playZone = GameFrame.getPlayZone();
                     playZone.setBlindness(0);
@@ -195,26 +183,22 @@ public class BossPanel extends JPanel implements ActionListener{
         switch (boss.getName()) {
             case "KingSlime":
                 if(boss.getState() == 2 && stateTimer != 2){
-                    boss.attackTimer = new Timer(10000, this);
-                    boss.attackTimer.restart();
+                    boss.setCooldownSeconds(10);
                     stateTimer = 2;
                 }
                 else if(boss.getState() == 3  && stateTimer != 3){
-                    boss.attackTimer = new Timer(12000, this);
-                    boss.attackTimer.restart();
+                    boss.setCooldownSeconds(12);
                     stateTimer = 3;
                 }
                 break;
             case "EyeOfCthulhu" :
                 if(boss.getPhase() == 1){
                     if(boss.getState() == 2 && stateTimer != 2){
-                        boss.attackTimer = new Timer(6000, this);
-                        boss.attackTimer.restart();
+                        boss.setCooldownSeconds(6);
                         stateTimer = 2;
                     }
                     else if(boss.getState() == 3  && stateTimer != 3){
-                        boss.attackTimer = new Timer(7000, this);
-                        boss.attackTimer.restart();
+                        boss.setCooldownSeconds(7);
                         stateTimer = 3;
                     }
                     bossAttack.applyBlindness(boss.getState());
@@ -222,13 +206,11 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "EaterOfWorld":
                 if(boss.getState() == 2 && stateTimer != 2){
-                    boss.attackTimer = new Timer(15000, this);
-                    boss.attackTimer.restart();
+                    boss.setCooldownSeconds(15);
                     stateTimer = 2;
                 }
                 else if(boss.getState() == 3  && stateTimer != 3){
-                    boss.attackTimer = new Timer(20000, this);
-                    boss.attackTimer.restart();
+                    boss.setCooldownSeconds(20);
                     stateTimer = 3;
                 }
                 break;
@@ -251,8 +233,6 @@ public class BossPanel extends JPanel implements ActionListener{
     public void exitFight(){
         ChatPanel.newMessage(stage, true);
         GameFrame.stopMusic();
-        boss.stopAnimateTimer();
-        boss.stopAttackTimer();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         bossAttack.BossesDefeat(boss.getName());
         boss = null;

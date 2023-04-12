@@ -315,7 +315,7 @@ public class BossAttack implements ActionListener{
         for (int i = 0; i < projectileCount; i++) {
             if(isBlocked[i] != 1){
             projectileDelay[i] += 7;
-            blockBlock(i);
+            blockWorm(i);
                 if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] != null){
                     backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] = null;
                 }
@@ -493,7 +493,7 @@ public class BossAttack implements ActionListener{
         }
     }
 
-    public void blockBlock(int i) {
+    public void blockWorm(int i) {
         TetrisPiece block = playZone.getBlock();
         int blockHeight = block.getHeight();
         int blockWidth = block.getWidth();

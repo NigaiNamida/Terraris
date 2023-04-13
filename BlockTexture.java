@@ -4,7 +4,8 @@ public enum BlockTexture {
     Grass,
     Stone,
     Sand,
-    Dynamite;
+    Dynamite,
+    Cloud;
 
     private Color color;
 
@@ -22,7 +23,8 @@ public enum BlockTexture {
     }
 
     public static BlockTexture[] getNormalTexture(){
-        return new BlockTexture[]{Grass,Grass,Grass,Grass,Stone,Stone,Stone,Stone,Sand,Dynamite};
+        //return new BlockTexture[]{Grass,Grass,Grass,Grass,Stone,Stone,Stone,Stone,Sand,Dynamite};
+        return new BlockTexture[]{Grass,Cloud};
     }
     
 }

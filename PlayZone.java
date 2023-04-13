@@ -168,6 +168,12 @@ public class PlayZone extends JPanel{
         lastTimerReset();
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            gravity.setHalfTimer();
+        }
+        else{
+            gravity.setTimer();
+        }
         block.spawnTetris(gridCols);
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();

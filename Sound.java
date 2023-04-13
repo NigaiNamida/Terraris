@@ -25,6 +25,7 @@ public class Sound {
         soundURL[8] = getClass().getResource("Assets/Sound/CloseMenu.wav");//close pause menu
         soundURL[9] = getClass().getResource("Assets/Sound/Roar_0.wav");//boss roar
         soundURL[10] = getClass().getResource("Assets/Sound/Dynamite.wav");//dynamite
+        soundURL[11] = getClass().getResource("Assets/Sound/Cloud.wav");//cloud
     }
 
     public void setFiles(int i){

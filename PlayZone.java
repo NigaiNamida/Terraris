@@ -511,7 +511,12 @@ public class PlayZone extends JPanel{
         XPPanel.addHardDropXP(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         updateBackGround();
-        GameFrame.playSE(2);
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            GameFrame.playSE(11);
+        }
+        else{
+            GameFrame.playSE(2);
+        }
         checkFullLine();
         createBlock();
         gravity.restartTimer();
@@ -570,7 +575,12 @@ public class PlayZone extends JPanel{
 
     public void lockAndSpawnBlock(){
         updateBackGround();
-        GameFrame.playSE(2);
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            GameFrame.playSE(11);
+        }
+        else{
+            GameFrame.playSE(2);
+        }
         checkFullLine();
         createBlock();
         lastTimerTrigger();

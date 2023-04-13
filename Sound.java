@@ -9,7 +9,7 @@ import javax.sound.sampled.FloatControl;
 public class Sound {
     private long pauseTime;
     private Clip clip;
-    private URL[] soundURL = new URL[10];
+    private URL[] soundURL = new URL[20];
     private FloatControl gainControl;
 
     public Sound(){
@@ -24,6 +24,7 @@ public class Sound {
         soundURL[7] = getClass().getResource("Assets/Sound/OpenMenu.wav");//open pause menu
         soundURL[8] = getClass().getResource("Assets/Sound/CloseMenu.wav");//close pause menu
         soundURL[9] = getClass().getResource("Assets/Sound/Roar_0.wav");//boss roar
+        soundURL[10] = getClass().getResource("Assets/Sound/Dynamite.wav");//dynamite
     }
 
     public void setFiles(int i){

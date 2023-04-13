@@ -168,6 +168,12 @@ public class PlayZone extends JPanel{
         lastTimerReset();
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            gravity.setHalfTimer();
+        }
+        else{
+            gravity.setTimer();
+        }
         block.spawnTetris(gridCols);
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
@@ -505,7 +511,12 @@ public class PlayZone extends JPanel{
         XPPanel.addHardDropXP(m);
         block.setPosition(block.getX(), lowestPoint()-block.getHeight());
         updateBackGround();
-        GameFrame.playSE(2);
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            GameFrame.playSE(11);
+        }
+        else{
+            GameFrame.playSE(2);
+        }
         checkFullLine();
         createBlock();
         gravity.restartTimer();
@@ -564,7 +575,12 @@ public class PlayZone extends JPanel{
 
     public void lockAndSpawnBlock(){
         updateBackGround();
-        GameFrame.playSE(2);
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
+            GameFrame.playSE(11);
+        }
+        else{
+            GameFrame.playSE(2);
+        }
         checkFullLine();
         createBlock();
         lastTimerTrigger();
@@ -583,6 +599,25 @@ public class PlayZone extends JPanel{
                 if(shape[row][col] == 1 && y+row < gridRows && x+col < gridCols && y+row >= 0 && x+col >= 0)
                     backgroundBlock[y+row][x+col] = color;
             }
+        }
+        if(color.equals(BlockTexture.Dynamite.getColor())){
+            int radius = 1;
+            for (int row = 0; row < blockHeight; row++) {
+                for (int col = 0; col < blockWidth; col++) {
+                    if(shape[row][col] == 1){
+                        for (int k = -radius; k <= radius; k++) {
+                            for (int l = -radius; l <= radius; l++) {
+                                if(!(k==0 && l==0)){
+                                    if(y+row+k < gridRows && x+col+l < gridCols && y+row+k >= 0 && x+col+l >= 0){
+                                        backgroundBlock[y+row+k][x+col+l] = null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            GameFrame.playSE(10);
         }
     }
 

@@ -77,11 +77,35 @@ public class TetrisTexture extends JPanel{
         else if(middle.equals(BlockTexture.Sand.getColor())){
             block = "Sand";
         }
-
-        String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];
-        if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-            pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
-            g.drawImage(pileImage,x,y,null);
+        else if(middle.equals(BlockTexture.Dynamite.getColor())){
+            block = "Dynamite";
         }
+        else if(middle.equals(BlockTexture.Cloud.getColor())){
+            block = "Cloud";
+        }
+        
+        String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];
+        if(block != null && block.equals("Dynamite")){
+            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
+                pileImage = new ImageIcon(path+"Block/Dynamite/11111111.png").getImage();
+                g.drawImage(pileImage,x,y,null);
+            }
+        }
+        else if(block != null && block.equals("Cloud")){
+            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
+                pileImage = new ImageIcon(path+"Block/Cloud/11111111.png").getImage();
+                g.drawImage(pileImage,x,y,null);
+            }
+        }
+        else{
+            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
+                pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
+                g.drawImage(pileImage,x,y,null);
+            }
+        }
+        // if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
+        //     pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
+        //     g.drawImage(pileImage,x,y,null);
+        // }
     }
 }

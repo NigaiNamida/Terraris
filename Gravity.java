@@ -28,6 +28,19 @@ public class Gravity implements ActionListener{
             playZone.applyGravity();
         }
     }
+    public void setTimer(){
+        if(timer != null){
+            timer.stop();
+        }
+        timer = new Timer((int)(fallSpeed*1000), this);
+    }
+
+    public void setHalfTimer(){
+        if(timer != null){
+            timer.stop();
+        }
+        timer = new Timer((int)(fallSpeed*1500), this);
+    }
 
     public Timer getTimer() {
         return timer;

@@ -3,7 +3,9 @@ import java.awt.Color;
 public enum BlockTexture {
     Grass,
     Stone,
-    Sand;
+    Sand,
+    Dynamite,
+    Cloud;
 
     private Color color;
 
@@ -21,7 +23,8 @@ public enum BlockTexture {
     }
 
     public static BlockTexture[] getNormalTexture(){
-        return new BlockTexture[]{Grass,Stone,Sand};
+        //return new BlockTexture[]{Grass,Grass,Grass,Grass,Stone,Stone,Stone,Stone,Sand,Dynamite};
+        return new BlockTexture[]{Grass,Cloud};
     }
     
 }

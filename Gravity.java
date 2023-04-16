@@ -11,7 +11,7 @@ public class Gravity implements ActionListener{
         this.fallSpeed = fallSpeed;
         this.playZone = pZone;
         timer = new Timer((int)(fallSpeed*1000), this);
-        lastTimer = new Timer(500, this);
+        lastTimer = new Timer(800, this);
         startTimer();
     }
     

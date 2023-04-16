@@ -261,11 +261,22 @@ public class BossPanel extends JPanel implements ActionListener{
 
     private void drawHP(Graphics g) {
         if (boss != null){
+            String path = "Assets/Image/Bosses/HealthBar/";
+            Image bgImage = new ImageIcon(path + "BGBossBar.png").getImage();
+            Image hpImage = new ImageIcon(path + "BossBar.png").getImage();
+            Image mainImage = new ImageIcon(path + "MainHealth.png").getImage();
+            Image redImage = new ImageIcon(path + "RedBossBar.png").getImage();
+            Image iconImage = new ImageIcon(path + boss.getName() +".png").getImage();
             int HP = boss.getHP();
             double maxHP = boss.getMaxHP();
-            int pixel = (int)((HP/maxHP) * 210) + 1;
-            g.setColor(Color.red);
-            g.fillRect(20, 40,pixel,2);
+            int pixel = (int)((HP/maxHP) * 190);
+            g.drawImage(bgImage, 20, 45,null);
+            for (int i = 0; i < pixel; i++) {
+                g.drawImage(mainImage, 30+i, 45,null);
+            }
+            g.drawImage(redImage, 30+pixel, 45,null);
+            g.drawImage(hpImage, 20, 40,null);
+            g.drawImage(iconImage, 21, 42,null);
         }
     }
 

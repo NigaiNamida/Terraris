@@ -91,15 +91,14 @@ public class TetrisTexture extends JPanel{
                 g.drawImage(pileImage,x,y,null);
             }
         }
-        else if(block != null && block.equals("Cloud")){
-            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-                pileImage = new ImageIcon(path+"Block/Cloud/11111111.png").getImage();
-                g.drawImage(pileImage,x,y,null);
-            }
-        }
         else{
             if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-                pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
+                if(block != "Cloud"){
+                    pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
+                }
+                else{
+                    pileImage = new ImageIcon(path+"Block/"+block+"/"+name+".png").getImage();  
+                }
                 g.drawImage(pileImage,x,y,null);
             }
         }

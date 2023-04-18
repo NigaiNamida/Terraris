@@ -600,7 +600,7 @@ public class PlayZone extends JPanel{
                     backgroundBlock[y+row][x+col] = color;
             }
         }
-        if(color.equals(BlockTexture.Dynamite.getColor())){
+        if(color.equals(BlockTexture.PrimeDynamite.getColor())){
             int radius = 1;
             for (int row = 0; row < blockHeight; row++) {
                 for (int col = 0; col < blockWidth; col++) {
@@ -782,6 +782,9 @@ public class PlayZone extends JPanel{
                                 }
                             }
                         }
+                    }
+                    if(color.equals(BlockTexture.Dynamite.getColor())){
+                        color = BlockTexture.PrimeDynamite.getColor();
                     }
                     int x = col * blockSize; //coordinate + offset
                     int y = row * blockSize; //coordinate + offset

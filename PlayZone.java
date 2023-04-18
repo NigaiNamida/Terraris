@@ -188,6 +188,7 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+        ActiveDynamite();
         gravity.restartTimer();
     }
     
@@ -600,24 +601,32 @@ public class PlayZone extends JPanel{
                     backgroundBlock[y+row][x+col] = color;
             }
         }
-        if(color.equals(BlockTexture.PrimeDynamite.getColor())){
-            int radius = 1;
-            for (int row = 0; row < blockHeight; row++) {
-                for (int col = 0; col < blockWidth; col++) {
-                    if(shape[row][col] == 1){
+    }
+
+    public void ActiveDynamite() {
+        Color color;
+        for (int row = 0; row < gridRows; row++) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if(color != null){
+                    if(color.equals(BlockTexture.PrimeDynamite.getColor())){
+                        int radius = 1;
                         for (int k = -radius; k <= radius; k++) {
                             for (int l = -radius; l <= radius; l++) {
-                                if(!(k==0 && l==0)){
-                                    if(y+row+k < gridRows && x+col+l < gridCols && y+row+k >= 0 && x+col+l >= 0){
-                                        backgroundBlock[y+row+k][x+col+l] = null;
-                                    }
+                                if(row+k < gridRows && col+l < gridCols && row+k >= 0 && col+l >= 0){
+                                    if(backgroundBlock[row+k][col+l] != null && backgroundBlock[row+k][col+l] != BlockTexture.PrimeDynamite.getColor())
+                                    backgroundBlock[row+k][col+l] = null;
                                 }
                             }
                         }
+                        backgroundBlock[row][col] = null;
+                        GameFrame.playSE(10);
+                    }
+                    if(color.equals(BlockTexture.Dynamite.getColor())){
+                        backgroundBlock[row][col] = BlockTexture.PrimeDynamite.getColor();
                     }
                 }
             }
-            GameFrame.playSE(10);
         }
     }
 
@@ -782,9 +791,6 @@ public class PlayZone extends JPanel{
                                 }
                             }
                         }
-                    }
-                    if(color.equals(BlockTexture.Dynamite.getColor())){
-                        color = BlockTexture.PrimeDynamite.getColor();
                     }
                     int x = col * blockSize; //coordinate + offset
                     int y = row * blockSize; //coordinate + offset

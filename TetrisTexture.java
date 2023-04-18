@@ -79,28 +79,25 @@ public class TetrisTexture extends JPanel{
         }
         else if(middle.equals(BlockTexture.Dynamite.getColor())){
             block = "Dynamite";
+            n[0] = n[2] = n[6] = n[8] = 'D';  
+        }
+        else if(middle.equals(BlockTexture.PrimeDynamite.getColor())){
+            block = "PrimeDynamite";
+            n[0] = n[2] = n[6] = n[8] = 'D';  
         }
         else if(middle.equals(BlockTexture.Cloud.getColor())){
             block = "Cloud";
         }
         
         String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];
-        if(block != null && block.equals("Dynamite")){
-            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-                pileImage = new ImageIcon(path+"Block/Dynamite/11111111.png").getImage();
-                g.drawImage(pileImage,x,y,null);
+        if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
+            if(block != "Cloud" && block != "Dynamite" && block != "PrimeDynamite"){
+                pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
             }
-        }
-        else{
-            if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-                if(block != "Cloud"){
-                    pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
-                }
-                else{
-                    pileImage = new ImageIcon(path+"Block/"+block+"/"+name+".png").getImage();  
-                }
-                g.drawImage(pileImage,x,y,null);
+            else{
+                pileImage = new ImageIcon(path+"Block/"+block+"/"+name+".png").getImage();  
             }
+            g.drawImage(pileImage,x,y,null);
         }
         // if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
         //     pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();

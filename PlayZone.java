@@ -604,7 +604,6 @@ public class PlayZone extends JPanel{
     }
 
     public void ActiveDynamite() {
-        Boss boss = GameFrame.getBossPanel().getBoss();
         Color color;
         for (int row = 0; row < gridRows; row++) {
             for (int col = 0; col < gridCols; col++) {
@@ -616,15 +615,16 @@ public class PlayZone extends JPanel{
                             for (int l = -radius; l <= radius; l++) {
                                 if(row+k < gridRows && col+l < gridCols && row+k >= 0 && col+l >= 0){
                                     if(backgroundBlock[row+k][col+l] != null && backgroundBlock[row+k][col+l] != BlockTexture.PrimeDynamite.getColor() && backgroundBlock[row+k][col+l] != BlockTexture.Dynamite.getColor())
-                                    backgroundBlock[row+k][col+l] = null;
+                                        backgroundBlock[row+k][col+l] = null;
                                 }
                             }
                         }
                         backgroundBlock[row][col] = null;
                         GameFrame.playSE(10);
-                        if(boss != null){
-                            boss.setHP(boss.getHP()-50);
-                        }
+
+                        BossPanel bossPanel = GameFrame.getBossPanel();
+                        bossPanel.damageToBoss(10);
+        
                     }
                     if(color.equals(BlockTexture.Dynamite.getColor())){
                         backgroundBlock[row][col] = BlockTexture.PrimeDynamite.getColor();

@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Crimson;
         terrariaFont = GameFrame.getTerrariaFont(20);
         brightness = (60)/100.0f;
         spawnDelay = 100;
@@ -277,21 +277,27 @@ public class BossPanel extends JPanel implements ActionListener{
         stage = stage.next();
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.repaint();
+        NextPanel nextPanel = GameFrame.getNextPanel();
+        nextPanel.repaint();
+        LevelPanel levelPanel = GameFrame.getLevelPanel();
+        levelPanel.repaint();
         repaint();
         GameFrame.playSE(9);
         GameFrame.playMusic(0);
     }
 
     public void damageToBoss(int damage){
-        if(boss.getHP() > 0){
-            boss.applyDamage(damage);
-            updateState();
+        if(boss != null){
+            if(boss.getHP() > 0){
+                boss.applyDamage(damage);
+                updateState();
+            }
+            if(boss.getHP() <= 0){
+                boss.changePhase();
+                updatePhase();
+            }
+            repaint();
         }
-        if(boss.getHP() <= 0){
-            boss.changePhase();
-            updatePhase();
-        }
-        repaint();
     }
 
     private void drawHP(Graphics g) {

@@ -409,7 +409,7 @@ public class BossAttack implements ActionListener{
     }
     
     public static void drawEaterOfWorldAttack(Graphics g) {
-        Boss boss = GameFrame.getBossPanel().getBoss();;
+        Boss boss = GameFrame.getBossPanel().getBoss();
         for (int i = 0; i < projectileCount; i++) {
             int offset = 0;
             if(isBlocked[i] == 0){

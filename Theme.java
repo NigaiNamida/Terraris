@@ -5,7 +5,17 @@ public enum Theme {
     Night,
     EyeOfCthulhu,
     Corruption,
-    EaterOfWorld;
+    EaterOfWorld,
+    Crimson,
+    BrainOfCthulhu,
+    Jungle,
+    QueenBee,
+    Snow,
+    DeerClops,
+    Dungeon,
+    Skeletron,
+    UnderWorld,
+    WallOfFlesh;
 
     private String BGImagePath;
     private String BGMusicPath;

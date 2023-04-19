@@ -33,7 +33,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private Font terrariaFont;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Crimson;
         terrariaFont = GameFrame.getTerrariaFont(20);
         spawnDelay = 100;
         spawnChance = -5;
@@ -91,6 +91,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     case Day:
                     case Night:
                     case Corruption:
+                    case Crimson:
                         ChatPanel.newMessage(stage, false);
                         stage = stage.next();
                         spawnChance = 100;
@@ -129,6 +130,10 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossTitle.setText("Eater Of World");
                     GameFrame.playSE(9);
                     break;
+                case BrainOfCthulhu:
+                    boss = new Boss("BrainOfCthulhu",10000,10000,10);
+                    bossTitle.setText("Brain Of Cthulhu");
+                    GameFrame.playSE(9);
                 default:
                     break;
             }
@@ -174,6 +179,20 @@ public class BossPanel extends JPanel implements ActionListener{
                 if(phase >= 2){
                     exitFight();
                 }
+                break;
+            case "BrainOfCthulhu":
+                if(phase == 2){
+                    bossAttack.stopAllTimer();
+                    boss.setMaxHP(10000);
+                    boss.setHP(10000);
+                    boss.setCooldownSeconds(10);
+                    GameFrame.playSE(9);
+                    bossAttack.setProjectileDelay(1000);
+                }
+                else if(phase >= 3){
+                    exitFight();
+                }
+                break;
             default:
                 break;
         }
@@ -266,7 +285,7 @@ public class BossPanel extends JPanel implements ActionListener{
             Image hpImage = new ImageIcon(path + "BossBar.png").getImage();
             Image mainImage = new ImageIcon(path + "MainHealth.png").getImage();
             Image redImage = new ImageIcon(path + "RedBossBar.png").getImage();
-            Image iconImage = new ImageIcon(path + boss.getName() +".png").getImage();
+            Image iconImage = new ImageIcon(path + boss.getName() + "_" + boss.getPhase() + ".png").getImage();
             int HP = boss.getHP();
             double maxHP = boss.getMaxHP();
             int pixel = (int)((HP/maxHP) * 190);
@@ -317,6 +336,11 @@ public class BossPanel extends JPanel implements ActionListener{
                 x = 50;
                 y = 50;
                 path += (frame % 4)+ ".png"; 
+                break;
+            case "BrainOfCthulhu":
+                x = 50;
+                y = 70;
+                path += frame + ".png";  
                 break;
         }
         bossImage = new ImageIcon(path).getImage();

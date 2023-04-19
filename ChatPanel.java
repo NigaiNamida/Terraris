@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 public class ChatPanel extends JPanel implements ActionListener{
     private static JLabel chat;
@@ -34,7 +33,6 @@ public class ChatPanel extends JPanel implements ActionListener{
         this.setLayout(null);
         this.setBounds(455, 290, 300, 250);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,1,true));
     }
 
     public static void newMessage(Theme stage,boolean isDefeat){

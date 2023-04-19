@@ -31,10 +31,12 @@ public class BossPanel extends JPanel implements ActionListener{
     public Timer spawnTimer;
     
     private Font terrariaFont;
+    private float brightness;
 
     public BossPanel(){
-        stage = Theme.Crimson;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
+        brightness = (60)/100.0f;
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
@@ -77,10 +79,24 @@ public class BossPanel extends JPanel implements ActionListener{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawBackgroundImage(g);
+        drawBackgroundBrightness(g);
         if(boss != null){
             drawBoss(g);
             drawHP(g);
         }
+    }
+
+    private void drawBackgroundImage(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+    }
+
+    private void drawBackgroundBrightness(Graphics g){
+        int brightness = (int)(255 * (1 - this.brightness));
+        g.setColor(new Color(0,0,0,brightness));
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
     
     public void attemptSpawn(){
@@ -106,7 +122,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 }
             }
             else{
-                spawnChance+=0.5;
+                spawnChance++;
             }
             System.out.println(spawnChance + ("%"));
         }

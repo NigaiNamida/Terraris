@@ -9,8 +9,10 @@ public class LevelPanel extends JPanel{
     private static JLabel levelScore;
     private static BossPanel bossPanel;
     private JLabel levelLabel;
+    private float brightness;
 
     public LevelPanel(){
+        brightness = (60)/100.0f;
         level = 1;
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
@@ -57,5 +59,19 @@ public class LevelPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
+        drawBackgroundImage(g);
+        drawBackgroundBrightness(g);
+    }
+
+    private void drawBackgroundImage(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+    }
+
+    private void drawBackgroundBrightness(Graphics g){
+        int brightness = (int)(255 * (1 - this.brightness));
+        g.setColor(new Color(0,0,0,brightness));
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
 }

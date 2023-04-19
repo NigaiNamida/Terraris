@@ -725,6 +725,7 @@ public class PlayZone extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBackgroundImage(g);
+        drawBackgroundBrightness(g);
         drawGridLine(g);
         drawPhantomBlock(g);
         drawPile(g);
@@ -738,8 +739,10 @@ public class PlayZone extends JPanel{
         BossPanel bossPanel = GameFrame.getBossPanel();
         Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
         g.drawImage(BGImage, 0, 0, null);
-        int brightness = (int)(256 - 256 * this.brightness);
-        
+    }
+
+    private void drawBackgroundBrightness(Graphics g){
+        int brightness = (int)(255 * (1 - this.brightness));
         g.setColor(new Color(0,0,0,brightness));
         g.fillRect(0, 0, getWidth(), getHeight());
     }

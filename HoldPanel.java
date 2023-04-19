@@ -12,10 +12,13 @@ public class HoldPanel extends JPanel{
     private int gridRows;
 
     private int blockSize;
+    private float brightness;
 
     private TetrisPiece block;
 
     public HoldPanel(){
+        brightness = (60)/100.0f;
+        
         holdLabel = new JLabel("HOLD");
         holdLabel.setForeground(new Color(193,221,196,255));
         holdLabel.setFont(GameFrame.getTerrariaFont(25));
@@ -37,7 +40,21 @@ public class HoldPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
+        drawBackgroundImage(g);
+        drawBackgroundBrightness(g);
         drawBlock(g);
+    }
+
+    private void drawBackgroundImage(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+    }
+
+    private void drawBackgroundBrightness(Graphics g){
+        int brightness = (int)(255 * (1 - this.brightness));
+        g.setColor(new Color(0,0,0,brightness));
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
 
     private void drawBlock(Graphics g){

@@ -623,7 +623,7 @@ public class PlayZone extends JPanel{
                         GameFrame.playSE(10);
 
                         BossPanel bossPanel = GameFrame.getBossPanel();
-                        bossPanel.damageToBoss(10);
+                        bossPanel.damageToBoss(100);
         
                     }
                     if(color.equals(BlockTexture.Dynamite.getColor())){
@@ -915,7 +915,7 @@ public class PlayZone extends JPanel{
     
     private void drawShadow(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu){
+        if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu || bossPanel.getStage() == Theme.Dungeon || bossPanel.getStage() == Theme.Skeletron){
             int radius = gridRows;
             int darkness = 4;
             int blockHeight = block.getHeight();

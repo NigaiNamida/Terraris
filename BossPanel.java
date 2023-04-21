@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Crimson;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
         brightness = (60)/100.0f;
         spawnDelay = 100;
@@ -108,6 +108,10 @@ public class BossPanel extends JPanel implements ActionListener{
                     case Night:
                     case Corruption:
                     case Crimson:
+                    case Jungle:
+                    case Snow:
+                    case Dungeon:
+                    case UnderWorld:
                         ChatPanel.newMessage(stage, false);
                         stage = stage.next();
                         spawnChance = 100;
@@ -150,6 +154,27 @@ public class BossPanel extends JPanel implements ActionListener{
                     boss = new Boss("BrainOfCthulhu",10000,10000,10);
                     bossTitle.setText("Brain Of Cthulhu");
                     GameFrame.playSE(9);
+                    break;
+                case QueenBee:
+                    boss = new Boss("QueenBee",25000,25000,10);
+                    bossTitle.setText("Queen Bee");
+                    GameFrame.playSE(9);
+                    break;
+                case DeerClops:
+                    boss = new Boss("DeerClops",32000,32000,10);
+                    bossTitle.setText("Deerclops");
+                    GameFrame.playSE(9);
+                    break;
+                case Skeletron:
+                    boss = new Boss("Skeletron",40000,40000,10);
+                    bossTitle.setText("Skeletron");
+                    GameFrame.playSE(9);
+                    break;
+                case WallOfFlesh:
+                    boss = new Boss("WallOfFlesh",50000,50000,10);
+                    bossTitle.setText("Wall Of Flesh");
+                    GameFrame.playSE(9);
+                    break;
                 default:
                     break;
             }
@@ -206,6 +231,26 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossAttack.setProjectileDelay(1000);
                 }
                 else if(phase >= 3){
+                    exitFight();
+                }
+                break;
+            case "QueenBee" :
+                if(phase >= 2){
+                    exitFight();
+                }
+                break;
+            case "DeerClops" :
+                if(phase >= 2){
+                    exitFight();
+                }
+                break;
+            case "Skeletron" :
+                if(phase >= 2){
+                    exitFight();
+                }
+                break;
+            case "WallOfFlesh" :
+                if(phase >= 2){
                     exitFight();
                 }
                 break;
@@ -362,6 +407,11 @@ public class BossPanel extends JPanel implements ActionListener{
             case "BrainOfCthulhu":
                 x = 50;
                 y = 70;
+                path += frame + ".png";  
+                break;
+            case "QueenBee":
+                x = 41;
+                y = 80;
                 path += frame + ".png";  
                 break;
         }

@@ -46,7 +46,7 @@ public class AnimationThread extends Thread{
         Boss boss = bossPanel.getBoss();
         if(boss != null){
             int cooldown = boss.getCooldownSeconds();
-            if(i % (FPS/4) == 0){
+            if(i % (FPS/8) == 0){
                 idle();
             }
             if(cooldown != 0 && i % (FPS*cooldown) == 0){

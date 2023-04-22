@@ -4,10 +4,13 @@ public class AnimationThread extends Thread{
     private static int FPS;
     private static double interval;
     private static double nextTime;
+    private static int i;
+    private static int j;
+
     @Override
     public void run() {
         setInitialValue();
-        int i = 0;
+        i = 0;
         while(GameFrame.isPlaying()){
             if(!playZone.isGameOver()){
                 if(GameFrame.getEffect().getClip() != null)
@@ -73,5 +76,18 @@ public class AnimationThread extends Thread{
 
     void repaintPlayZone(){
         playZone.repaint();
+    }
+
+    public static void resetFrame() {
+        i = 0;
+    }
+
+    public static void pauseFrame() {
+        j = i;
+    }
+
+    public static void resumeFrame() {
+        i = j;
+        j = 0;
     }
 }

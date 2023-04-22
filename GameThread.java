@@ -113,7 +113,7 @@ public class GameThread extends Thread{
             Thread.sleep(40);
             playZone.softDrop();
         }
-        if(keyHandler.isisRotateCWPressed() && !keyHandler.isHoldingCWRotate()){
+        if(keyHandler.isRotateCWPressed() && !keyHandler.isHoldingCWRotate()){
             keyHandler.setHoldingCWRotate(true);
             playZone.rotate("CW");
         }

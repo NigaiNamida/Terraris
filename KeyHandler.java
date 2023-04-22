@@ -49,11 +49,13 @@ public class KeyHandler implements KeyListener{
                         if(GameFrame.getMusic().getClip() != null)
                             GameFrame.getMusic().pauseSound();
                         GameFrame.pauseGame();
+                        AnimationThread.pauseFrame();
                     }
                     else{
                         if(GameFrame.getMusic().getClip() != null)
                             GameFrame.getMusic().resumeSound();
                         GameFrame.continueGame();
+                        AnimationThread.resumeFrame();
                     }
                 }
                 if(!isPause){
@@ -165,11 +167,11 @@ public class KeyHandler implements KeyListener{
         this.isHardDropPressed = isHardDropPressed;
     }
 
-    public boolean isisRotateCWPressed() {
+    public boolean isRotateCWPressed() {
         return isRotateCWPressed;
     }
 
-    public void setisRotateCWPressed(boolean isRotateCWPressed) {
+    public void setRotateCWPressed(boolean isRotateCWPressed) {
         this.isRotateCWPressed = isRotateCWPressed;
     }
 

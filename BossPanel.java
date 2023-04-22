@@ -27,6 +27,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private int stateTimer;
     private int tickCount;
     private int spawnDelay;
+    private int actionTick;
 
     public Timer spawnTimer;
     
@@ -34,13 +35,14 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Snow;
         terrariaFont = GameFrame.getTerrariaFont(20);
         brightness = (60)/100.0f;
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
         canSpawn = false;
+        actionTick = 0;
 
         random = new Random();
         
@@ -307,6 +309,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = 0;
         stateTimer = 1;
         System.out.println("Boss Spawn DeActive");
+        AnimationThread.resetFrame();
         GameFrame.playMusic(0);
     }
 
@@ -317,6 +320,7 @@ public class BossPanel extends JPanel implements ActionListener{
         bossAttack.BossesDefeat(boss.getName());
         boss = null;
         spawnChance = 0;
+        actionTick = 0;
         bossTitle.setText("");
         restartSpawnTimer();
         stage = stage.next();
@@ -414,6 +418,21 @@ public class BossPanel extends JPanel implements ActionListener{
                 y = 80;
                 path += frame + ".png";  
                 break;
+            case "DeerClops":
+                x = 50;
+                y = 20;
+                path += frame + ".png";
+                if(actionTick < 24){
+                    actionTick++;
+                }
+                else if(actionTick < 32){
+                    actionTick ++;
+                    path = "Assets/Image/Bosses/" + name + "/Blink_" + phase + "_" + state + "_" + frame + ".png";
+                }
+                if(actionTick == 32){
+                    actionTick = 0;
+                }
+                break;   
         }
         bossImage = new ImageIcon(path).getImage();
         g.drawImage(bossImage ,x, y,null);

@@ -34,9 +34,9 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Jungle;
         terrariaFont = GameFrame.getTerrariaFont(20);
-        brightness = (60)/100.0f;
+        adjustBrightness(stage);
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
@@ -107,11 +107,24 @@ public class BossPanel extends JPanel implements ActionListener{
             case KingSlime:
             case Night:
             case EyeOfCthulhu:
-                path += "Normal_Border.png";
+                path += "Normal";
+                break;
+            case Corruption:
+            case EaterOfWorld:
+                path += "Corruption";
+                break;
+            case Crimson:
+            case BrainOfCthulhu:
+                path += "Crimson";
+                break;
+            case Jungle:
+            case QueenBee:
+                path += "Jungle";
                 break;
             default:
                 break;
         }
+        path += "_Border.png";
         Image BorderImage = new ImageIcon(path).getImage();
         g.drawImage(BorderImage, 0, 0, null);
     }
@@ -343,6 +356,7 @@ public class BossPanel extends JPanel implements ActionListener{
         bossTitle.setText("");
         restartSpawnTimer();
         stage = stage.next();
+        adjustBrightness(stage);
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.repaint();
         NextPanel nextPanel = GameFrame.getNextPanel();
@@ -352,6 +366,18 @@ public class BossPanel extends JPanel implements ActionListener{
         repaint();
         GameFrame.playSE(9);
         GameFrame.playMusic(0);
+    }
+
+    public void adjustBrightness(Theme stage) {
+        switch (stage) {
+            case Night:
+            case EyeOfCthulhu:
+                brightness = (10)/100.0f;
+                break;
+            default:
+                brightness = (60)/100.0f;
+                break;
+        }
     }
 
     public void damageToBoss(int damage){
@@ -424,7 +450,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "EaterOfWorld":
                 x = 50;
-                y = 50;
+                y = 80;
                 path += (frame % 4)+ ".png"; 
                 break;
             case "BrainOfCthulhu":
@@ -434,7 +460,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "QueenBee":
                 x = 41;
-                y = 80;
+                y = 60;
                 path += frame + ".png";  
                 break;
             case "DeerClops":

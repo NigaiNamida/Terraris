@@ -4,7 +4,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 public abstract class DataPanel extends JPanel{
     private float brightness;
@@ -12,9 +11,8 @@ public abstract class DataPanel extends JPanel{
     private int gridRows;
     private int blockSize;
     DataPanel(){
-        brightness = (60)/100.0f;
+        brightness = (80)/100.0f;
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3,true));
     }
     
     public void calculateGrid(int col) {
@@ -28,18 +26,73 @@ public abstract class DataPanel extends JPanel{
         super.paintComponent(g);
         drawBackgroundImage(g);
         drawBackgroundBrightness(g);
+        drawBorder(g);
     }
 
     private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
-        g.drawImage(BGImage, 0, 0, null);
+        String path = "Assets/Image/Background/SmallPanel/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal";
+                break;
+            case Corruption:
+            case EaterOfWorld:
+                path += "Corruption";
+                break;
+            case Crimson:
+            case BrainOfCthulhu:
+                path += "Crimson";
+                break;
+            case Jungle:
+            case QueenBee:
+                path += "Jungle";
+                break;
+            default:
+                break;
+        }
+        path += ".png";
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
 
     private void drawBackgroundBrightness(Graphics g){
-        int brightness = (int)(255 * (1 - getBrightness()));
+        int brightness = (int)(255 * (1 - this.brightness));
         g.setColor(new Color(0,0,0,brightness));
         g.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    private void drawBorder(Graphics g) {
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        String path = "Assets/Image/Background/SmallPanel/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal";
+                break;
+            case Corruption:
+            case EaterOfWorld:
+                path += "Corruption";
+                break;
+            case Crimson:
+            case BrainOfCthulhu:
+                path += "Crimson";
+                break;
+            case Jungle:
+            case QueenBee:
+                path += "Jungle";
+                break;
+            default:
+                break;
+        }
+        path += "_Border.png";
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
 
     protected void drawBlock(Graphics g, TetrisPiece block){

@@ -1,6 +1,6 @@
 import java.awt.*;
-
 import javax.swing.*;
+
 public class LevelPanel extends DataPanel{
     private static int level;
     private static JLabel levelScore;
@@ -13,6 +13,7 @@ public class LevelPanel extends DataPanel{
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
+        
         this.setBounds(10, 395, 125, 125);
 
         //add component
@@ -49,5 +50,4 @@ public class LevelPanel extends DataPanel{
     public static JLabel getLevelScore() {
         return levelScore;
     }
-
 }

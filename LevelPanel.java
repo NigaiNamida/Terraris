@@ -1,25 +1,19 @@
 import java.awt.*;
 
 import javax.swing.*;
-
-import javax.swing.border.LineBorder;
-
-public class LevelPanel extends JPanel{
+public class LevelPanel extends DataPanel{
     private static int level;
     private static JLabel levelScore;
     private static BossPanel bossPanel;
     private JLabel levelLabel;
-    private float brightness;
 
     public LevelPanel(){
-        brightness = (60)/100.0f;
+        super();
         level = 1;
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
         this.setBounds(10, 395, 125, 125);
-        this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3,true));
 
         //add component
         this.add(levelLabel);
@@ -56,22 +50,4 @@ public class LevelPanel extends JPanel{
         return levelScore;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);//not have = no panel bg color
-        drawBackgroundImage(g);
-        drawBackgroundBrightness(g);
-    }
-
-    private void drawBackgroundImage(Graphics g){
-        BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
-        g.drawImage(BGImage, 0, 0, null);
-    }
-
-    private void drawBackgroundBrightness(Graphics g){
-        int brightness = (int)(255 * (1 - this.brightness));
-        g.setColor(new Color(0,0,0,brightness));
-        g.fillRect(0, 0, getWidth(), getHeight());
-    }
 }

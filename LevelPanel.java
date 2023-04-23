@@ -1,22 +1,19 @@
 import java.awt.*;
 
 import javax.swing.*;
-
-public class LevelPanel extends JPanel{
+public class LevelPanel extends DataPanel{
     private static int level;
     private static JLabel levelScore;
     private static BossPanel bossPanel;
     private JLabel levelLabel;
-    private float brightness;
 
     public LevelPanel(){
-        brightness = (100)/100.0f;
+        super();
         level = 1;
         levelLabel = new JLabel("LEVEL", SwingConstants.CENTER);
         levelScore = new JLabel(""+level, SwingConstants.CENTER);
         //setting panel
         this.setBounds(10, 395, 125, 125);
-        this.setBackground(Color.black);
 
         //add component
         this.add(levelLabel);
@@ -53,53 +50,4 @@ public class LevelPanel extends JPanel{
         return levelScore;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);//not have = no panel bg color
-        drawBackgroundImage(g);
-        drawBackgroundBrightness(g);
-        drawBorder(g);
-    }
-
-    private void drawBackgroundImage(Graphics g){
-        BossPanel bossPanel = GameFrame.getBossPanel();
-        String path = "Assets/Image/Background/SmallPanel/";
-        switch (bossPanel.getStage()) {
-            case Day:
-            case KingSlime:
-            case Night:
-            case EyeOfCthulhu:
-                path += "Normal";
-                break;
-            default:
-                break;
-        }
-        path += ".png";
-        Image BorderImage = new ImageIcon(path).getImage();
-        g.drawImage(BorderImage, 0, 0, null);
-    }
-
-    private void drawBackgroundBrightness(Graphics g){
-        int brightness = (int)(255 * (1 - this.brightness));
-        g.setColor(new Color(0,0,0,brightness));
-        g.fillRect(0, 0, getWidth(), getHeight());
-    }
-
-    private void drawBorder(Graphics g) {
-        BossPanel bossPanel = GameFrame.getBossPanel();
-        String path = "Assets/Image/Background/SmallPanel/";
-        switch (bossPanel.getStage()) {
-            case Day:
-            case KingSlime:
-            case Night:
-            case EyeOfCthulhu:
-                path += "Normal";
-                break;
-            default:
-                break;
-        }
-        path += "_Border.png";
-        Image BorderImage = new ImageIcon(path).getImage();
-        g.drawImage(BorderImage, 0, 0, null);
-    }
 }

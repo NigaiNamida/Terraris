@@ -16,6 +16,12 @@ public abstract class DataPanel extends JPanel{
         this.setBackground(Color.black);
         this.setBorder(new LineBorder(Color.WHITE,3,true));
     }
+    
+    public void calculateGrid(int col) {
+        gridCols = col;
+        blockSize = this.getWidth()/ gridCols;
+        gridRows = this.getHeight() / blockSize;
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -72,12 +78,4 @@ public abstract class DataPanel extends JPanel{
     public void setBrightness(float brightness) {
         this.brightness = brightness;
     }
-
-    public void calculateGrid(int col) {
-        gridCols = col;
-        blockSize = this.getWidth()/ gridCols;
-        gridRows = this.getHeight() / blockSize;
-    }
-
-    
 }

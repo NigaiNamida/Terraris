@@ -1,8 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 
-import javax.swing.border.LineBorder;
-
 public class NextPanel extends JPanel{
     private JLabel nextLabel;
     private int gridCols;
@@ -14,7 +12,7 @@ public class NextPanel extends JPanel{
     private TetrisPiece block;
 
     public NextPanel(){
-        brightness = (60)/100.0f;
+        brightness = (100)/100.0f;
         nextLabel = new JLabel("NEXT");
         nextLabel.setForeground(new Color(193,221,196,255));
         nextLabel.setFont(GameFrame.getTerrariaFont(25));
@@ -22,7 +20,6 @@ public class NextPanel extends JPanel{
         //setting panel
         this.setBounds(10, 208, 125, 125);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3,true));
 
         //add component
         this.add(nextLabel);
@@ -40,19 +37,50 @@ public class NextPanel extends JPanel{
         super.paintComponent(g);
         drawBackgroundImage(g);
         drawBackgroundBrightness(g);
+        drawBorder(g);
         drawBlock(g);
     }
 
     private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
-        g.drawImage(BGImage, 0, 0, null);
+        String path = "Assets/Image/Background/SmallPanel/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal";
+                break;
+            default:
+                break;
+        }
+        path += ".png";
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
 
     private void drawBackgroundBrightness(Graphics g){
         int brightness = (int)(255 * (1 - this.brightness));
         g.setColor(new Color(0,0,0,brightness));
         g.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    private void drawBorder(Graphics g) {
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        String path = "Assets/Image/Background/SmallPanel/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal";
+                break;
+            default:
+                break;
+        }
+        path += "_Border.png";
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
 
     private void drawBlock(Graphics g){

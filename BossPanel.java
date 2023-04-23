@@ -27,7 +27,6 @@ public class BossPanel extends JPanel implements ActionListener{
     private int stateTimer;
     private int tickCount;
     private int spawnDelay;
-    private int actionTick;
 
     public Timer spawnTimer;
     
@@ -35,14 +34,13 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Snow;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
         brightness = (60)/100.0f;
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
         canSpawn = false;
-        actionTick = 0;
 
         random = new Random();
         
@@ -57,7 +55,6 @@ public class BossPanel extends JPanel implements ActionListener{
 
         this.setBounds(455, 20, 250, 250);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3,true));
     }
 
     @Override
@@ -83,6 +80,7 @@ public class BossPanel extends JPanel implements ActionListener{
         super.paintComponent(g);
         drawBackgroundImage(g);
         drawBackgroundBrightness(g);
+        drawBorderImage(g);
         if(boss != null){
             drawBoss(g);
             drawHP(g);
@@ -91,7 +89,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
     private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBGImagePath()).getImage();
+        Image BGImage = new ImageIcon("Assets/Image/Background/BossPanel/" + bossPanel.getStage() + ".png").getImage();
         g.drawImage(BGImage, 0, 0, null);
     }
 
@@ -99,6 +97,23 @@ public class BossPanel extends JPanel implements ActionListener{
         int brightness = (int)(255 * (1 - this.brightness));
         g.setColor(new Color(0,0,0,brightness));
         g.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    private void drawBorderImage(Graphics g) {
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        String path = "Assets/Image/Background/BossPanel/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal_Border.png";
+                break;
+            default:
+                break;
+        }
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
     
     public void attemptSpawn(){
@@ -168,6 +183,9 @@ public class BossPanel extends JPanel implements ActionListener{
                     GameFrame.playSE(9);
                     break;
                 case Skeletron:
+                    this.setBounds(455, 20, 250, 306);
+                    this.setBackground(Color.black);
+                    this.setBorder(new LineBorder(Color.WHITE, 0));
                     boss = new Boss("Skeletron",40000,40000,10);
                     bossTitle.setText("Skeletron");
                     GameFrame.playSE(9);
@@ -314,13 +332,14 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void exitFight(){
+        this.setBounds(455, 20, 250, 250);
+        this.setBackground(Color.black);
         ChatPanel.newMessage(stage, true);
         GameFrame.stopMusic();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         bossAttack.BossesDefeat(boss.getName());
         boss = null;
         spawnChance = 0;
-        actionTick = 0;
         bossTitle.setText("");
         restartSpawnTimer();
         stage = stage.next();
@@ -422,17 +441,19 @@ public class BossPanel extends JPanel implements ActionListener{
                 x = 50;
                 y = 20;
                 path += frame + ".png";
-                if(actionTick < 24){
-                    actionTick++;
-                }
-                else if(actionTick < 32){
-                    actionTick ++;
+                if(AnimationThread.getActonTick() >= 24){
                     path = "Assets/Image/Bosses/" + name + "/Blink_" + phase + "_" + state + "_" + frame + ".png";
                 }
-                if(actionTick == 32){
-                    actionTick = 0;
-                }
-                break;   
+                break;  
+            case "Skeletron":
+                x = 29;
+                y = 93;
+                path += frame + ".png";
+                g.setColor(Color.WHITE);
+                g.drawRect(0, 0, 249, 249);
+                g.drawRect(1, 1, 247, 247);
+                g.drawRect(2, 2, 245, 245);
+                break;
         }
         bossImage = new ImageIcon(path).getImage();
         g.drawImage(bossImage ,x, y,null);

@@ -4,21 +4,30 @@ public class AnimationThread extends Thread{
     private static int FPS;
     private static double interval;
     private static double nextTime;
-    private static int i;
-    private static int j;
+    private static int frame;
+    private static int freezeFrame;
+    private static int actionTick;
+    private static int freezeActionTick;
 
     @Override
     public void run() {
         setInitialValue();
-        i = 0;
+        frame = 0;
+        actionTick = 0;
         while(GameFrame.isPlaying()){
             if(!playZone.isGameOver()){
                 if(GameFrame.getEffect().getClip() != null)
                     GameFrame.getEffect().setVolume(SettingPanel.getFXVolume()/2);
                 if(!KeyHandler.isPause()){
                     updateFrame();
-                    animate(i);
-                    i++;
+                    animate(frame);
+                    frame++;
+                    if(frame % (FPS/8) == 0){
+                        actionTick++;
+                        if(actionTick == 32){
+                            actionTick = 0;
+                        }
+                    }
                 }
             }
         }
@@ -49,7 +58,7 @@ public class AnimationThread extends Thread{
         Boss boss = bossPanel.getBoss();
         if(boss != null){
             int cooldown = boss.getCooldownSeconds();
-            if(i % (FPS/8) == 0){
+            if(frame % (FPS/8) == 0){
                 idle();
             }
             if(cooldown != 0 && i % (FPS*cooldown) == 0){
@@ -79,15 +88,24 @@ public class AnimationThread extends Thread{
     }
 
     public static void resetFrame() {
-        i = 0;
+        frame = 0;
+        actionTick = 0;
     }
 
     public static void pauseFrame() {
-        j = i;
+        freezeFrame = frame;
+        freezeActionTick = actionTick;
     }
 
     public static void resumeFrame() {
-        i = j;
-        j = 0;
+        frame = freezeFrame;
+        actionTick = freezeActionTick;
+        freezeFrame = 0;
+        freezeActionTick = 0;
     }
+
+    public static int getActonTick() {
+        return actionTick;
+    }
+
 }

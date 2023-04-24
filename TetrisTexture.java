@@ -28,7 +28,7 @@ public class TetrisTexture extends JPanel{
 
     public static void mergePileTexture(Graphics g, Color middle, int x, int y,char[][] c){
         Theme bossStage = GameFrame.getBossPanel().getStage();
-        String stage = "Normal";
+        String stage = "";
         char[] n = new char[9];
         n[0] = c[0][0];
         n[1] = c[0][1];
@@ -54,19 +54,28 @@ public class TetrisTexture extends JPanel{
             }
         }
         switch (bossStage) {
-            case Day:
-            case Night:
-            case KingSlime:
-            case EyeOfCthulhu:
-                break;
+            case Corruption:
             case EaterOfWorld:
                 stage = "Corruption";
                 break;
+            case Crimson:
             case BrainOfCthulhu:
                 stage = "Crimson";
                 break;
+            case Jungle:
+            case QueenBee:
+                stage = "Jungle";
+                break;
+            case Snow:
+            case DeerClops:
+                stage = "Snow";
+                break;
+            case UnderWorld:
+            case WallOfFlesh:
+                stage = "UnderWorld";
+                break;
             default:
-                stage = ""+bossStage;
+                stage = "Normal";
                 break;
         }
 
@@ -76,9 +85,15 @@ public class TetrisTexture extends JPanel{
         }
         else if(middle.equals(BlockTexture.Stone.getColor())){
             block = "Stone";
+            if(stage == "Jungle"){
+                stage = "Normal";
+            }
         }
         else if(middle.equals(BlockTexture.Sand.getColor())){
             block = "Sand";
+            if(stage == "Jungle"){
+                stage = "Normal";
+            }
         }
         else if(middle.equals(BlockTexture.Dynamite.getColor())){
             block = "Dynamite";

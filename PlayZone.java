@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import javax.swing.border.LineBorder;
+
 public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
     private XPPanel XPPanel;
@@ -11,7 +11,6 @@ public class PlayZone extends JPanel{
     private static Color[][] backgroundBlock;
     private static Color slimePuddleColor;
     private static Color slimeBlockColor;
-    private Color gridLineColor;
     private static int blindness;
     private int gridCols;
     private int gridRows;
@@ -24,6 +23,7 @@ public class PlayZone extends JPanel{
     private boolean isMiniTSpin;
     private boolean isTSpin;
     private boolean isRotated;
+    private boolean isExploded;
 
     private TetrisPiece block;
 
@@ -50,14 +50,12 @@ public class PlayZone extends JPanel{
         nextPanel = GameFrame.getNextPanel();
         XPPanel = GameFrame.getXPPanel();
 
-        gridLineColor = new Color(150, 150, 150, 125);
         slimePuddleColor = new Color(255, 255, 255, 0);
         slimeBlockColor = new Color(255, 255, 254, 0);
 
         this.setOpaque(true);
         this.setBounds(145, 20, 250, 500);
         this.setBackground(Color.black);
-        this.setBorder(new LineBorder(Color.WHITE,3,true));
         this.setDoubleBuffered(true);
 
         gridCols = 10;
@@ -188,7 +186,9 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+        isExploded = false;
         ActiveDynamite();
+        applySandGravity();
         gravity.restartTimer();
     }
     
@@ -620,7 +620,10 @@ public class PlayZone extends JPanel{
                             }
                         }
                         backgroundBlock[row][col] = null;
-                        GameFrame.playSE(10);
+                        if(!isExploded){
+                            GameFrame.playSE(10);
+                            isExploded = true;
+                        }
 
                         BossPanel bossPanel = GameFrame.getBossPanel();
                         bossPanel.damageToBoss(100);
@@ -733,6 +736,7 @@ public class PlayZone extends JPanel{
         drawBlock(g);
         drawBossAttack(g);
         drawShadow(g);
+        drawBorderImage(g);
     }
 
     private void drawBackgroundImage(Graphics g){
@@ -747,15 +751,51 @@ public class PlayZone extends JPanel{
         g.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    private void drawGridLine(Graphics g){
-        for (int row = -1; row < gridRows; row++) {
-            for (int col = 0; col < gridCols; col++) {
-                int x = col * blockSize; //coordinate + offset
-                int y = row * blockSize; //coordinate + offset
-                g.setColor(gridLineColor);
-                g.drawRect(x, y, blockSize, blockSize);  
-            }
+    private void drawBorderImage(Graphics g) {
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        String path = "Assets/Image/Background/PlayZone/";
+        switch (bossPanel.getStage()) {
+            case Day:
+            case KingSlime:
+            case Night:
+            case EyeOfCthulhu:
+                path += "Normal";
+                break;
+            case Corruption:
+            case EaterOfWorld:
+                path += "Corruption";
+                break;
+            case Crimson:
+            case BrainOfCthulhu:
+                path += "Crimson";
+                break;
+            case Jungle:
+            case QueenBee:
+                path += "Jungle";
+                break;
+            case Snow:
+            case DeerClops:
+                path += "Snow";
+                break;
+            case Dungeon:
+            case Skeletron:
+                path += "Dungeon";
+                break;
+            case UnderWorld:
+            case WallOfFlesh:
+                path += "Underworld";
+                break;
+            default:
+                break;
         }
+        path += "_Border.png";
+        Image BorderImage = new ImageIcon(path).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
+    }
+
+    private void drawGridLine(Graphics g){
+        Image BorderImage = new ImageIcon("Assets/Image/Background/PlayZone/Grid.png").getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
 
     private void drawPhantomBlock(Graphics g){

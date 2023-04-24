@@ -31,8 +31,8 @@ public class ChatPanel extends JPanel implements ActionListener{
         this.add(chat);
 
         this.setLayout(null);
-        this.setBounds(455, 290, 300, 250);
-        this.setBackground(Color.black);
+        this.setBounds(455, 350, 300, 250);
+        this.setBackground(Color.BLACK);
     }
 
     public static void newMessage(Theme stage,boolean isDefeat){

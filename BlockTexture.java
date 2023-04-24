@@ -25,7 +25,7 @@ public enum BlockTexture {
 
     public static BlockTexture[] getNormalTexture(){
         //return new BlockTexture[]{Grass,Grass,Grass,Grass,Stone,Stone,Stone,Stone,Sand,Dynamite};
-        return new BlockTexture[]{Dynamite,Dynamite,Dynamite,Dynamite};
+        return new BlockTexture[]{Grass,Stone,Sand,Cloud,Dynamite};
     }
     
 }

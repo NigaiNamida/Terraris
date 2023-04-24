@@ -22,7 +22,7 @@ public enum Theme {
     private static final Theme[] vals = values();
     
     private Theme(){
-        BGImagePath = "Assets/Image/Background/" + this + ".png";
+        BGImagePath = "Assets/Image/Background/PlayZone/" + this + ".png";
         BGMusicPath = "Assets/Sound/" + this + ".wav";
     }
 

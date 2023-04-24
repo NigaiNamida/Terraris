@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Jungle;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
         adjustBrightness(stage);
         spawnDelay = 100;
@@ -120,6 +120,18 @@ public class BossPanel extends JPanel implements ActionListener{
             case Jungle:
             case QueenBee:
                 path += "Jungle";
+                break;
+            case Snow:
+            case DeerClops:
+                path += "Snow";
+                break;
+            case Dungeon:
+            case Skeletron:
+                path += "Dungeon";
+                break;
+            case UnderWorld:
+            case WallOfFlesh:
+                path += "Underworld";
                 break;
             default:
                 break;
@@ -372,10 +384,12 @@ public class BossPanel extends JPanel implements ActionListener{
         switch (stage) {
             case Night:
             case EyeOfCthulhu:
+            case Dungeon:
+            case Skeletron:
                 brightness = (10)/100.0f;
                 break;
             default:
-                brightness = (60)/100.0f;
+                brightness = (80)/100.0f;
                 break;
         }
     }
@@ -465,7 +479,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "DeerClops":
                 x = 50;
-                y = 20;
+                y = 15;
                 path += frame + ".png";
                 if(AnimationThread.getActonTick() >= 24){
                     path = "Assets/Image/Bosses/" + name + "/Blink_" + phase + "_" + state + "_" + frame + ".png";
@@ -473,12 +487,8 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;  
             case "Skeletron":
                 x = 29;
-                y = 93;
+                y = 90;
                 path += frame + ".png";
-                g.setColor(Color.WHITE);
-                g.drawRect(0, 0, 249, 249);
-                g.drawRect(1, 1, 247, 247);
-                g.drawRect(2, 2, 245, 245);
                 break;
         }
         bossImage = new ImageIcon(path).getImage();

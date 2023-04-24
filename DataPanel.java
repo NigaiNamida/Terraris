@@ -31,7 +31,7 @@ public abstract class DataPanel extends JPanel{
 
     private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        String path = "Assets/Image/Background/SmallPanel/";
+        String path = "Assets/Image/Background/DataPanel/";
         switch (bossPanel.getStage()) {
             case Day:
             case KingSlime:
@@ -50,6 +50,18 @@ public abstract class DataPanel extends JPanel{
             case Jungle:
             case QueenBee:
                 path += "Jungle";
+                break;
+            case Snow:
+            case DeerClops:
+                path += "Snow";
+                break;
+            case Dungeon:
+            case Skeletron:
+                path += "Dungeon";
+                break;
+            case UnderWorld:
+            case WallOfFlesh:
+                path += "Underworld";
                 break;
             default:
                 break;
@@ -67,7 +79,7 @@ public abstract class DataPanel extends JPanel{
 
     private void drawBorder(Graphics g) {
         BossPanel bossPanel = GameFrame.getBossPanel();
-        String path = "Assets/Image/Background/SmallPanel/";
+        String path = "Assets/Image/Background/DataPanel/";
         switch (bossPanel.getStage()) {
             case Day:
             case KingSlime:
@@ -86,6 +98,18 @@ public abstract class DataPanel extends JPanel{
             case Jungle:
             case QueenBee:
                 path += "Jungle";
+                break;
+            case Snow:
+            case DeerClops:
+                path += "Snow";
+                break;
+            case Dungeon:
+            case Skeletron:
+                path += "Dungeon";
+                break;
+            case UnderWorld:
+            case WallOfFlesh:
+                path += "Underworld";
                 break;
             default:
                 break;

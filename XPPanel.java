@@ -28,14 +28,20 @@ public class XPPanel extends JPanel{
 
     public void checkLevel(){
         while(XP >= maxXP){
-            LevelPanel.addLevel();
-            LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
-            if(LevelPanel.getLevel()%2 == 1)
-                PlayZone.getGravity().increaseFallSpeed(LevelPanel.getLevel()/2+1);
-            XP %= maxXP;
-            maxXP += 1000;
+            levelUp();
+            RewardPanel rewardPanel = GameFrame.getRewardPanel();
+            rewardPanel.promptReward();
         }
         repaint();
+    }
+
+    private void levelUp() {
+        LevelPanel.addLevel();
+        LevelPanel.getLevelScore().setText(""+LevelPanel.getLevel());
+        if(LevelPanel.getLevel()%2 == 1)
+            PlayZone.getGravity().increaseFallSpeed(LevelPanel.getLevel()/2+1);
+        XP %= maxXP;
+        maxXP += 1000;
     }
 
     public void paintBar(Graphics g){

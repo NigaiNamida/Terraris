@@ -21,43 +21,26 @@ public class KeyHandler implements KeyListener{
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if(SettingPanel.isSetting()){
-            if(code != 27 && !SettingPanel.Duplicate(code)){
-                SettingPanel.setNewKey(code);
-                SettingPanel.setNewKey();
-                GameFrame.getAnyKeyPanel().setVisible(false);
+            if(!isDuplicateKey(code)){
+                setNewButtonKey(code);
             }
         }
         else{
-            if((code == 27) && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
-            (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
-                GameFrame.getMenu().setVisible(true);
-                GameFrame.playSE(7);
-                GameFrame.getSettingPanel().setVisible(false);
-                SettingPanel.saveSetting();
-                GameFrame.getLeaderboard().setVisible(false);
+            if(isESCKey(code) && (isOnLeaderBoard(code) || isOnSetting(code))){
+                backToMenu();
             }
-            else if((code == 27 || code == 112) && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
-                GameFrame.getPausePanel().setVisible(true);
-                GameFrame.playSE(7);
-                SettingPanel.saveSetting();
-                GameFrame.getSettingPanel().setVisible(false);
-                GameFrame.getLeaderboard().setVisible(false);
+            else if((isESCKey(code) || isF1Key(code)) && isOnSettingInGame(code)){
+                backToPause();
             }
             else if(!playZone.isGameOver()){
-                if((code == 27 || code == 112) && !isHoldingPause && GameFrame.isPlaying()){
+                if((isESCKey(code) || isF1Key(code)) && !isHoldingPause && GameFrame.isPlaying()){
                     isHoldingPause = true;
                     isPause = !isPause;
                     if(isPause){
-                        if(GameFrame.getMusic().getClip() != null)
-                            GameFrame.getMusic().pauseSound();
-                        GameFrame.pauseGame();
-                        AnimationThread.pauseFrame();
+                        pauseGame();
                     }
                     else{
-                        if(GameFrame.getMusic().getClip() != null)
-                            GameFrame.getMusic().resumeSound();
-                        GameFrame.continueGame();
-                        AnimationThread.resumeFrame();
+                        continueGame();
                     }
                 }
                 if(!isPause){
@@ -103,7 +86,7 @@ public class KeyHandler implements KeyListener{
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
         if(!playZone.isGameOver()){
-            if(code == 27 || code == 112){
+            if(isESCKey(code) || code == 112){
                 isHoldingPause = false;
             }
             else if(code == SettingPanel.getKeyBind("Right")){
@@ -135,6 +118,67 @@ public class KeyHandler implements KeyListener{
                 isHoldPressed = false;
             }
         }
+    }
+
+    public boolean isESCKey(int code){
+        return code == 27;
+    }
+
+    public boolean isF1Key(int code){
+        return code == 112;
+    }
+
+    public boolean isOnLeaderBoard(int code){
+        return !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
+            GameFrame.getLeaderboard().isVisible();
+    }
+    public boolean isOnSetting(int code){
+        return !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
+            GameFrame.getSettingPanel().isVisible();
+    }
+
+    public boolean isOnSettingInGame(int code){
+        return GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible();
+    }
+
+    public boolean isDuplicateKey(int code){
+        return isESCKey(code) || SettingPanel.Duplicate(code);
+    }
+
+    public void setNewButtonKey(int code){
+        SettingPanel.setNewKey(code);
+        SettingPanel.setNewKey();
+        GameFrame.getAnyKeyPanel().setVisible(false);
+    }
+
+    public void backToMenu(){
+        GameFrame.getMenu().setVisible(true);
+        GameFrame.playSE(7);
+        GameFrame.getSettingPanel().setVisible(false);
+        SettingPanel.saveSetting();
+        GameFrame.getLeaderboard().setVisible(false);
+    }
+
+    public void backToPause(){
+        GameFrame.getPausePanel().setVisible(true);
+        GameFrame.playSE(7);
+        SettingPanel.saveSetting();
+        GameFrame.getSettingPanel().setVisible(false);
+        GameFrame.getLeaderboard().setVisible(false);
+    }
+
+    public void pauseGame(){
+        if(GameFrame.getMusic().getClip() != null)
+            GameFrame.getMusic().pauseSound();
+        GameFrame.pauseGame();
+        AnimationThread.pauseFrame();
+    }
+
+    public void continueGame(){
+        if(GameFrame.getMusic().getClip() != null)
+            GameFrame.getMusic().resumeSound();
+        GameFrame.continueGame();
+        AnimationThread.resumeFrame();
     }
 
     public boolean isRightPressed() {

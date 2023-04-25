@@ -23,7 +23,7 @@ public class ChatPanel extends JPanel implements ActionListener{
         showTimer = new Timer(10000, this);
         warningColor = new Color(93,226,156);
         bossColor = new Color(133,69,195);
-        terrariaFont = GameFrame.getTerrariaFont(20);
+        terrariaFont = GameFrame.getTerrariaFont(15);
         chat = new JLabel();
         chat.setBounds(0, (0)*40+20, 300, 20);
         chat.setFont(terrariaFont);

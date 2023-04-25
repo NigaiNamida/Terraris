@@ -9,7 +9,7 @@ public class NextPanel extends DataPanel{
         super();
         nextLabel = new JLabel("NEXT");
         nextLabel.setForeground(new Color(193,221,196,255));
-        nextLabel.setFont(GameFrame.getTerrariaFont(25));
+        nextLabel.setFont(GameFrame.getTerrariaFont(20));
 
         //setting panel
         this.setBounds(10, 208, 125, 125);

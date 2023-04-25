@@ -380,7 +380,7 @@ public class GameFrame extends JFrame{
     }
 
     public static Font getTerrariaFont(float size) {
-        return terrariaFont.deriveFont(size);
+        return terrariaFont.deriveFont(size+5);
     }
     
 }

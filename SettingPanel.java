@@ -25,7 +25,7 @@ public class SettingPanel extends JPanel implements ActionListener{
     private static int musicVolume;
     private static int FXVolume;
 
-    private Font font = new Font("Futura",Font.PLAIN,20);
+    private Font font = GameFrame.getTerrariaFont(20);
     public SettingPanel(){
 
         keyBind = new HashMap<String,Integer>();
@@ -80,10 +80,11 @@ public class SettingPanel extends JPanel implements ActionListener{
             JLabel label = settingLabel.get(labelName);
             label.setForeground(new Color(193,221,196,255));
             label.setHorizontalAlignment(JLabel.CENTER);
+            label.setFont(GameFrame.getTerrariaFont(15));
             this.add(label);
         }
 
-        settingLabel.get("Title").setFont(new Font("Futura",Font.BOLD,40));
+        settingLabel.get("Title").setFont(GameFrame.getTerrariaFont(40));
 
         for (var buttonName : settingButton.keySet()) {
             JButton button = settingButton.get(buttonName);

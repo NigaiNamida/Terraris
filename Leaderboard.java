@@ -23,7 +23,7 @@ public class Leaderboard extends JPanel{
         scoreBoard = new JLabel[5];
         leaderboardFile = "leaderboard.txt";
 
-        font = new Font("Futura",Font.PLAIN,20);
+        font = GameFrame.getTerrariaFont(20);
         this.setOpaque(true);
         this.setBounds(150, 70, 500, 400);
         this.setBackground(Color.BLACK);
@@ -31,7 +31,7 @@ public class Leaderboard extends JPanel{
         this.setLayout(null);
 
         leaderboardLabel.setForeground(new Color(193,221,196,255));
-        leaderboardLabel.setFont(new Font("Futura",Font.BOLD,40));
+        leaderboardLabel.setFont(GameFrame.getTerrariaFont(40));
         leaderboardLabel.setBounds(50, 40, 400, 40);
         leaderboardLabel.setHorizontalAlignment(JLabel.CENTER);
         this.add(leaderboardLabel);

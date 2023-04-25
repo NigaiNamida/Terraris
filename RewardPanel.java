@@ -4,20 +4,21 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PausePanel extends JPanel implements ActionListener{
-    private static JLabel pauseLabel;
+public class RewardPanel extends JPanel implements ActionListener{
+    private static JLabel rewardLabel;
     private static JButton resumeButton;
     private static JButton settingButton;
     private static JButton exitButton;
 
-    public PausePanel(){
-        pauseLabel = new JLabel("PAUSED");
+    public RewardPanel(){
+        rewardLabel = new JLabel("Reward");
         resumeButton = new JButton("RESUME");
         settingButton = new JButton("SETTING");
         exitButton = new JButton("EXIT TO MENU");
@@ -29,13 +30,13 @@ public class PausePanel extends JPanel implements ActionListener{
         this.setVisible(false);
         this.setLayout(null);
 
-        pauseLabel.setForeground(new Color(193,221,196,255));
-        pauseLabel.setFont(GameFrame.getTerrariaFont(35));
-        pauseLabel.setBounds(50, 30, 150, 40);
-        pauseLabel.setHorizontalAlignment(JLabel.CENTER);
+        rewardLabel.setForeground(new Color(193,221,196,255));
+        rewardLabel.setFont(new Font("Futura",Font.BOLD,35));
+        rewardLabel.setBounds(50, 30, 150, 40);
+        rewardLabel.setHorizontalAlignment(JLabel.CENTER);
 
         resumeButton.setForeground(new Color(89,68,52));
-        resumeButton.setFont(GameFrame.getTerrariaFont(20));
+        resumeButton.setFont(new Font("Futura",Font.BOLD,20));
         //resumeButton.setBorder(new LineBorder(Color.WHITE,2));
         resumeButton.setBounds(25, 115, 200, 30);
         resumeButton.setHorizontalAlignment(JLabel.CENTER);
@@ -49,7 +50,7 @@ public class PausePanel extends JPanel implements ActionListener{
         });
 
         settingButton.setForeground(new Color(193,221,196,255));
-        settingButton.setFont(GameFrame.getTerrariaFont(20));
+        settingButton.setFont(new Font("Futura",Font.BOLD,20));
         //settingButton.setBorder(new LineBorder(Color.WHITE,2));
         settingButton.setBounds(25, 175, 200, 30);
         settingButton.setHorizontalAlignment(JLabel.CENTER);
@@ -63,7 +64,7 @@ public class PausePanel extends JPanel implements ActionListener{
         });
         
         exitButton.setForeground(new Color(193,221,196,255));
-        exitButton.setFont(GameFrame.getTerrariaFont(20));
+        exitButton.setFont(new Font("Futura",Font.BOLD, 20));
         //exitButton.setBorder(new LineBorder(Color.WHITE,2));
         exitButton.setBounds(25, 235, 200, 30);
         exitButton.setHorizontalAlignment(JLabel.CENTER);
@@ -76,7 +77,7 @@ public class PausePanel extends JPanel implements ActionListener{
             }
         });
 
-        this.add(pauseLabel);
+        this.add(rewardLabel);
         this.add(resumeButton);
         this.add(settingButton);
         this.add(exitButton);

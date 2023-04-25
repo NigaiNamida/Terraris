@@ -10,8 +10,10 @@ public class RewardSlotPanel extends JPanel implements MouseListener {
     private int gridRows;
     private int blockSize;
     private BlockTexture texture;
+    private boolean isUpgrade;
 
     public RewardSlotPanel(BlockTexture texture){
+        isUpgrade = TetrisPiece.containSpecialTexture(texture);
         this.texture = texture;
         this.setBackground(Color.black);
         this.addMouseListener(this);
@@ -58,10 +60,6 @@ public class RewardSlotPanel extends JPanel implements MouseListener {
         }
     }
 
-    public BlockTexture getTexture() {
-        return texture;
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         RewardPanel rewardPanel = GameFrame.getRewardPanel();
@@ -86,6 +84,14 @@ public class RewardSlotPanel extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
+    }
+
+    public BlockTexture getTexture() {
+        return texture;
+    }
+
+    public boolean isUpgrade() {
+        return isUpgrade;
     }
 }
 

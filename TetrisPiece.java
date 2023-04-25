@@ -5,10 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class TetrisPiece {
-    public static Tetris[] blockSet = Tetris.values();
-    public static BlockTexture[] textureSet = BlockTexture.getNormalTexture();
-    //public static BlockTexture[] specialTextureSet = BlockTexture.getSpecialTexture();
-    public static ArrayList<BlockTexture> specialTextureSet = new ArrayList<>();
+    private static Tetris[] blockSet = Tetris.values();
+    private static BlockTexture[] textureSet = BlockTexture.getNormalTexture();
+    private static ArrayList<BlockTexture> specialTextureSet = new ArrayList<>();
     private Tetris name;
     private int[][] shape;
     private Color color;
@@ -141,5 +140,9 @@ public class TetrisPiece {
     @Override
     public String toString() {
         return ""+name;
+    }
+
+    public static boolean containSpecialTexture(BlockTexture texture) {
+        return specialTextureSet.contains(texture);
     }
 }

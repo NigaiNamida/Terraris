@@ -46,6 +46,11 @@ public class RewardPanel extends JPanel implements ActionListener{
         ArrayList<BlockTexture> temp = new ArrayList<>();
         temp.addAll(textures);
         for (int i = 0; i < rewards.length; i++) {
+            if(rewards[i] != null){
+                this.remove(rewards[i]);
+            }
+        }
+        for (int i = 0; i < rewards.length; i++) {
             BlockTexture slotTexture = temp.get(i);
             rewards[i] = new RewardSlotPanel(slotTexture);
             rewards[i].setBounds(20 + (i*120), 100, 100, 100);
@@ -60,9 +65,35 @@ public class RewardPanel extends JPanel implements ActionListener{
     }
 
     public void selectSlot(RewardSlotPanel slot){
-        TetrisPiece.specialTextureSet.add(slot.getTexture());
+        if(slot.isUpgrade()){
+            upgrade(slot.getTexture());
+        }
+        else{
+            TetrisPiece.UnlockSpecialTexture(slot.getTexture());
+        }
         this.setVisible(false);
         KeyHandler.setPause(false);
+    }
+
+    private void upgrade(BlockTexture texture) {
+        PlayZone playZone = GameFrame.getPlayZone();
+        switch (texture) {
+            case Sand:
+                
+                break;
+            case Dynamite:
+                playZone.addRadius();
+                playZone.addDynamiteDamage();
+                break;
+            case Cloud:
+                playZone.addCloudGravityScale();
+                break;
+            case Bubble:
+                
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

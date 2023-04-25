@@ -9,7 +9,7 @@ public class HoldPanel extends DataPanel{
         super();
         holdLabel = new JLabel("HOLD");
         holdLabel.setForeground(new Color(193,221,196,255));
-        holdLabel.setFont(GameFrame.getTerrariaFont(25));
+        holdLabel.setFont(GameFrame.getTerrariaFont(20));
         //setting panel
         this.setBounds(10, 20, 125, 125);
 

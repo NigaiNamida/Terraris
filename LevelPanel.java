@@ -24,8 +24,8 @@ public class LevelPanel extends DataPanel{
         levelScore.setForeground(new Color(193,221,196,255));
         levelLabel.setPreferredSize(new Dimension(80, 30));
         levelScore.setPreferredSize(new Dimension(80, 30));
-        levelLabel.setFont(GameFrame.getTerrariaFont(25));
-        levelScore.setFont(GameFrame.getTerrariaFont(35));
+        levelLabel.setFont(GameFrame.getTerrariaFont(20));
+        levelScore.setFont(GameFrame.getTerrariaFont(30));
         levelScore.setText(""+level);
 
         bossPanel = GameFrame.getBossPanel();

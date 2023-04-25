@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -38,7 +37,7 @@ public class Menu extends JPanel implements ActionListener{
         startButton.setLocation(160, 280);
         startButton.setBackground(new Color(29,201,88));
         startButton.setForeground(new Color(89,68,52));
-        startButton.setFont(new Font("Futura",Font.BOLD, 30));
+        startButton.setFont(GameFrame.getTerrariaFont(30));
         //startButton.setBorder(new LineBorder(new Color(239,239,239,255),2));
         this.add(startButton);
         startButton.addMouseListener(new MouseAdapter() {
@@ -51,7 +50,7 @@ public class Menu extends JPanel implements ActionListener{
         leaderboardButton.setLocation(170, 350);
         leaderboardButton.setBackground(Color.gray);
         leaderboardButton.setForeground(new Color(193,221,196,255));
-        leaderboardButton.setFont(new Font("Futura",Font.BOLD, 20));
+        leaderboardButton.setFont(GameFrame.getTerrariaFont(20));
         //leaderboardButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(leaderboardButton);
         leaderboardButton.addMouseListener(new MouseAdapter() {
@@ -64,7 +63,7 @@ public class Menu extends JPanel implements ActionListener{
         settingButton.setLocation(170, 410);
         settingButton.setBackground(Color.gray);
         settingButton.setForeground(new Color(193,221,196,255));
-        settingButton.setFont(new Font("Futura",Font.BOLD, 20));
+        settingButton.setFont(GameFrame.getTerrariaFont(20));
         //settingButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(settingButton);
         settingButton.addMouseListener(new MouseAdapter() {
@@ -77,7 +76,7 @@ public class Menu extends JPanel implements ActionListener{
         exitButton.setLocation(170, 470);
         exitButton.setBackground(Color.gray);
         exitButton.setForeground(new Color(193,221,196,255));
-        exitButton.setFont(new Font("Futura",Font.BOLD, 20));
+        exitButton.setFont(GameFrame.getTerrariaFont(20));
         //exitButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(exitButton);
         exitButton.addMouseListener(new MouseAdapter() {

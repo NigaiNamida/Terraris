@@ -811,9 +811,7 @@ public class PlayZone extends JPanel{
         drawBackgroundImage(g);
         drawBackgroundBrightness(g);
         drawGridLine(g);
-        if(!block.getColor().equals(BlockTexture.Bubble.getColor())){
-            drawPhantomBlock(g);
-        }
+        drawPhantomBlock(g);
         drawPile(g);
         drawSlime(g);
         drawBlock(g);

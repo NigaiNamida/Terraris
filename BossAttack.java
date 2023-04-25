@@ -26,6 +26,10 @@ public class BossAttack implements ActionListener{
     private static boolean isDashed;
 
     private static int[] projectileLength;
+    private static int[] projectileX;
+    private static int[] projectileY;
+    private static int[] turnPointX;
+    private static int[] turnPointY;
     private static int[] isBlocked;
 
     private static Color slimePuddleColor;
@@ -50,7 +54,7 @@ public class BossAttack implements ActionListener{
         
     }
 
-    public void attack(String bossName, int phase, int state) {
+    public void Attack(String bossName, int phase, int state) {
         switch (bossName) {
             case "KingSlime":
                 KingSlimeAttack(state);
@@ -79,6 +83,7 @@ public class BossAttack implements ActionListener{
                 isDashed = true;
                 break;
             case "EaterOfWorld":
+                isBlocked = new int[1];
                 break;
             default:
                 break;
@@ -204,6 +209,12 @@ public class BossAttack implements ActionListener{
         projectileCount = state;
 
         isBlocked = new int[projectileCount];
+
+        projectileX = new int[projectileCount];
+        projectileY = new int[projectileCount];
+
+        turnPointX = new int[projectileCount];
+        turnPointY = new int[projectileCount];
         
         projectileDelay = new int[projectileCount];
         for(int i = 0; i < projectileCount; i++) {
@@ -212,7 +223,7 @@ public class BossAttack implements ActionListener{
 
         projectileLength = new int[projectileCount];
         for(int i = 0; i < projectileCount; i++) {
-            projectileLength[i] = ran.nextInt(3)+5;
+            projectileLength[i] = ran.nextInt(3)+4;
         }
 
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -314,19 +325,28 @@ public class BossAttack implements ActionListener{
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         for (int i = 0; i < projectileCount; i++) {
-            if(isBlocked[i] != 1){
             projectileDelay[i] += 7;
-            blockWorm(i);
+            if(isBlocked[i] == 0){
+                blockWorm(i);
                 if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] != null){
                     backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] = null;
                 }
             }
-            else{
-                if(projectileCoordinate[i]<=100){
-                    projectileCoordinate[i] -= 7;
+            else {
+                if (isBlocked[i] == 1){
+                    projectileX[i] = projectileCoordinate[i];
+                    projectileY[i] = projectileDelay[i]; 
+
+                    turnPointX[i] = projectileCoordinate[i];    
+                    turnPointY[i] = projectileDelay[i]; 
+
+                    isBlocked[i]++;
                 }
-                else{
-                    projectileCoordinate[i] += 7;
+                if (projectileCoordinate[i]/25 <= 4){
+                    projectileX[i] -= 7;
+                }
+                else {
+                    projectileX[i] += 7;
                 }
             }
         }
@@ -412,7 +432,25 @@ public class BossAttack implements ActionListener{
     public static void drawEaterOfWorldAttack(Graphics g) {
         Boss boss = GameFrame.getBossPanel().getBoss();
         for (int i = 0; i < projectileCount; i++) {
-            int offset = 0;
+            int[] offset = new int[4];
+            String direction = "";
+
+            if (projectileCoordinate[i]/25 <= 4) {
+                offset[0] = 0;
+                offset[1] = -25;    
+                offset[2] = -10;
+                offset[3] = -7;
+                direction = "Left";
+            }
+
+            else if(projectileCoordinate[i]/25 >= 5){
+                offset[0] = 0;
+                offset[1] = 25;
+                offset[2] = 0;
+                offset[3] = 7;
+                direction = "Right";
+            }
+
             if(isBlocked[i] == 0){
                 g.setColor(new Color(255, 0, 0, 100));
             }
@@ -420,20 +458,48 @@ public class BossAttack implements ActionListener{
                 g.setColor(new Color(50, 255, 0, 100));
             }
             g.fillRect(projectileCoordinate[i] , projectileDelay[i], 25 , 25);
+
             for (int part = projectileLength[i]; part >= 0 ; part--) {
                 if(part == projectileLength[i]){
-                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i])-2 , projectileDelay[i]-offset, null);
+                    if(projectileDelay[i]-offset[0]+4 <= turnPointY[i] || turnPointY[i] == 0){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head.png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileCoordinate[i])-2 , projectileDelay[i]-offset[0], null);
+                    }
+                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head_" + direction + ".png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileX[i])-offset[1] , projectileY[i]-2, null);
+                    }
                 }
                 else if(part == 0){
-                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset-7, null);
+                    if(projectileDelay[i]-offset[0]+4 <= turnPointY[i] || turnPointY[i] == 0){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail.png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset[0]-7, null);
+                    }
+                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail_" + direction + ".png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileX[i])-offset[1]-offset[3] , projectileY[i]+2, null);
+                    }
                 }
                 else{
-                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body_" + isBlocked[i] + ".png").getImage(); 
-                    g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset, null);
+                    if(projectileDelay[i]-offset[0]+4 <= turnPointY[i] || turnPointY[i] == 0){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body.png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset[0], null);
+                        }
+                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                        bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body_" + direction + ".png").getImage(); 
+                        g.drawImage(bossAttackImage, (projectileX[i])-offset[1]-offset[2] , projectileY[i]+2, null);
+                    }
                 }
-                offset += 25;
+
+                offset[0] += 25;
+
+                if (projectileCoordinate[i]/25 <= 4) {
+                    offset[1] -= 25;          
+                }
+
+                else if(projectileCoordinate[i]/25 >= 5){
+                    offset[1] += 25;
+                }
             }
         }
     }
@@ -444,6 +510,38 @@ public class BossAttack implements ActionListener{
         slimePuddleColor = BlockTexture.SlimePuddle.getColor();
         
         return projectileDelay[i]/25 >= playZone.getGridRows() - 1 || (projectileDelay[i]/25 >= 0 && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != null && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != slimePuddleColor);
+    }
+
+    public static boolean hitCorner(int i, int part, int offset1, int offset2) {
+        Boolean hitCorner = true;
+        if (projectileCoordinate[i]/25 <= 4) {
+            if(part == projectileLength[i] && part == 0){
+                if (projectileX[i]-offset1-4 <= turnPointX[i]){
+                    hitCorner = false;
+                }
+            }
+            else{
+                if (projectileX[i]-offset1-offset2-4 <= turnPointX[i]){
+                    hitCorner = false;
+                }
+            }
+        }
+        else if(projectileCoordinate[i]/25 >= 5){
+            if(part == projectileLength[i] && part == 0){
+                if (projectileX[i]-offset1+4 >= turnPointX[i]){
+                    hitCorner = false;
+                }
+            }
+            else{
+                if (projectileX[i]-offset1-offset2+4 >= turnPointX[i]){
+                    hitCorner = false;
+                }
+            }
+        }
+        else {
+            hitCorner = true;
+        }
+        return hitCorner;
     }
 
     public void applyBlindness(int state){

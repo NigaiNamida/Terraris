@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Corruption;
         terrariaFont = GameFrame.getTerrariaFont(20);
         adjustBrightness(stage);
         spawnDelay = 100;
@@ -398,7 +398,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void attack(){
-        bossAttack.attack(boss.getName(), boss.getPhase(), boss.getState());
+        bossAttack.Attack(boss.getName(), boss.getPhase(), boss.getState());
     }
 
     public void animate(){

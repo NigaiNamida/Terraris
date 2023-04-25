@@ -106,14 +106,8 @@ public class GameThread extends Thread{
             playZone.holdBlock();
         }
         if(keyHandler.isHardDropPressed() && !keyHandler.isHoldingHardDrop()){
-            playZone = GameFrame.getPlayZone();
             keyHandler.setHoldingHardDrop(true);
-            if (playZone.getBlock().getColor() != (BlockTexture.Bubble.getColor())) {
-                playZone.hardDrop();        
-            }
-            else if (playZone.getBlock().getColor() != (BlockTexture.Bubble.getColor())) {
-                playZone.lockAndSpawnBlock();       
-            }
+            playZone.hardDrop();        
         }
         if(keyHandler.isSoftDropPressed()){
             Thread.sleep(40);

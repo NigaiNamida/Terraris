@@ -7,6 +7,7 @@ import java.util.Collections;
 public class TetrisPiece {
     public static Tetris[] blockSet = Tetris.values();
     public static BlockTexture[] textureSet = BlockTexture.getNormalTexture();
+    public static BlockTexture[] specialTextureSet = BlockTexture.getSpecialTexture();
     private Tetris name;
     private int[][] shape;
     private Color color;
@@ -47,8 +48,10 @@ public class TetrisPiece {
         return new int[][]{{1,0,0},{1,1,1}};
     }
 
-    public static void queueSpecialTexture(ArrayList<BlockTexture> textureQueue, BlockTexture texture){
-        textureQueue.add(texture);
+    public static void queueSpecialTexture(ArrayList<BlockTexture> textureQueue){
+		List<BlockTexture> textureList = Arrays.asList(specialTextureSet);
+		Collections.shuffle(textureList);
+        textureQueue.add(textureList.get(0));
     }
 
     public static void queueTexture(ArrayList<BlockTexture> textureQueue,boolean reset){

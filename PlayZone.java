@@ -90,8 +90,8 @@ public class PlayZone extends JPanel{
         }
     }
 
-    public static void queueSpecialTexture(BlockTexture texture){
-        TetrisPiece.queueSpecialTexture(textureQueue,texture);
+    public static void queueSpecialTexture(){
+        TetrisPiece.queueSpecialTexture(textureQueue);
     }
 
     public static TetrisPiece getNextPiece(){
@@ -626,7 +626,7 @@ public class PlayZone extends JPanel{
                         }
 
                         BossPanel bossPanel = GameFrame.getBossPanel();
-                        bossPanel.damageToBoss(100);
+                        bossPanel.damageToBoss(200);
         
                     }
                     if(color.equals(BlockTexture.Dynamite.getColor())){

@@ -49,7 +49,7 @@ public class XPPanel extends JPanel{
     }
 
     public void deductXP(int point){
-        if(bossPanel.getBoss() != null){
+        if(bossPanel.isBossAlive()){
             bossPanel.damageToBoss(-point);
         }
         else{
@@ -93,6 +93,10 @@ public class XPPanel extends JPanel{
             }
         }
 
+        if(bossPanel.isBossAlive()){
+            PlayZone.queueSpecialTexture();
+        }
+
         point = (int)(LevelPanel.getLevel()/1.5 * point);
         if(isBackToBack && fullLineAmount != 0){
             point *= 1.5;
@@ -102,7 +106,7 @@ public class XPPanel extends JPanel{
         }
         isBackToBack = true;
 
-        if(bossPanel.getBoss() != null){
+        if(bossPanel.isBossAlive()){
             bossPanel.damageToBoss(point);
         }
         else{
@@ -124,9 +128,11 @@ public class XPPanel extends JPanel{
                 point = 350;
                 break;
             default:
-                PlayZone.queueSpecialTexture(BlockTexture.Sand);
                 point = 500;
                 break;
+        }
+        if(bossPanel.isBossAlive()){
+            PlayZone.queueSpecialTexture();
         }
 
         point = (int)(LevelPanel.getLevel()/1.5 * point);
@@ -141,7 +147,7 @@ public class XPPanel extends JPanel{
         }
         isBackToBack = (fullLineAmount == 4);
 
-        if(bossPanel.getBoss() != null){
+        if(bossPanel.isBossAlive()){
             bossPanel.damageToBoss(point);
         }
         else{
@@ -158,7 +164,7 @@ public class XPPanel extends JPanel{
     }
 
     public void addSoftDropXP(){
-        if(bossPanel.getBoss() != null){
+        if(bossPanel.isBossAlive()){
             bossPanel.damageToBoss(1);
         }
         else{
@@ -168,7 +174,7 @@ public class XPPanel extends JPanel{
     }
 
     public void addHardDropXP(int m){
-        if(bossPanel.getBoss() != null){
+        if(bossPanel.isBossAlive()){
             bossPanel.damageToBoss(2*m);
         }
         else{

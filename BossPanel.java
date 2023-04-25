@@ -81,7 +81,7 @@ public class BossPanel extends JPanel implements ActionListener{
         drawBackgroundImage(g);
         drawBackgroundBrightness(g);
         drawBorderImage(g);
-        if(boss != null){
+        if(isBossAlive()){
             drawBoss(g);
             drawHP(g);
         }
@@ -174,8 +174,12 @@ public class BossPanel extends JPanel implements ActionListener{
         }
     }
 
+    public boolean isBossAlive(){
+        return boss != null;
+    }
+
     public void spawnBoss(){
-        if(boss == null){
+        if(!isBossAlive()){
             switch (stage) {
                 case KingSlime:
                     boss = new Boss("KingSlime",5000,5000,8);
@@ -395,7 +399,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     public void damageToBoss(int damage){
-        if(boss != null){
+        if(isBossAlive()){
             if(boss.getHP() > 0){
                 boss.applyDamage(damage);
                 updateState();
@@ -409,7 +413,7 @@ public class BossPanel extends JPanel implements ActionListener{
     }
 
     private void drawHP(Graphics g) {
-        if (boss != null){
+        if (isBossAlive()){
             String path = "Assets/Image/Bosses/HealthBar/";
             Image bgImage = new ImageIcon(path + "BGBossBar.png").getImage();
             Image hpImage = new ImageIcon(path + "BossBar.png").getImage();

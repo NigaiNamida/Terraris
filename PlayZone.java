@@ -303,7 +303,7 @@ public class PlayZone extends JPanel{
             }
         }
         for (int i = 0; i < testSet.length; i++){
-            int[][] rotated = rotateShape(direction);;
+            int[][] rotated = rotateShape(direction);
             int blockHeight = rotated.length;
             int blockWidth = rotated[0].length;
             boolean isPassCase = true;

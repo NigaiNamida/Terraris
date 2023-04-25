@@ -18,11 +18,9 @@ public class RewardPanel extends JPanel implements ActionListener{
     private static JLabel rewardLabel;
     private static RewardSlotPanel[] rewards;
     private static ArrayList<BlockTexture> textures;
-    private static ArrayList<BlockTexture> unlockedTextures;
-
+    
     public RewardPanel(){
         textures = new ArrayList<>();
-        unlockedTextures = new ArrayList<>();
         textures.addAll(Arrays.asList(BlockTexture.getSpecialTexture()));
         rewardLabel = new JLabel("Reward");
         rewards = new RewardSlotPanel[3];
@@ -48,19 +46,11 @@ public class RewardPanel extends JPanel implements ActionListener{
         ArrayList<BlockTexture> temp = new ArrayList<>();
         temp.addAll(textures);
         for (int i = 0; i < rewards.length; i++) {
-            TetrisPiece block = TetrisPiece.getBlock(Tetris.O, temp.get(i).getColor());
-            rewards[i] = new RewardSlotPanel(block);
+            BlockTexture slotTexture = temp.get(i);
+            rewards[i] = new RewardSlotPanel(slotTexture);
             rewards[i].setBounds(20 + (i*120), 100, 100, 100);
             rewards[i].calculateGrid(5);
             rewards[i].repaint();
-            rewards[i].addMouseListener(new MouseAdapter() {
-                public void mouseEntered(MouseEvent evt) {
-                    GameFrame.playSE(12);
-                }
-                public void mouseClicked(MouseEvent e) {
-                    selectSlot();
-                }
-            });
             this.add(rewards[i]);
             
         }
@@ -69,7 +59,8 @@ public class RewardPanel extends JPanel implements ActionListener{
         repaint();
     }
 
-    public void selectSlot(){
+    public void selectSlot(RewardSlotPanel slot){
+        TetrisPiece.specialTextureSet.add(slot.getTexture());
         this.setVisible(false);
         KeyHandler.setPause(false);
     }

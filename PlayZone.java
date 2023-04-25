@@ -12,9 +12,12 @@ public class PlayZone extends JPanel{
     private static int blindness;
     private int gridCols;
     private int gridRows;
+    private int radius;
+    private int dynamiteDamage;
     private static int blockSize;
     private static int lastAction;
     private float brightness;
+    private int cloudGravityScale;
 
     private static boolean isUseHold;
     private boolean isGameOver;
@@ -34,6 +37,9 @@ public class PlayZone extends JPanel{
     public PlayZone(){
         blindness = 0;
         lastAction = 0;
+        radius = 1;
+        dynamiteDamage = 200;
+        cloudGravityScale = 2;
         brightness = (60)/100.0f;
         blockQueue = new ArrayList<>();
         textureQueue = new ArrayList<>();
@@ -163,7 +169,7 @@ public class PlayZone extends JPanel{
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
         if(block.getColor().equals(BlockTexture.Cloud.getColor()) && block.getColor().equals(BlockTexture.Bubble.getColor())){
-            gravity.setHalfTimer();
+            gravity.setTimerScale(1.0/cloudGravityScale);
         }
         else{
             gravity.setTimer();
@@ -641,7 +647,6 @@ public class PlayZone extends JPanel{
                     }
 
                     else if(color.equals(BlockTexture.PrimeDynamite.getColor())){
-                        int radius = 1;
                         for (int k = -radius; k <= radius; k++) {
                             for (int l = -radius; l <= radius; l++) {
                                 if(row+k < gridRows && col+l < gridCols && row+k >= 0 && col+l >= 0){
@@ -661,7 +666,7 @@ public class PlayZone extends JPanel{
                         }
 
                         BossPanel bossPanel = GameFrame.getBossPanel();
-                        bossPanel.damageToBoss(200);
+                        bossPanel.damageToBoss(dynamiteDamage);
         
                     }
 
@@ -1058,4 +1063,41 @@ public class PlayZone extends JPanel{
     public void setGameOver(boolean isGameOver) {
         this.isGameOver = isGameOver;
     }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void addRadius() {
+        radius++;
+    }
+
+    public int getDynamiteDamage() {
+        return dynamiteDamage;
+    }
+
+    public void setDynamiteDamage(int dynamiteDamage) {
+        this.dynamiteDamage = dynamiteDamage;
+    }
+
+    public void addDynamiteDamage() {
+        dynamiteDamage += 100;
+    }
+
+    public int getCloudGravityScale() {
+        return cloudGravityScale;
+    }
+
+    public void setCloudGravityScale(int cloudGravityScale) {
+        this.cloudGravityScale = cloudGravityScale;
+    }
+
+    public void addCloudGravityScale() {
+        cloudGravityScale++;
+    }
+
 }

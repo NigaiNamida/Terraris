@@ -1,17 +1,22 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-public class RewardSlotPanel extends JPanel {
+public class RewardSlotPanel extends JPanel implements MouseListener {
     private int gridCols;
     private int gridRows;
     private int blockSize;
-    private TetrisPiece block;
+    private BlockTexture texture;
+    private boolean isUpgrade;
 
-    public RewardSlotPanel(TetrisPiece block){
-        this.block = block;
+    public RewardSlotPanel(BlockTexture texture){
+        isUpgrade = TetrisPiece.containSpecialTexture(texture);
+        this.texture = texture;
         this.setBackground(Color.black);
+        this.addMouseListener(this);
     }
 
     public void calculateGrid(int col) {
@@ -23,7 +28,7 @@ public class RewardSlotPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawBlock(g, block);
+        drawBlock(g, TetrisPiece.getBlock(Tetris.O, texture));
     }
     protected void drawBlock(Graphics g, TetrisPiece block){
         if(block != null){
@@ -53,6 +58,40 @@ public class RewardSlotPanel extends JPanel {
                 }
             }
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        RewardPanel rewardPanel = GameFrame.getRewardPanel();
+        rewardPanel.selectSlot(this);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        GameFrame.playSE(12);
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    public BlockTexture getTexture() {
+        return texture;
+    }
+
+    public boolean isUpgrade() {
+        return isUpgrade;
     }
 }
 

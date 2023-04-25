@@ -1,4 +1,3 @@
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -8,8 +7,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,11 +15,9 @@ public class RewardPanel extends JPanel implements ActionListener{
     private static JLabel rewardLabel;
     private static RewardSlotPanel[] rewards;
     private static ArrayList<BlockTexture> textures;
-    private static ArrayList<BlockTexture> unlockedTextures;
-
+    
     public RewardPanel(){
         textures = new ArrayList<>();
-        unlockedTextures = new ArrayList<>();
         textures.addAll(Arrays.asList(BlockTexture.getSpecialTexture()));
         rewardLabel = new JLabel("Reward");
         rewards = new RewardSlotPanel[3];
@@ -48,19 +43,16 @@ public class RewardPanel extends JPanel implements ActionListener{
         ArrayList<BlockTexture> temp = new ArrayList<>();
         temp.addAll(textures);
         for (int i = 0; i < rewards.length; i++) {
-            TetrisPiece block = TetrisPiece.getBlock(Tetris.O, temp.get(i).getColor());
-            rewards[i] = new RewardSlotPanel(block);
+            if(rewards[i] != null){
+                this.remove(rewards[i]);
+            }
+        }
+        for (int i = 0; i < rewards.length; i++) {
+            BlockTexture slotTexture = temp.get(i);
+            rewards[i] = new RewardSlotPanel(slotTexture);
             rewards[i].setBounds(20 + (i*120), 100, 100, 100);
             rewards[i].calculateGrid(5);
             rewards[i].repaint();
-            rewards[i].addMouseListener(new MouseAdapter() {
-                public void mouseEntered(MouseEvent evt) {
-                    GameFrame.playSE(12);
-                }
-                public void mouseClicked(MouseEvent e) {
-                    selectSlot();
-                }
-            });
             this.add(rewards[i]);
             
         }
@@ -69,8 +61,36 @@ public class RewardPanel extends JPanel implements ActionListener{
         repaint();
     }
 
-    public void selectSlot(){
+    public void selectSlot(RewardSlotPanel slot){
+        if(slot.isUpgrade()){
+            upgrade(slot.getTexture());
+        }
+        else{
+            TetrisPiece.UnlockSpecialTexture(slot.getTexture());
+        }
         this.setVisible(false);
+        KeyHandler.setPause(false);
+    }
+
+    private void upgrade(BlockTexture texture) {
+        PlayZone playZone = GameFrame.getPlayZone();
+        switch (texture) {
+            case Sand:
+                
+                break;
+            case Dynamite:
+                playZone.addRadius();
+                playZone.addDynamiteDamage();
+                break;
+            case Cloud:
+                playZone.addCloudGravityScale();
+                break;
+            case Bubble:
+                
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

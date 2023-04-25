@@ -30,11 +30,11 @@ public enum BlockTexture {
     }
 
     public static BlockTexture[] getNormalTexture(){
-        return new BlockTexture[]{Grass,Stone,Bubble};
+        return new BlockTexture[]{Grass,Stone};
     }
 
     public static BlockTexture[] getSpecialTexture() {
-        return new BlockTexture[]{Sand,Cloud,Dynamite};
+        return new BlockTexture[]{Sand,Cloud,Dynamite,Bubble};
     }
     
 }

@@ -39,7 +39,7 @@ public class Gravity implements ActionListener{
         if(timer != null){
             timer.stop();
         }
-        timer = new Timer((int)(fallSpeed*1000*(1+scale)), this);
+        timer = new Timer((int)(fallSpeed*1000*scale), this);
     }
 
     public Timer getTimer() {

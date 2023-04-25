@@ -17,7 +17,7 @@ public class PlayZone extends JPanel{
     private static int blockSize;
     private static int lastAction;
     private float brightness;
-    private int cloudGravityScale;
+    private float cloudGravityScale;
 
     private static boolean isUseHold;
     private boolean isGameOver;
@@ -39,7 +39,7 @@ public class PlayZone extends JPanel{
         lastAction = 0;
         radius = 1;
         dynamiteDamage = 200;
-        cloudGravityScale = 2;
+        cloudGravityScale = 1.5f;
         brightness = (60)/100.0f;
         blockQueue = new ArrayList<>();
         textureQueue = new ArrayList<>();
@@ -169,7 +169,7 @@ public class PlayZone extends JPanel{
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
         if(block.getColor().equals(BlockTexture.Cloud.getColor()) && block.getColor().equals(BlockTexture.Bubble.getColor())){
-            gravity.setTimerScale(1.0/cloudGravityScale);
+            gravity.setTimerScale(cloudGravityScale);
         }
         else{
             gravity.setTimer();
@@ -1088,7 +1088,7 @@ public class PlayZone extends JPanel{
         dynamiteDamage += 100;
     }
 
-    public int getCloudGravityScale() {
+    public float getCloudGravityScale() {
         return cloudGravityScale;
     }
 

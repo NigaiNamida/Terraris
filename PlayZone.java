@@ -820,6 +820,7 @@ public class PlayZone extends JPanel{
         drawBossAttack(g);
         drawShadow(g);
         drawBorderImage(g);
+        repaintPauseAndReward(g);
     }
 
     private void drawBackgroundImage(Graphics g){
@@ -1011,6 +1012,13 @@ public class PlayZone extends JPanel{
                 }
             }
         }
+    }
+
+    private void repaintPauseAndReward(Graphics g) {
+        RewardPanel rewardPanel = GameFrame.getRewardPanel();
+        rewardPanel.repaint();
+        GameOverPanel gameOverPanel = GameFrame.getGameOverPanel();
+        gameOverPanel.repaint();
     }
 
     public TetrisPiece getBlock() {

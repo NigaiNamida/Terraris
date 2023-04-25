@@ -451,14 +451,6 @@ public class BossAttack implements ActionListener{
                 direction = "Right";
             }
 
-            if(isBlocked[i] == 0){
-                g.setColor(new Color(255, 0, 0, 100));
-            }
-            else{
-                g.setColor(new Color(50, 255, 0, 100));
-            }
-            g.fillRect(projectileCoordinate[i] , projectileDelay[i], 25 , 25);
-
             for (int part = projectileLength[i]; part >= 0 ; part--) {
                 if(part == projectileLength[i]){
                     if(projectileDelay[i]-offset[0]+4 <= turnPointY[i] || turnPointY[i] == 0){

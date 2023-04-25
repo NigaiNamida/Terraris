@@ -31,12 +31,14 @@ public class KeyHandler implements KeyListener{
             if((code == 27) && !GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && 
             (GameFrame.getSettingPanel().isVisible() || GameFrame.getLeaderboard().isVisible())){
                 GameFrame.getMenu().setVisible(true);
+                GameFrame.playSE(7);
                 GameFrame.getSettingPanel().setVisible(false);
                 SettingPanel.saveSetting();
                 GameFrame.getLeaderboard().setVisible(false);
             }
             else if((code == 27 || code == 112) && GameFrame.isPlaying() && !GameFrame.getMenu().isVisible() && GameFrame.getSettingPanel().isVisible()){
                 GameFrame.getPausePanel().setVisible(true);
+                GameFrame.playSE(7);
                 SettingPanel.saveSetting();
                 GameFrame.getSettingPanel().setVisible(false);
                 GameFrame.getLeaderboard().setVisible(false);

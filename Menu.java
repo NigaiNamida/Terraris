@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,11 @@ public class Menu extends JPanel implements ActionListener{
         startButton.setFont(new Font("Futura",Font.BOLD, 30));
         //startButton.setBorder(new LineBorder(new Color(239,239,239,255),2));
         this.add(startButton);
+        startButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         leaderboardButton.setSize(180, 30);
         leaderboardButton.setLocation(170, 350);
@@ -47,6 +54,11 @@ public class Menu extends JPanel implements ActionListener{
         leaderboardButton.setFont(new Font("Futura",Font.BOLD, 20));
         //leaderboardButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(leaderboardButton);
+        leaderboardButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         settingButton.setSize(180, 30);
         settingButton.setLocation(170, 410);
@@ -55,6 +67,11 @@ public class Menu extends JPanel implements ActionListener{
         settingButton.setFont(new Font("Futura",Font.BOLD, 20));
         //settingButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(settingButton);
+        settingButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         exitButton.setSize(180, 30);
         exitButton.setLocation(170, 470);
@@ -63,6 +80,11 @@ public class Menu extends JPanel implements ActionListener{
         exitButton.setFont(new Font("Futura",Font.BOLD, 20));
         //exitButton.setBorder(new LineBorder(Color.WHITE,2));
         this.add(exitButton);
+        exitButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         try {
             myPicture = ImageIO.read(new File("Assets/Image/Terraris.png"));
@@ -83,14 +105,17 @@ public class Menu extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == startButton){
             this.setVisible(false);
+            GameFrame.playSE(7);
             GameFrame.startGame();
         }
         else if(e.getSource() == leaderboardButton){
             this.setVisible(false);
+            GameFrame.playSE(7);
             GameFrame.getLeaderboard().setVisible(true);
         }
         else if(e.getSource() == settingButton){
             this.setVisible(false);
+            GameFrame.playSE(7);
             GameFrame.getSettingPanel().setVisible(true);
             SettingPanel.setNewKey(-1);
             SettingPanel.setSettingKey(null);
@@ -98,6 +123,7 @@ public class Menu extends JPanel implements ActionListener{
             SettingPanel.enableButton();
         }
         else if(e.getSource() == exitButton){
+            GameFrame.playSE(7);
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
             System.exit(0);

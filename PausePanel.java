@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PausePanel extends JPanel implements ActionListener{
     private static JLabel pauseLabel;
@@ -41,6 +43,11 @@ public class PausePanel extends JPanel implements ActionListener{
         resumeButton.setFocusable(false);
         resumeButton.setBackground(new Color(29,201,88));
         resumeButton.addActionListener(this);
+        resumeButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         settingButton.setForeground(new Color(193,221,196,255));
         settingButton.setFont(new Font("Futura",Font.BOLD,20));
@@ -50,6 +57,11 @@ public class PausePanel extends JPanel implements ActionListener{
         settingButton.setFocusable(false);
         settingButton.setBackground(Color.gray);
         settingButton.addActionListener(this);
+        settingButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
         
         exitButton.setForeground(new Color(193,221,196,255));
         exitButton.setFont(new Font("Futura",Font.BOLD, 20));
@@ -59,6 +71,11 @@ public class PausePanel extends JPanel implements ActionListener{
         exitButton.setFocusable(false);
         exitButton.setBackground(Color.gray);
         exitButton.addActionListener(this);
+        exitButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                GameFrame.playSE(12);
+            }
+        });
 
         this.add(pauseLabel);
         this.add(resumeButton);
@@ -80,6 +97,7 @@ public class PausePanel extends JPanel implements ActionListener{
             KeyHandler.setPause(false);
         }
         else if(e.getSource() == settingButton){
+            GameFrame.playSE(7);
             this.setVisible(false);
             SettingPanel.setNewKey(-1);
             SettingPanel.setSettingKey(null);
@@ -88,6 +106,7 @@ public class PausePanel extends JPanel implements ActionListener{
             GameFrame.getSettingPanel().setVisible(true);
         }
         else if(e.getSource() == exitButton){
+            GameFrame.playSE(7);
             Leaderboard.saveLeaderboard();
             SettingPanel.saveSetting();
             GameFrame.getPlayZone().setGameOver(true);

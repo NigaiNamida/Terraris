@@ -98,6 +98,11 @@ public class SettingPanel extends JPanel implements ActionListener{
             button.setBackground(Color.gray);
             button.addActionListener(this);
             this.add(button);
+            button.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent evt) {
+                    GameFrame.playSE(12);
+                }
+            });
         }
         settingLabel.get("Title").setBounds(200, 30, 200, 40);
         settingLabel.get("MusicLabel").setBounds(50, 95, 200, 25);

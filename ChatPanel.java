@@ -66,6 +66,56 @@ public class ChatPanel extends JPanel implements ActionListener{
                 text = "Eater of Worlds has ";
                 text += (isDefeat) ? "been defeated!" : "awoken!";
                 break;
+            case Crimson:
+                chat.setForeground(warningColor);
+                text = "A horrible chill goes down your spine...";
+                //text = "Screams echo around you...";
+                break;
+            case BrainOfCthulhu:
+                chat.setForeground(bossColor);
+                text = "Brain of Cthulhu has ";
+                text += (isDefeat) ? "been defeated!" : "awoken!";
+                break;
+            case Jungle:
+                chat.setForeground(warningColor);
+                //text = "A horrible chill goes down your spine...";
+                text = "Screams echo around you...";
+                break;
+            case QueenBee:
+                chat.setForeground(bossColor);
+                text = "Queen Bee has ";
+                text += (isDefeat) ? "been defeated!" : "awoken!";
+                break;
+            case Snow:
+                chat.setForeground(warningColor);
+                text = "A horrible chill goes down your spine...";
+                //text = "Screams echo around you...";
+                break;
+            case DeerClops:
+                chat.setForeground(bossColor);
+                text = "Deerclops has ";
+                text += (isDefeat) ? "been defeated!" : "awoken!";
+                break;
+            case Dungeon:
+                chat.setForeground(warningColor);
+                //text = "A horrible chill goes down your spine...";
+                text = "Screams echo around you...";
+                break;
+            case Skeletron:
+                chat.setForeground(bossColor);
+                text = "Skeletron has ";
+                text += (isDefeat) ? "been defeated!" : "awoken!";
+                break;
+            case UnderWorld:
+                chat.setForeground(warningColor);
+                text = "A horrible chill goes down your spine...";
+                //text = "Screams echo around you...";
+                break;
+            case WallOfFlesh:
+                chat.setForeground(bossColor);
+                text = "Wall of Flesh has ";
+                text += (isDefeat) ? "been defeated!" : "awoken!";
+                break;
             default:
                 break;
         }

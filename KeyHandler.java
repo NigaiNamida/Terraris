@@ -33,7 +33,7 @@ public class KeyHandler implements KeyListener{
                 backToPause();
             }
             else if(!playZone.isGameOver()){
-                if((isESCKey(code) || isF1Key(code)) && !isHoldingPause && GameFrame.isPlaying()){
+                if((isESCKey(code) || isF1Key(code)) && !isHoldingPause && GameFrame.isPlaying() && !GameFrame.getRewardPanel().isVisible()){
                     isHoldingPause = true;
                     isPause = !isPause;
                     if(isPause){
@@ -167,14 +167,14 @@ public class KeyHandler implements KeyListener{
         GameFrame.getLeaderboard().setVisible(false);
     }
 
-    public void pauseGame(){
+    public static void pauseGame(){
         if(GameFrame.getMusic().getClip() != null)
             GameFrame.getMusic().pauseSound();
         GameFrame.pauseGame();
         AnimationThread.pauseFrame();
     }
 
-    public void continueGame(){
+    public static void continueGame(){
         if(GameFrame.getMusic().getClip() != null)
             GameFrame.getMusic().resumeSound();
         GameFrame.continueGame();

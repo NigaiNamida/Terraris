@@ -71,6 +71,7 @@ public class RewardPanel extends JPanel implements ActionListener{
 
     public void selectSlot(){
         this.setVisible(false);
+        KeyHandler.setPause(false);
     }
 
     @Override

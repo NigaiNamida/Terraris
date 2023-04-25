@@ -10,7 +10,7 @@ public class TetrisTexture extends JPanel{
 
     public static void drawPuddleTexture(Graphics g, Color middle, int x, int y){
         String imageName = null;
-        if(middle == PlayZone.getSlimePuddleColor()){
+        if(middle == (BlockTexture.SlimePuddle.getColor())){
             if(y<19*25){
                 imageName = "Slime_Puddle";
             }
@@ -18,7 +18,7 @@ public class TetrisTexture extends JPanel{
                 imageName = "Slime_Puddle_Floor";
             }
         }
-        else if(middle == PlayZone.getSlimeBlockColor()){
+        else if(middle == (BlockTexture.SlimeBlock.getColor())){
             imageName = "Slime_Block";
         }
 
@@ -79,7 +79,7 @@ public class TetrisTexture extends JPanel{
                 break;
         }
 
-        String block = null;
+        String block = "";
         if(middle.equals(BlockTexture.Grass.getColor())){
             block = "Grass";
         }
@@ -95,7 +95,7 @@ public class TetrisTexture extends JPanel{
                 stage = "Normal";
             }
         }
-        else if(middle.equals(BlockTexture.Dynamite.getColor())){
+        else if(middle.equals(BlockTexture.Dynamite.getColor()) || middle.equals(BlockTexture.PlacedDynamite.getColor())){
             block = "Dynamite";
             n[0] = n[2] = n[6] = n[8] = 'D';  
         }
@@ -103,20 +103,33 @@ public class TetrisTexture extends JPanel{
             block = "PrimeDynamite";
             n[0] = n[2] = n[6] = n[8] = 'D';  
         }
+        else if(middle.equals(BlockTexture.Bubble.getColor()) || middle.equals(BlockTexture.PlacedBubble.getColor())){
+            block = "Bubble";
+            n[0] = n[2] = n[6] = n[8] = 'D';  
+        }
+        else if(middle.equals(BlockTexture.FadedBubble.getColor())){
+            block = "FadedBubble";
+            n[0] = n[2] = n[6] = n[8] = 'D';  
+        }
         else if(middle.equals(BlockTexture.Cloud.getColor())){
             block = "Cloud";
         }
         
         String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];
-        if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
-            if(block != "Cloud" && block != "Dynamite" && block != "PrimeDynamite"){
-                pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
-            }
-            else{
-                pileImage = new ImageIcon(path+"Block/"+block+"/"+name+".png").getImage();  
+        if(!middle.equals(BlockTexture.SlimePuddle.getColor()) && !middle.equals(BlockTexture.SlimeBlock.getColor())){
+            switch (block) {
+                case "Grass":
+                case "Stone":
+                case "Sand":
+                    pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
+                    break;
+                default:
+                    pileImage = new ImageIcon(path+"Block/"+block+"/"+name+".png").getImage();  
+                    break;
             }
             g.drawImage(pileImage,x,y,null);
         }
+        
         // if(!middle.equals(PlayZone.getSlimeBlockColor()) && !middle.equals(PlayZone.getSlimePuddleColor())){
         //     pileImage = new ImageIcon(path+"Block/"+block+"/"+stage+"/"+name+".png").getImage();
         //     g.drawImage(pileImage,x,y,null);

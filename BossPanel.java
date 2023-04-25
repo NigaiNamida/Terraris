@@ -89,7 +89,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
     private void drawBackgroundImage(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon("Assets/Image/Background/BossPanel/" + bossPanel.getStage() + ".png").getImage();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBossPanelBGImagePath()).getImage();
         g.drawImage(BGImage, 0, 0, null);
     }
 
@@ -101,44 +101,8 @@ public class BossPanel extends JPanel implements ActionListener{
 
     private void drawBorderImage(Graphics g) {
         BossPanel bossPanel = GameFrame.getBossPanel();
-        String path = "Assets/Image/Background/BossPanel/";
-        switch (bossPanel.getStage()) {
-            case Day:
-            case KingSlime:
-            case Night:
-            case EyeOfCthulhu:
-                path += "Normal";
-                break;
-            case Corruption:
-            case EaterOfWorld:
-                path += "Corruption";
-                break;
-            case Crimson:
-            case BrainOfCthulhu:
-                path += "Crimson";
-                break;
-            case Jungle:
-            case QueenBee:
-                path += "Jungle";
-                break;
-            case Snow:
-            case DeerClops:
-                path += "Snow";
-                break;
-            case Dungeon:
-            case Skeletron:
-                path += "Dungeon";
-                break;
-            case UnderWorld:
-            case WallOfFlesh:
-                path += "Underworld";
-                break;
-            default:
-                break;
-        }
-        path += "_Border.png";
-        Image BorderImage = new ImageIcon(path).getImage();
-        g.drawImage(BorderImage, 0, 0, null);
+        Image BGImage = new ImageIcon(bossPanel.getStage().getBossPanelBorderImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
     }
     
     public void attemptSpawn(){

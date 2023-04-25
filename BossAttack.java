@@ -261,8 +261,8 @@ public class BossAttack implements ActionListener{
     public void movingSlimeRain(){
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = PlayZone.getSlimePuddleColor();
-        slimeBlockColor = PlayZone.getSlimeBlockColor();
+        slimePuddleColor = BlockTexture.SlimePuddle.getColor();
+        slimeBlockColor = BlockTexture.SlimeBlock.getColor();
         for(int i = 0; i < projectileCount; i++){
             if(!isHit(i) && slimePuddleColumn[i] == 0){        
                 projectileDelay[i] += 5;
@@ -280,11 +280,12 @@ public class BossAttack implements ActionListener{
                     }
                     else if (backgroundColor == slimePuddleColor){
                         playZone.setBackgroundBlock(projectileDelay[i]/25, projectileCoordinate[i], slimeBlockColor);
+                        playZone.checkFullLine();
                     }
                 }
             }
         }
-        playZone.checkFullLine();
+
     }
 
     public void movingDemonEye(){   
@@ -440,7 +441,7 @@ public class BossAttack implements ActionListener{
     public static boolean isHit(int i){
         PlayZone playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = PlayZone.getSlimePuddleColor();
+        slimePuddleColor = BlockTexture.SlimePuddle.getColor();
         
         return projectileDelay[i]/25 >= playZone.getGridRows() - 1 || (projectileDelay[i]/25 >= 0 && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != null && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != slimePuddleColor);
     }

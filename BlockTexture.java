@@ -5,8 +5,14 @@ public enum BlockTexture {
     Stone,
     Sand,
     Dynamite,
+    PlacedDynamite,
     PrimeDynamite,
-    Cloud;
+    Bubble,
+    PlacedBubble,
+    FadedBubble,
+    Cloud,
+    SlimePuddle,
+    SlimeBlock;
 
     private Color color;
 
@@ -24,7 +30,7 @@ public enum BlockTexture {
     }
 
     public static BlockTexture[] getNormalTexture(){
-        return new BlockTexture[]{Grass,Stone};
+        return new BlockTexture[]{Grass,Stone,Bubble};
     }
 
     public static BlockTexture[] getSpecialTexture() {

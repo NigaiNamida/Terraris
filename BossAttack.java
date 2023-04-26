@@ -185,11 +185,18 @@ public class BossAttack implements ActionListener{
     }
 
     public void QueenBeeAttack(int state){
+        HoldPanel holdPanel = GameFrame.getHoldPanel();
+        NextPanel nextPanel = GameFrame.getNextPanel();
         playZone = GameFrame.getPlayZone();
         setBeeline(state);
         projectileTimer = new Timer(50, this);
         projectileTimer.restart();
-        playZone.setHoneyBlock();
+        if(holdPanel.getBlock() != null && holdPanel.getBlock().getColor() != BlockTexture.Honey.getColor()){
+            playZone.setHoldHoneyBlock();
+        }
+        else if(nextPanel.getBlock().getColor() != BlockTexture.Honey.getColor()){
+            playZone.setNextHoneyBlock();
+        }
     }
 
     public void setSlimeRainColumn(int state){
@@ -962,11 +969,11 @@ public class BossAttack implements ActionListener{
         BossAttack.projectileDelay[0] = projectileDelay;
     }
 
-    public static int getconfuseCount() {
+    public static int getConfuseCount() {
         return confuseCount;
     }
 
-    public static void setconfuseCount(int confuseCount) {
+    public static void setConfuseCount(int confuseCount) {
         BossAttack.confuseCount = confuseCount;
     }
 

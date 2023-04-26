@@ -196,7 +196,7 @@ public class PlayZone extends JPanel{
         activeSpecialBlock();
         applySandGravity();
         gravity.restartTimer();
-        BossAttack.setconfuseCount(BossAttack.getconfuseCount()-1);
+        BossAttack.setConfuseCount(BossAttack.getConfuseCount()-1);
     }
     
     public void gameOver(){
@@ -702,27 +702,52 @@ public class PlayZone extends JPanel{
                 if(shape[row][col] == 1 && !isStuck){
                     int x = block.getX() + col;
                     int y = block.getY() + row;
-                    if(x < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x] == slimePuddle){
-                        hardDrop();
-                        isStuck = true;
+                    if(block.getColor() != honey){
+                        if(x < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x] == slimePuddle){
+                            hardDrop();
+                            isStuck = true;
+                        }
+                        else if(x < gridCols && y + 1 < gridRows && y+1 >= 0 && (backgroundBlock[y + 1][x] == slimeBlock)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x + 1 < gridCols && y < gridRows && y >= 0 && (backgroundBlock[y][x + 1] == slimeBlock)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x < gridCols && y - 1 >= 0 && (backgroundBlock[y - 1][x] == slimeBlock)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x - 1 >= 0 && y < gridRows && y >= 0 && (backgroundBlock[y][x - 1] == slimeBlock)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
                     }
-                    else if(x < gridCols && y + 1 < gridRows && y+1 >= 0 && backgroundBlock[y + 1][x] == slimeBlock){
-                        lockAndSpawnBlock();
-                        isStuck = true;
-                    }
-                    else if(x + 1 < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x + 1] == slimeBlock){
-                        lockAndSpawnBlock();
-                        isStuck = true;
-                    }
-                    else if(x < gridCols && y - 1 >= 0 && backgroundBlock[y - 1][x] == slimeBlock){
-                        lockAndSpawnBlock();
-                        isStuck = true;
-                    }
-                    else if(x - 1 >= 0 && y < gridRows && y >= 0 && backgroundBlock[y][x - 1] == slimeBlock){
-                        lockAndSpawnBlock();
-                        isStuck = true;
+                    else{
+                        if(x < gridCols && y < gridRows && y >= 0 && backgroundBlock[y][x] == slimePuddle){
+                            hardDrop();
+                            isStuck = true;
+                        }
+                        else if(x < gridCols && y + 1 < gridRows && y+1 >= 0 && (backgroundBlock[y + 1][x] == slimeBlock || backgroundBlock[y + 1][x] == honey)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x + 1 < gridCols && y < gridRows && y >= 0 && (backgroundBlock[y][x + 1] == slimeBlock || backgroundBlock[y][x + 1] == honey)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x < gridCols && y - 1 >= 0 && (backgroundBlock[y - 1][x] == slimeBlock || backgroundBlock[y - 1][x] == honey)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
+                        else if(x - 1 >= 0 && y < gridRows && y >= 0 && (backgroundBlock[y][x - 1] == slimeBlock || backgroundBlock[y][x - 1] == honey)){
+                            lockAndSpawnBlock();
+                            isStuck = true;
+                        }
                     }
                 }
+
             }
         }
         repaint();
@@ -912,13 +937,13 @@ public class PlayZone extends JPanel{
                 if (color != null && color.equals(sand)){
                     int tempRow = row;
                     while(tempRow+1 < gridRows){
-                        if(col+1 < gridCols && (backgroundBlock[tempRow][col+1] == (slimeBlock) || backgroundBlock[tempRow][col+1] == (honey))){
+                        if(col+1 < gridCols && (backgroundBlock[tempRow][col+1] == slimeBlock)){
                             break;
                         }
-                        else if(col-1 > 0 && (backgroundBlock[tempRow][col+1] == (slimeBlock) || backgroundBlock[tempRow][col+1] == (honey))){
+                        else if(col-1 > 0 && (backgroundBlock[tempRow][col-1] == slimeBlock)){
                             break;
                         }
-                        else if(tempRow-1 > 0 && (backgroundBlock[tempRow][col+1] == (slimeBlock) || backgroundBlock[tempRow][col+1] == (honey))){
+                        else if(tempRow-1 > 0 && (backgroundBlock[tempRow-1][col] == slimeBlock)){
                             break;
                         }
                         else if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddle)){
@@ -987,7 +1012,7 @@ public class PlayZone extends JPanel{
                 }   
             }
         }
-        if(BossAttack.getconfuseCount()>0){
+        if(BossAttack.getConfuseCount()>0){
             Image bossAttackImage = new ImageIcon("Assets/Image/Background/Confuse.png").getImage();
             g.drawImage(bossAttackImage, (((block.getX())*25)+(block.getWidth()*25)/2)-8 , (block.getY()-1)*25-5, null); 
         }
@@ -1108,11 +1133,16 @@ public class PlayZone extends JPanel{
         cloudGravityScale++;
     }
 
-    public void setHoneyBlock() {
+    public void setNextHoneyBlock() {
         textureQueue.set(0, BlockTexture.Honey);
         NextPanel nextPanel = GameFrame.getNextPanel();
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
     }
 
+    public void setHoldHoneyBlock() {
+        HoldPanel holdPanel = GameFrame.getHoldPanel();
+        holdPanel.setBlock(TetrisPiece.getBlock(holdPanel.getBlock().getName(),honey));
+        holdPanel.repaint();
+    }
 }

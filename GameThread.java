@@ -72,7 +72,7 @@ public class GameThread extends Thread{
             if(rightHoldingTime <= 8){
                 if(rightHoldingTime == 0){
                     Thread.sleep(40);
-                    if(BossAttack.getconfuseCount()>0){
+                    if(BossAttack.getConfuseCount()>0){
                         playZone.moveLeft();
                     }
                     else{
@@ -83,7 +83,7 @@ public class GameThread extends Thread{
             }
             else if(keyHandler.isRightFirst() && keyHandler.isLeftPressed()){
                 Thread.sleep(40);
-                if(BossAttack.getconfuseCount()>0){
+                if(BossAttack.getConfuseCount()>0){
                     playZone.moveRight();
                 }
                 else{
@@ -92,7 +92,7 @@ public class GameThread extends Thread{
             }   
             else{
                 Thread.sleep(40);
-                if(BossAttack.getconfuseCount()>0){
+                if(BossAttack.getConfuseCount()>0){
                     playZone.moveLeft();
                 }
                 else{
@@ -104,7 +104,7 @@ public class GameThread extends Thread{
             if(leftHoldingTime <= 8){
                 if(leftHoldingTime == 0){
                     Thread.sleep(40);
-                    if(BossAttack.getconfuseCount()>0){
+                    if(BossAttack.getConfuseCount()>0){
                         playZone.moveRight();
                     }
                     else{
@@ -115,7 +115,7 @@ public class GameThread extends Thread{
             }
             else if(keyHandler.isLeftFirst() && keyHandler.isRightPressed()){
                 Thread.sleep(40);
-                    if(BossAttack.getconfuseCount()>0){
+                    if(BossAttack.getConfuseCount()>0){
                         playZone.moveLeft();
                     }
                     else{
@@ -124,7 +124,7 @@ public class GameThread extends Thread{
             }   
             else{
                 Thread.sleep(40);
-                if(BossAttack.getconfuseCount()>0){
+                if(BossAttack.getConfuseCount()>0){
                     playZone.moveRight();
                 }
                 else{

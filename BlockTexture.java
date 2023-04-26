@@ -12,7 +12,8 @@ public enum BlockTexture {
     FadedBubble,
     Cloud,
     SlimePuddle,
-    SlimeBlock;
+    SlimeBlock,
+    Honey;
 
     private Color color;
 

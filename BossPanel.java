@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 import java.util.Random;
 
@@ -34,7 +33,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Crimson;
+        stage = Theme.Jungle;
         terrariaFont = GameFrame.getTerrariaFont(20);
         adjustBrightness(stage);
         spawnDelay = 100;
@@ -161,12 +160,12 @@ public class BossPanel extends JPanel implements ActionListener{
                     GameFrame.playSE(9);
                     break;
                 case BrainOfCthulhu:
-                    boss = new Boss("BrainOfCthulhu",10000,10000,10);
+                    boss = new Boss("BrainOfCthulhu",10000,10000,5);
                     bossTitle.setText("Brain Of Cthulhu");
                     GameFrame.playSE(9);
                     break;
                 case QueenBee:
-                    boss = new Boss("QueenBee",25000,25000,10);
+                    boss = new Boss("QueenBee",5000,25000,10);
                     bossTitle.setText("Queen Bee");
                     GameFrame.playSE(9);
                     break;
@@ -177,8 +176,6 @@ public class BossPanel extends JPanel implements ActionListener{
                     break;
                 case Skeletron:
                     this.setBounds(455, 20, 250, 306);
-                    this.setBackground(Color.black);
-                    this.setBorder(new LineBorder(Color.WHITE, 0));
                     boss = new Boss("Skeletron",40000,40000,10);
                     bossTitle.setText("Skeletron");
                     GameFrame.playSE(9);
@@ -306,6 +303,17 @@ public class BossPanel extends JPanel implements ActionListener{
                 else if(boss.getState() == 3  && stateTimer != 3){
                     boss.setCooldownSeconds(20);
                     stateTimer = 3;
+                }
+            case "BrainOfCthulhu":
+                if(boss.getPhase() == 1){
+                    if(boss.getState() == 2 && stateTimer != 2){
+                        boss.setCooldownSeconds(6);
+                        stateTimer = 2;
+                    }
+                    else if(boss.getState() == 3  && stateTimer != 3){
+                        boss.setCooldownSeconds(7);
+                        stateTimer = 3;
+                    }
                 }
                 break;
             default:

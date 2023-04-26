@@ -30,9 +30,9 @@ public class BossAttack implements ActionListener{
     private static int[] projectileLength;
     private static int[] turnPointX;
     private static int[] turnPointY;
-    private static int[] isBlocked;
+    private static int[] blocked;
 
-    private static int isActive;
+    private static int active;
     private static boolean[] isExploded;
 
     private static int tentacleGap;
@@ -40,8 +40,8 @@ public class BossAttack implements ActionListener{
     private static int tentacleY;
     private static int tentacleLeft;
     private static int tentacleRight;
-    private static int isTentacleActive;
-    private static int isConfuse;
+    private static int tentacleActive;
+    private static int confuseCount;
 
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
@@ -59,12 +59,14 @@ public class BossAttack implements ActionListener{
         isHealed = false;
         isDashed = true;
 
-        isBlocked = new int[1];
+        blocked = new int[1];
 
-        isActive = 0;    
+        active = 0;    
         tentacleLeft = -182;
         tentacleRight = 250;
-        isTentacleActive = 0;
+        tentacleActive = 0;
+
+        confuseCount = 0;
     }
 
     public void Attack(String bossName, int phase, int state) {
@@ -80,6 +82,9 @@ public class BossAttack implements ActionListener{
                 break;
             case "BrainOfCthulhu":
                 BrainOfCthulhuAttack(phase, state);
+                break;
+            case "QueenBee":
+                QueenBeeAttack(state);
                 break;
             default:
                 break;
@@ -99,7 +104,13 @@ public class BossAttack implements ActionListener{
                 isDashed = true;
                 break;
             case "EaterOfWorld":
-                isBlocked = new int[1];
+                blocked = new int[1];
+                break;
+            case "BrainOfCthulhu":
+                active = 0;    
+                tentacleLeft = -182;
+                tentacleRight = 250;
+                tentacleActive = 0;
                 break;
             default:
                 break;
@@ -137,40 +148,48 @@ public class BossAttack implements ActionListener{
         System.out.println(phase + " " + state);
 
         for (int i = 0; i < projectileCount; i++) {
-            isActive = 0;
-            if (isBlocked[i] == 0 && !isExploded[i]){
-                isActive = 1;
+            active = 0;
+            if (blocked[i] == 0 && !isExploded[i]){
+                active = 1;
                 break;
             }
         }
 
-        if(isActive == 2){
-            isActive = 0;
+        if(active == 2){
+            active = 0;
         }
 
-        if(isActive == 0){
+        if(active == 0){
             setCreeper(phase, state);
             projectileTimer = new Timer(50, this);
             projectileTimer.restart();
         }
         else{
-            isActive = 2;
+            active = 2;
         }
 
         if (phase == 2){
 
-            if(isTentacleActive == 2){
-                isTentacleActive = 0;
+            if(tentacleActive == 2){
+                tentacleActive = 0;
             }
 
-            if(isTentacleActive == 0){
+            if(tentacleActive == 0){
                 setTentacle(state);
             }
 
             else{
-                isTentacleActive = 2;
+                tentacleActive = 2;
             }
         }
+    }
+
+    public void QueenBeeAttack(int state){
+        playZone = GameFrame.getPlayZone();
+        setBeeline(state);
+        projectileTimer = new Timer(50, this);
+        projectileTimer.restart();
+        playZone.setHoneyBlock();
     }
 
     public void setSlimeRainColumn(int state){
@@ -265,7 +284,7 @@ public class BossAttack implements ActionListener{
         Random ran = new Random();
         projectileCount = state;
 
-        isBlocked = new int[projectileCount];
+        blocked = new int[projectileCount];
 
         projectileX = new int[projectileCount];
         projectileY = new int[projectileCount];
@@ -309,7 +328,7 @@ public class BossAttack implements ActionListener{
         projectileY = new int[projectileCount];
         isExploded = new boolean[projectileCount];
 
-        isBlocked = new int[projectileCount];
+        blocked = new int[projectileCount];
 
         ArrayList<Integer> list = new ArrayList<Integer>();
         for(int i = 1; i < 9; i++) {
@@ -335,7 +354,7 @@ public class BossAttack implements ActionListener{
             projectileY[i] = list.get(i);
         }
 
-        isActive = 1;
+        active = 1;
     }
 
     public void setTentacle(int state) {
@@ -350,7 +369,48 @@ public class BossAttack implements ActionListener{
 
         tentacleRight = 250;
 
-        isTentacleActive = 1;
+        tentacleActive = 1;
+    }
+
+    public void setBeeline(int state){
+        Random ran = new Random();
+
+        projectileCount = state*3;
+        
+        projectileDirection = new int[projectileCount];
+      
+        projectileDelay = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileDelay[i] = i*20;
+        }
+
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(int i = 0; i <= 10; i++) {
+            list.add(i);
+        }
+
+        Collections.shuffle(list);
+        
+        projectileCoordinate = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileCoordinate[i] = list.get(i);
+        }
+
+        for (int i = 0; i < projectileCount; i++) {
+            projectileDirection[i] = ran.nextInt(2);
+            if(projectileDirection[i] == 1){
+                projectileDelay[i] *= -1;
+            }
+            else{
+                projectileDelay[i] += 250;
+            }
+        }
+
+        projectileLength = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileLength[i] = ran.nextInt(3)+20;
+        }
+
     }
 
     @Override
@@ -380,6 +440,8 @@ public class BossAttack implements ActionListener{
                             movingTentacle();
                         }
                         break;
+                    case "QueenBee":
+                        movingBeeLine();
                     default:
                         break;
                 }
@@ -445,21 +507,21 @@ public class BossAttack implements ActionListener{
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         for (int i = 0; i < projectileCount; i++) {
             projectileDelay[i] += 7;
-            if(isBlocked[i] == 0){
+            if(blocked[i] == 0){
                 blockDevourer(i);
                 if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] != null){
                     backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]/25] = null;
                 }
             }
             else {
-                if (isBlocked[i] == 1){
+                if (blocked[i] == 1){
                     projectileX[i] = projectileCoordinate[i];
                     projectileY[i] = projectileDelay[i]; 
 
                     turnPointX[i] = projectileCoordinate[i];    
                     turnPointY[i] = projectileDelay[i]; 
 
-                    isBlocked[i]++;
+                    blocked[i]++;
                 }
                 if (projectileCoordinate[i]/25 <= 4){
                     projectileX[i] -= 7;
@@ -476,7 +538,7 @@ public class BossAttack implements ActionListener{
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();   
         for (int i = 0; i < projectileCount; i++) {
             blockCreeper(i);
-            if(isActive == 2 && !isExploded[i] && isBlocked[i] == 0){
+            if(active == 2 && !isExploded[i] && blocked[i] == 0){
                 if((projectileY[i]/25 >= 0 && projectileY[i]/25 <= 19) && backgroundBlock[projectileY[i]/25][projectileX[i]/25] != null){
                     for (int row = -1; row <= 1; row++){
                         for (int col = -1; col <= 1; col++){
@@ -499,7 +561,7 @@ public class BossAttack implements ActionListener{
     }
 
     public void movingTentacle() {
-        if(isTentacleActive == 1){
+        if(tentacleActive == 1){
             confuseBlock();
             if(tentacleLeft < tentacleX-182){
                 tentacleLeft += 5;
@@ -509,12 +571,23 @@ public class BossAttack implements ActionListener{
             }
         }
 
-        if(isTentacleActive == 2){
+        if(tentacleActive == 2){
             if(tentacleLeft > -182){
                 tentacleLeft -= 5;
             }
             if(tentacleRight < 250){
                 tentacleRight += 5;
+            }
+        }
+    }
+
+    public void movingBeeLine() {
+        for (int i = 0; i < projectileCount; i++) {
+            if(projectileDirection[i] == 1){
+                projectileDelay[i] += 10;
+            }
+            else{
+                projectileDelay[i] -= 10;
             }
         }
     }
@@ -538,6 +611,9 @@ public class BossAttack implements ActionListener{
                     break;
                 case "BrainOfCthulhu":
                     drawBrainOfCthulhuAttack(g);
+                    break;
+                case "QueenBee":
+                    drawQueenBeeAttack(g);
                     break;
                 default:
                     break;
@@ -627,7 +703,7 @@ public class BossAttack implements ActionListener{
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head.png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileCoordinate[i])-2 , projectileDelay[i]-offset[0], null);
                     }
-                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                    if(blocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Head_" + direction + ".png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileX[i])-offset[1] , projectileY[i]-2, null);
                     }
@@ -637,7 +713,7 @@ public class BossAttack implements ActionListener{
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail.png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset[0]-7, null);
                     }
-                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                    if(blocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Tail_" + direction + ".png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileX[i])-offset[1]-offset[3] , projectileY[i]+2, null);
                     }
@@ -647,7 +723,7 @@ public class BossAttack implements ActionListener{
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body.png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileCoordinate[i])+2 , projectileDelay[i]-offset[0], null);
                         }
-                    if(isBlocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
+                    if(blocked[i] != 0 && projectileX[i] != 0 && !hitCorner(i, part, offset[1], offset[2])){
                         bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Devourer_Body_" + direction + ".png").getImage(); 
                         g.drawImage(bossAttackImage, (projectileX[i])-offset[1]-offset[2] , projectileY[i]+2, null);
                     }
@@ -677,7 +753,7 @@ public class BossAttack implements ActionListener{
 
     public static void drawCreeper(Graphics g, String name) {
         for(int i = 0; i < projectileCount; i++){
-            if(!isExploded[i] && isBlocked[i] == 0){
+            if(!isExploded[i] && blocked[i] == 0){
                 bossAttackImage = new ImageIcon(path + name + "/Attack/Creeper.png").getImage();
                 g.drawImage(bossAttackImage, projectileX[i]-5 , projectileY[i]-5, null);  
             }  
@@ -690,6 +766,42 @@ public class BossAttack implements ActionListener{
 
         bossAttackImage = new ImageIcon(path + name + "/Attack/Tentacle_Right.png").getImage();
         g.drawImage(bossAttackImage, tentacleRight , tentacleY, null);  
+    }
+
+    public static void drawQueenBeeAttack(Graphics g) {
+        Boss boss = GameFrame.getBossPanel().getBoss();
+        for (int i = 0; i < projectileCount; i++) {
+            int offset = 0;
+            String direction = "";
+            if (projectileDirection[i] == 0) {
+                direction = "Left";
+            }
+            else {
+                direction = "Right";
+            }
+            for (int part = projectileLength[i]; part >= 0 ; part--) {
+                if(part == projectileLength[i]){
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Beeline_Head_" + direction +".png").getImage(); 
+                    g.drawImage(bossAttackImage, projectileDelay[i]-offset ,(projectileCoordinate[i]*25)-4, null);
+                }
+                else if(part == 0){
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Beeline_Tail_" + direction +".png").getImage(); 
+                    g.drawImage(bossAttackImage, projectileDelay[i]-offset ,(projectileCoordinate[i]*25)-4, null);
+                }
+                else{
+                    bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Beeline_Body_" + direction +".png").getImage(); 
+                    g.drawImage(bossAttackImage,projectileDelay[i]-offset ,(projectileCoordinate[i]*25)-4, null);
+                }
+
+                if (projectileDirection[i] == 0) {
+                    offset -= 25;          
+                }
+
+                else {
+                    offset += 25;
+                }
+            }
+        }
     }
 
     public static boolean isHit(int i){
@@ -791,7 +903,7 @@ public class BossAttack implements ActionListener{
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1){
                     if(col+x == projectileCoordinate[i]/25 && row+y == projectileDelay[i]/25){
-                        isBlocked[i]=1;
+                        blocked[i]=1;
                     }
 
                 }
@@ -810,7 +922,7 @@ public class BossAttack implements ActionListener{
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1){
                     if(col+x == projectileX[i]/25 && row+y == projectileY[i]/25){
-                        isBlocked[i]=1;
+                        blocked[i]=1;
                     } 
                 }
             }
@@ -828,8 +940,8 @@ public class BossAttack implements ActionListener{
             for (int col = 0; col < blockWidth; col++) {
                 if(shape[row][col] == 1){
                     if((col+x < tentacleX/25 || col+x > (tentacleX+tentacleGap)/25) && row+y == tentacleY/25){
-                        isConfuse = 3;
-                        isTentacleActive = 2;
+                        confuseCount = 3;
+                        tentacleActive = 2;
                     } 
                 }
             }
@@ -850,12 +962,12 @@ public class BossAttack implements ActionListener{
         BossAttack.projectileDelay[0] = projectileDelay;
     }
 
-    public static int getIsConfuse() {
-        return isConfuse;
+    public static int getconfuseCount() {
+        return confuseCount;
     }
 
-    public static void setIsConfuse(int isConfuse) {
-        BossAttack.isConfuse = isConfuse;
+    public static void setconfuseCount(int confuseCount) {
+        BossAttack.confuseCount = confuseCount;
     }
 
 }

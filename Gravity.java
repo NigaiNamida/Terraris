@@ -33,6 +33,7 @@ public class Gravity implements ActionListener{
             timer.stop();
         }
         timer = new Timer((int)(fallSpeed*1000), this);
+        System.out.println("Normal "+ (int)(fallSpeed*1000));
     }
 
     public void setTimerScale(double scale){
@@ -40,6 +41,7 @@ public class Gravity implements ActionListener{
             timer.stop();
         }
         timer = new Timer((int)(fallSpeed*1000*scale), this);
+        System.out.println("Cloud "+ (int)(fallSpeed*1000*scale));
     }
 
     public Timer getTimer() {

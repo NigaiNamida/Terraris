@@ -1,5 +1,6 @@
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
@@ -61,23 +62,27 @@ public class RewardPanel extends JPanel implements ActionListener{
             BlockTexture slotTexture = temp.get(i);
 
             textureLabels[i] = new JLabel();
-            textureLabels[i].setBounds(20 + (i*120), 80, (int)(this.getWidth()/3.0), 50);
+            textureLabels[i].setBounds(50 + (i*200), 100, 100, 50);
             textureLabels[i].setText(""+slotTexture);
+            textureLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             textureLabels[i].setFont(GameFrame.getTerrariaFont(20));
+            textureLabels[i].setForeground(new Color(193,221,196,255));
             textureLabels[i].repaint();
             this.add(textureLabels[i]);
 
             rewards[i] = new RewardSlotPanel(slotTexture);
-            rewards[i].setBounds(20 + (i*120), 100, 100, 100);
-            rewards[i].calculateGrid(5);
+            rewards[i].setBounds(50 + (i*200), 125, 100, 100);
+            rewards[i].calculateGrid(4);
             rewards[i].repaint();
             this.add(rewards[i]);
             
             modes[i] = new JLabel();
-            modes[i].setBounds(20 + (i*120), 220, 100, 50);
+            modes[i].setBounds(50 + (i*200), 220, 100, 50);
             String text = rewards[i].isUpgrade() ? "Upgrade" : "Unlock";
             modes[i].setText(""+text);
             modes[i].setFont(GameFrame.getTerrariaFont(20));
+            modes[i].setForeground(new Color(193,221,196,255));
+            modes[i].setHorizontalAlignment(SwingConstants.CENTER);
             modes[i].repaint();
             this.add(modes[i]);
         }

@@ -51,7 +51,7 @@ public class RewardSlotPanel extends JPanel implements MouseListener {
                             }
                         }
                         int x = (int)(((gridCols-blockWidth)/2.0 + col) * blockSize); //coordinate + offset
-                        int y = (int)(((gridRows-blockHeight)*(2/3.0) + row) * blockSize); //coordinate + offset
+                        int y = (int)(((gridRows-blockHeight)/2.0 + row) * blockSize); //coordinate + offset
                         TetrisTexture.mergePileTexture(g, color, x, y, isAround); 
                         isAround = new char[][]{{'0','0','0'},{'0','0','0'},{'0','0','0'}};
                     }   

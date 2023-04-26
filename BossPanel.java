@@ -27,6 +27,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private int stateTimer;
     private int tickCount;
     private int spawnDelay;
+    private int powerMultiplier;
 
     public Timer spawnTimer;
     
@@ -41,6 +42,7 @@ public class BossPanel extends JPanel implements ActionListener{
         spawnChance = -5;
         tickCount = 0;
         canSpawn = false;
+        powerMultiplier = 1;
 
         random = new Random();
         
@@ -146,32 +148,32 @@ public class BossPanel extends JPanel implements ActionListener{
         if(!isBossAlive()){
             switch (stage) {
                 case KingSlime:
-                    boss = new Boss("KingSlime",5000,5000,8);
+                    boss = new Boss("KingSlime",5000*powerMultiplier,5000*powerMultiplier,8);
                     bossTitle.setText("King Slime");
                     GameFrame.playSE(9);
                     break;
                 case EyeOfCthulhu:
-                    boss = new Boss("EyeOfCthulhu",6000,6000,5);
+                    boss = new Boss("EyeOfCthulhu",6000*powerMultiplier,6000*powerMultiplier,5);
                     bossTitle.setText("Eye Of Cthulhu");
                     GameFrame.playSE(9);
                     break;
                 case EaterOfWorld:
-                    boss = new Boss("EaterOfWorld",15000,15000,10);
+                    boss = new Boss("EaterOfWorld",15000*powerMultiplier,15000*powerMultiplier,10);
                     bossTitle.setText("Eater Of World");
                     GameFrame.playSE(9);
                     break;
                 case BrainOfCthulhu:
-                    boss = new Boss("BrainOfCthulhu",10000,10000,10);
+                    boss = new Boss("BrainOfCthulhu",10000*powerMultiplier,10000*powerMultiplier,10);
                     bossTitle.setText("Brain Of Cthulhu");
                     GameFrame.playSE(9);
                     break;
                 case QueenBee:
-                    boss = new Boss("QueenBee",25000,25000,10);
+                    boss = new Boss("QueenBee",25000*powerMultiplier,25000*powerMultiplier,10);
                     bossTitle.setText("Queen Bee");
                     GameFrame.playSE(9);
                     break;
                 case DeerClops:
-                    boss = new Boss("DeerClops",32000,32000,10);
+                    boss = new Boss("DeerClops",32000*powerMultiplier,32000*powerMultiplier,10);
                     bossTitle.setText("Deerclops");
                     GameFrame.playSE(9);
                     break;
@@ -179,12 +181,12 @@ public class BossPanel extends JPanel implements ActionListener{
                     this.setBounds(455, 20, 250, 306);
                     this.setBackground(Color.black);
                     this.setBorder(new LineBorder(Color.WHITE, 0));
-                    boss = new Boss("Skeletron",40000,40000,10);
+                    boss = new Boss("Skeletron",40000*powerMultiplier,40000*powerMultiplier,10);
                     bossTitle.setText("Skeletron");
                     GameFrame.playSE(9);
                     break;
                 case WallOfFlesh:
-                    boss = new Boss("WallOfFlesh",50000,50000,10);
+                    boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,10);
                     bossTitle.setText("Wall Of Flesh");
                     GameFrame.playSE(9);
                     break;
@@ -217,8 +219,8 @@ public class BossPanel extends JPanel implements ActionListener{
             case "EyeOfCthulhu":
                 if(phase == 2){
                     bossAttack.stopAllTimer();
-                    boss.setMaxHP(3000);
-                    boss.setHP(3000);
+                    boss.setMaxHP(3000*powerMultiplier);
+                    boss.setHP(3000*powerMultiplier);
                     boss.setCooldownSeconds(10);
                     boss.setState(1);
                     GameFrame.playSE(9);
@@ -238,8 +240,8 @@ public class BossPanel extends JPanel implements ActionListener{
             case "BrainOfCthulhu":
                 if(phase == 2){
                     bossAttack.stopAllTimer();
-                    boss.setMaxHP(10000);
-                    boss.setHP(10000);
+                    boss.setMaxHP(10000*powerMultiplier);
+                    boss.setHP(10000*powerMultiplier);
                     boss.setCooldownSeconds(5);
                     boss.setState(1);
                     GameFrame.playSE(9);
@@ -332,6 +334,9 @@ public class BossPanel extends JPanel implements ActionListener{
         GameFrame.stopMusic();
         GameFrame.getXPPanel().addBossXP((int)boss.getMaxHP());
         bossAttack.BossesDefeat(boss.getName());
+        if(boss.getName().equals("WallOfFlesh")){
+            powerMultiplier *= 10;
+        }
         boss = null;
         spawnChance = 0;
         bossTitle.setText("");

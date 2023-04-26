@@ -168,7 +168,7 @@ public class PlayZone extends JPanel{
         lastTimerReset();
         lastAction = 15;
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
-        if(block.getColor().equals(BlockTexture.Cloud.getColor()) && block.getColor().equals(BlockTexture.Bubble.getColor())){
+        if(block.getColor().equals(BlockTexture.Cloud.getColor())){
             gravity.setTimerScale(cloudGravityScale);
         }
         else{

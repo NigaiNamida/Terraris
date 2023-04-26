@@ -72,34 +72,64 @@ public class GameThread extends Thread{
             if(rightHoldingTime <= 8){
                 if(rightHoldingTime == 0){
                     Thread.sleep(40);
-                    playZone.moveRight();
+                    if(BossAttack.getIsConfuse()>0){
+                        playZone.moveLeft();
+                    }
+                    else{
+                        playZone.moveRight();
+                    }
                 }
                 rightHoldingTime++;
             }
             else if(keyHandler.isRightFirst() && keyHandler.isLeftPressed()){
                 Thread.sleep(40);
-                playZone.moveLeft();
+                if(BossAttack.getIsConfuse()>0){
+                    playZone.moveRight();
+                }
+                else{
+                    playZone.moveLeft();
+                }
             }   
             else{
                 Thread.sleep(40);
-                playZone.moveRight();
+                if(BossAttack.getIsConfuse()>0){
+                    playZone.moveLeft();
+                }
+                else{
+                    playZone.moveRight();
+                }
             }
         }
         if(keyHandler.isLeftPressed()){
             if(leftHoldingTime <= 8){
                 if(leftHoldingTime == 0){
                     Thread.sleep(40);
-                    playZone.moveLeft();
+                    if(BossAttack.getIsConfuse()>0){
+                        playZone.moveRight();
+                    }
+                    else{
+                        playZone.moveLeft();
+                    }
                 }
                 leftHoldingTime++;
             }
             else if(keyHandler.isLeftFirst() && keyHandler.isRightPressed()){
                 Thread.sleep(40);
-                playZone.moveRight();
+                    if(BossAttack.getIsConfuse()>0){
+                        playZone.moveLeft();
+                    }
+                    else{
+                        playZone.moveRight();
+                    }
             }   
             else{
                 Thread.sleep(40);
-                playZone.moveLeft();
+                if(BossAttack.getIsConfuse()>0){
+                    playZone.moveRight();
+                }
+                else{
+                    playZone.moveLeft();
+                }
             }
         }
         if(keyHandler.isHoldPressed()){

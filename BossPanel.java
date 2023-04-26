@@ -220,6 +220,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     boss.setMaxHP(3000);
                     boss.setHP(3000);
                     boss.setCooldownSeconds(10);
+                    boss.setState(1);
                     GameFrame.playSE(9);
                     playZone = GameFrame.getPlayZone();
                     playZone.setBlindness(0);
@@ -240,6 +241,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     boss.setMaxHP(10000);
                     boss.setHP(10000);
                     boss.setCooldownSeconds(5);
+                    boss.setState(1);
                     GameFrame.playSE(9);
                 }
                 else if(phase >= 3){
@@ -398,6 +400,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void attack(){
         bossAttack.Attack(boss.getName(), boss.getPhase(), boss.getState());
+        System.out.println(boss.getName() + " " + boss.getPhase() + " " +  boss.getState());
     }
 
     public void animate(){

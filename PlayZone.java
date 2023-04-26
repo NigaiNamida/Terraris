@@ -192,6 +192,7 @@ public class PlayZone extends JPanel{
         activeSpecialBlock();
         applySandGravity();
         gravity.restartTimer();
+        BossAttack.setIsConfuse(BossAttack.getIsConfuse()-1);
     }
     
     public void gameOver(){

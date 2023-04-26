@@ -60,6 +60,7 @@ public class TetrisPiece {
     public static void queueTexture(ArrayList<BlockTexture> textureQueue,boolean reset){
         if(reset){
             textureQueue.clear();
+            specialTextureSet = new ArrayList<>();
         }
 		List<BlockTexture> textureList = Arrays.asList(textureSet);
 		Collections.shuffle(textureList);

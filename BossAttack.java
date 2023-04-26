@@ -15,9 +15,11 @@ public class BossAttack implements ActionListener{
     private PlayZone playZone;
     private Boss boss;
     private Timer projectileTimer;
+    private static int projectileCount;
     private static int[] projectileCoordinate;
     private static int[] projectileDelay;
-    private static int projectileCount;
+    private static int[] projectileX;
+    private static int[] projectileY;
 
     private static int[] slimePuddleColumn;
 
@@ -26,14 +28,13 @@ public class BossAttack implements ActionListener{
     private static boolean isDashed;
 
     private static int[] projectileLength;
-    private static int[] projectileX;
-    private static int[] projectileY;
     private static int[] turnPointX;
     private static int[] turnPointY;
     private static int[] isBlocked;
 
-    private static Color slimePuddleColor;
-    private static Color slimeBlockColor;
+    private static int isActive;
+    private static boolean[] isExploded;
+
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
     
@@ -51,7 +52,8 @@ public class BossAttack implements ActionListener{
         isDashed = true;
 
         isBlocked = new int[1];
-        
+
+        isActive = 0;    
     }
 
     public void Attack(String bossName, int phase, int state) {
@@ -64,6 +66,9 @@ public class BossAttack implements ActionListener{
                 break;
             case "EaterOfWorld":
                 EaterOfWorldAttack(state);
+                break;
+            case "BrainOfCthulhu":
+                BrainOfCthulhuAttack(phase,state);
                 break;
             default:
                 break;
@@ -114,6 +119,27 @@ public class BossAttack implements ActionListener{
         setDevourerColumn(state);
         projectileTimer = new Timer(50, this);
         projectileTimer.restart();
+    }
+
+    public void BrainOfCthulhuAttack(int phase, int state) {
+        if(phase == 1){
+            if(isActive == 2){
+                isActive = 0;
+            }
+            if(isActive == 0){
+                setCreeper(state);
+                projectileTimer = new Timer(50, this);
+                projectileTimer.restart();
+            }
+            else if(isActive == 1){
+                isActive = 2;
+            }
+        }
+        else{
+            setTentacle(state);
+            projectileTimer = new Timer(50, this);
+            projectileTimer.restart();
+        }
     }
 
     public void setSlimeRainColumn(int state){
@@ -227,7 +253,7 @@ public class BossAttack implements ActionListener{
         }
 
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for(int i = 0; i < 10; i++) {
+        for(int i = 1; i < 9; i++) {
             list.add(i*25);
         }
         
@@ -238,6 +264,39 @@ public class BossAttack implements ActionListener{
             projectileCoordinate[i] = list.get(i);
         }
 
+    }
+
+    public void setCreeper(int state) {
+        projectileCount = state * 2;
+
+        projectileX = new int[projectileCount];
+        projectileY = new int[projectileCount];
+        isExploded = new boolean[projectileCount];
+
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(int i = 1; i < 9; i++) {
+            list.add(i*25);
+        }
+        
+        Collections.shuffle(list);
+        
+        projectileX = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileX[i] = list.get(i);
+        }
+
+        Collections.shuffle(list);
+
+        projectileY = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileY[i] = list.get(i);
+        }
+
+        isActive = 1;
+    }
+
+    public void setTentacle(int state) {
+        
     }
 
     @Override
@@ -261,6 +320,14 @@ public class BossAttack implements ActionListener{
                     case "EaterOfWorld":
                         movingDevourer();
                         break;
+                    case "BrainOfCthulhu":
+                        if(boss.getPhase()==1){
+                            movingCreeper();
+                        }
+                        else{
+                            movingEoC();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -272,8 +339,8 @@ public class BossAttack implements ActionListener{
     public void movingSlimeRain(){
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = BlockTexture.SlimePuddle.getColor();
-        slimeBlockColor = BlockTexture.SlimeBlock.getColor();
+        Color slimePuddleColor = BlockTexture.SlimePuddle.getColor();
+        Color slimeBlockColor = BlockTexture.SlimeBlock.getColor();
         for(int i = 0; i < projectileCount; i++){
             if(!isHit(i) && slimePuddleColumn[i] == 0){        
                 projectileDelay[i] += 5;
@@ -352,6 +419,27 @@ public class BossAttack implements ActionListener{
         }
     }
 
+    public void movingCreeper(){   
+        playZone = GameFrame.getPlayZone();
+        Color[][] backgroundBlock = PlayZone.getBackgroundBlock();   
+        for (int i = 0; i < projectileCount; i++) {
+            // touchBlock();
+            if(isActive == 2 && !isExploded[i]){
+                if((projectileY[i]/25 >= 0 && projectileY[i]/25 <= 19) && backgroundBlock[projectileY[i]/25][projectileX[i]/25] != null){
+                    for (int row = -1; row <= 1; row++){
+                        for (int col = -1; col <= 1; col++){
+                            if((projectileY[i]/25)+row > 20 && (projectileX[i]/25)+col < -1 && (projectileX[i]/25)+col > 10){}
+                            backgroundBlock[(projectileY[i]/25)+row][(projectileX[i]/25)+col] = null;
+                        }
+                    }
+                    isExploded[i] = true;
+                    GameFrame.playSE(10);
+                }
+                projectileY[i] += 20;
+            }
+        }
+    }
+
     void repaintPlayZone(){
         playZone.repaint();
     }
@@ -368,6 +456,9 @@ public class BossAttack implements ActionListener{
                     break;
                 case "EaterOfWorld":
                     drawEaterOfWorldAttack(g);
+                    break;
+                case "BrainOfCthulhu":
+                    drawBrainOfCthulhuAttack(g);
                     break;
                 default:
                     break;
@@ -496,10 +587,20 @@ public class BossAttack implements ActionListener{
         }
     }
 
+    public static void drawBrainOfCthulhuAttack(Graphics g) {
+        Boss boss = GameFrame.getBossPanel().getBoss();
+        for(int i = 0; i < projectileCount; i++){
+            if(!isExploded[i]){
+                bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Creeper.png").getImage();
+                g.drawImage(bossAttackImage, projectileX[i]-5 , projectileY[i]-5, null);  
+            }  
+        }
+    }
+
     public static boolean isHit(int i){
         PlayZone playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        slimePuddleColor = BlockTexture.SlimePuddle.getColor();
+        Color slimePuddleColor = BlockTexture.SlimePuddle.getColor();
         
         return projectileDelay[i]/25 >= playZone.getGridRows() - 1 || (projectileDelay[i]/25 >= 0 && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != null && backgroundBlock[projectileDelay[i]/25 + 1][projectileCoordinate[i]] != slimePuddleColor);
     }

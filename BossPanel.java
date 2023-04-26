@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Crimson;
         terrariaFont = GameFrame.getTerrariaFont(20);
         adjustBrightness(stage);
         spawnDelay = 100;
@@ -239,9 +239,8 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossAttack.stopAllTimer();
                     boss.setMaxHP(10000);
                     boss.setHP(10000);
-                    boss.setCooldownSeconds(10);
+                    boss.setCooldownSeconds(5);
                     GameFrame.playSE(9);
-                    bossAttack.setProjectileDelay(1000);
                 }
                 else if(phase >= 3){
                     exitFight();

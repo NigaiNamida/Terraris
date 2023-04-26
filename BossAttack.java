@@ -43,6 +43,9 @@ public class BossAttack implements ActionListener{
     private static int tentacleActive;
     private static int confuseCount;
 
+    private static int[] projectileType;
+    private static int[] projectileVariant;
+
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
     
@@ -67,6 +70,9 @@ public class BossAttack implements ActionListener{
         tentacleActive = 0;
 
         confuseCount = 0;
+
+        projectileType = new int[1];
+        projectileVariant = new int[1];
     }
 
     public void Attack(String bossName, int phase, int state) {
@@ -85,6 +91,9 @@ public class BossAttack implements ActionListener{
                 break;
             case "QueenBee":
                 QueenBeeAttack(state);
+                break;
+            case "DeerClops":
+                DeerClopsAttack(state);
                 break;
             default:
                 break;
@@ -111,6 +120,11 @@ public class BossAttack implements ActionListener{
                 tentacleLeft = -182;
                 tentacleRight = 250;
                 tentacleActive = 0;
+                break;
+            case "DeerClops":
+                blocked = new int[1];
+                projectileType = new int[1];
+                projectileVariant = new int[1];
                 break;
             default:
                 break;
@@ -160,7 +174,7 @@ public class BossAttack implements ActionListener{
         }
 
         if(active == 0){
-            setCreeper(phase, state);
+            setCreeperCoordinate(phase, state);
             projectileTimer = new Timer(50, this);
             projectileTimer.restart();
         }
@@ -175,7 +189,7 @@ public class BossAttack implements ActionListener{
             }
 
             if(tentacleActive == 0){
-                setTentacle(state);
+                setTentacleRow(state);
             }
 
             else{
@@ -188,8 +202,8 @@ public class BossAttack implements ActionListener{
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         NextPanel nextPanel = GameFrame.getNextPanel();
         playZone = GameFrame.getPlayZone();
-        setBeeline(state);
-        projectileTimer = new Timer(50, this);
+        setBeelineRow(state);
+        projectileTimer = new Timer(25, this);
         projectileTimer.restart();
         if(holdPanel.getBlock() != null && holdPanel.getBlock().getColor() != BlockTexture.Honey.getColor()){
             playZone.setHoldHoneyBlock();
@@ -197,6 +211,12 @@ public class BossAttack implements ActionListener{
         else if(nextPanel.getBlock().getColor() != BlockTexture.Honey.getColor()){
             playZone.setNextHoneyBlock();
         }
+    }
+
+    public void DeerClopsAttack(int state) {
+        setDebrisColumn(state);
+        projectileTimer = new Timer(50, this);
+        projectileTimer.restart();
     }
 
     public void setSlimeRainColumn(int state){
@@ -323,7 +343,7 @@ public class BossAttack implements ActionListener{
 
     }
 
-    public void setCreeper(int phase, int state) {
+    public void setCreeperCoordinate(int phase, int state) {
 
         projectileCount = state * 2;
 
@@ -364,7 +384,7 @@ public class BossAttack implements ActionListener{
         active = 1;
     }
 
-    public void setTentacle(int state) {
+    public void setTentacleRow(int state) {
         Random ran = new Random();
         tentacleGap = (6-state)*25;
 
@@ -379,7 +399,7 @@ public class BossAttack implements ActionListener{
         tentacleActive = 1;
     }
 
-    public void setBeeline(int state){
+    public void setBeelineRow(int state){
         Random ran = new Random();
 
         projectileCount = state*3;
@@ -420,6 +440,42 @@ public class BossAttack implements ActionListener{
 
     }
 
+    public void setDebrisColumn(int state) {
+        Random ran = new Random();
+        projectileCount = state;
+        
+        projectileDelay = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileDelay[i] = -i*150-100;
+        }
+
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(int i = 1; i < 9; i++) {
+            list.add(i);
+        }
+        
+        Collections.shuffle(list);
+        
+        projectileCoordinate = new int[projectileCount];
+        for(int i = 1; i < projectileCount; i++) {
+            projectileCoordinate[i] = list.get(i);
+        }
+
+        projectileType = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileType[i] = ran.nextInt(4);
+        }
+
+        projectileVariant = new int[projectileCount];
+        for(int i = 0; i < projectileCount; i++) {
+            projectileVariant[i] = ran.nextInt(3);
+        }
+        
+        blocked = new int[projectileCount];
+        System.out.println(blocked.length);
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         playZone = GameFrame.getPlayZone();
@@ -449,6 +505,10 @@ public class BossAttack implements ActionListener{
                         break;
                     case "QueenBee":
                         movingBeeLine();
+                        break;
+                    case "DeerClops":
+                        movingDebris();
+                        break;
                     default:
                         break;
                 }
@@ -591,10 +651,24 @@ public class BossAttack implements ActionListener{
     public void movingBeeLine() {
         for (int i = 0; i < projectileCount; i++) {
             if(projectileDirection[i] == 1){
-                projectileDelay[i] += 10;
+                projectileDelay[i] += 5;
             }
             else{
-                projectileDelay[i] -= 10;
+                projectileDelay[i] -= 5;
+            }
+        }
+    }
+
+    public void movingDebris() {
+        playZone = GameFrame.getPlayZone();
+        Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
+        for (int i = 0; i < projectileCount; i++) {
+            projectileDelay[i] += 10;
+            if(blocked[i] == 0){
+                dropBlock(i);
+                if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] != null){
+                    blocked[i] = 1;
+                }
             }
         }
     }
@@ -622,6 +696,8 @@ public class BossAttack implements ActionListener{
                 case "QueenBee":
                     drawQueenBeeAttack(g);
                     break;
+                case "DeerClops":
+                    drawDeerClopsAttack(g);
                 default:
                     break;
             }
@@ -811,6 +887,18 @@ public class BossAttack implements ActionListener{
         }
     }
 
+    public static void drawDeerClopsAttack(Graphics g) {
+        Boss boss = GameFrame.getBossPanel().getBoss();
+        for (int i = 0; i < projectileCount; i++) {
+            if(blocked[i] == 0 && projectileDelay[i] <= 500 && projectileDelay[i] >= -200){
+                bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Debris_" + projectileType[i] + "_" + projectileVariant[i] + ".png").getImage();
+                g.drawImage(bossAttackImage, projectileCoordinate[i]*25-4 , projectileDelay[i], null);  
+                g.setColor(new Color(255, 0, 0, 100));
+                g.fillRect(projectileCoordinate[i]*25 , 0, 25 , 500);
+            }
+        }
+    }
+
     public static boolean isHit(int i){
         PlayZone playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
@@ -912,7 +1000,6 @@ public class BossAttack implements ActionListener{
                     if(col+x == projectileCoordinate[i]/25 && row+y == projectileDelay[i]/25){
                         blocked[i]=1;
                     }
-
                 }
             }
         }
@@ -955,6 +1042,38 @@ public class BossAttack implements ActionListener{
         }
     }
 
+    public void increaseSnowFallSpeed(int state){
+        playZone = GameFrame.getPlayZone();
+        if (state == 1){
+            playZone.setSnowFallSpeed(40);
+        }
+        else if (state == 2){
+            playZone.setSnowFallSpeed(30);
+        }
+        else if (state == 3){
+            playZone.setSnowFallSpeed(20);
+        }
+    }
+
+    public void dropBlock(int i) {
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    if(col+x == projectileCoordinate[i] && row+y == projectileDelay[i]/25){
+                        playZone.hardDrop();
+                        blocked[i] = 1;
+                    }
+                }
+            }
+        }
+    }
+
     public void stopAllTimer(){
         if(projectileTimer != null){
             projectileTimer.stop();
@@ -978,4 +1097,3 @@ public class BossAttack implements ActionListener{
     }
 
 }
-

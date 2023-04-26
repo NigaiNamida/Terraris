@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class PlayZone extends JPanel{
+public class PlayZone extends JPanel implements ActionListener{
     private HoldPanel holdPanel;
     private XPPanel XPPanel;
     private NextPanel nextPanel;
@@ -35,6 +38,10 @@ public class PlayZone extends JPanel{
     private static Color slimePuddle = BlockTexture.SlimePuddle.getColor(); 
     private static Color slimeBlock = BlockTexture.SlimeBlock.getColor(); 
     private static Color honey = BlockTexture.Honey.getColor(); 
+
+    private Timer snowFallTimer;
+    private static int snowFallSpeed; 
+    private static int snowFallFrame; 
 
     private int[][] testSet;
 
@@ -72,6 +79,15 @@ public class PlayZone extends JPanel{
         TetrisPiece.queueTexture(textureQueue, true);
         
         gravity = new Gravity(this,1);
+
+        Theme stage = GameFrame.getBossPanel().getStage();
+        snowFallFrame = 0;
+        snowFallSpeed = 40;
+        snowFallTimer = new Timer(snowFallSpeed, this);
+        if (stage == Theme.Snow || stage == Theme.DeerClops){
+            snowFallTimer.restart();
+        }
+
         createBlock();
     }
     
@@ -851,6 +867,7 @@ public class PlayZone extends JPanel{
         drawSlime(g);
         drawBlock(g);
         drawBossAttack(g);
+        drawSnow(g);
         drawShadow(g);
         drawBorderImage(g);
         repaintPauseAndReward(g);
@@ -1022,11 +1039,29 @@ public class PlayZone extends JPanel{
         BossAttack.drawBossAttack(g);
     }
     
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(!isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == snowFallTimer){
+            snowFallFrame = (snowFallFrame + 1) % 12;
+            repaint();
+        }
+    }
+
+    private void drawSnow(Graphics g){    
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        if(bossPanel.getStage() == Theme.Snow || bossPanel.getStage() == Theme.DeerClops ){
+            Image snowImage = new ImageIcon("Assets/Image/Background/SnowFall_" + snowFallFrame + ".png").getImage();
+            g.drawImage(snowImage ,0, 0,null);
+        }
+    }
+
     private void drawShadow(Graphics g){
         BossPanel bossPanel = GameFrame.getBossPanel();
+        int radius;
+        int darkness;
         if (bossPanel.getStage() == Theme.Night || bossPanel.getStage() == Theme.EyeOfCthulhu || bossPanel.getStage() == Theme.Dungeon || bossPanel.getStage() == Theme.Skeletron){
-            int radius = gridRows;
-            int darkness = 4;
+            radius = gridRows;
+            darkness = 4;
             int blockHeight = block.getHeight();
             int blockWidth = block.getWidth();
             int[][] shape = block.getShape();
@@ -1046,6 +1081,21 @@ public class PlayZone extends JPanel{
                         }
                     }
                 }
+            }
+        }
+        else if(bossPanel.getStage() == Theme.Snow || bossPanel.getStage() == Theme.DeerClops ){
+            if(bossPanel.getBoss() != null){
+                radius = 20 + (bossPanel.getBoss().getState()-1)*3;
+            }
+            else{
+                radius = 20;
+            }
+            for (int row = 0; row < radius; row++) {
+                if(row > 19){
+                    break;
+                }
+                g.setColor(new Color(255, 255, 255, 200/radius*(radius-row)));
+                g.fillRect(0,row*25,250,25);
             }
         }
     }
@@ -1145,4 +1195,20 @@ public class PlayZone extends JPanel{
         holdPanel.setBlock(TetrisPiece.getBlock(holdPanel.getBlock().getName(),honey));
         holdPanel.repaint();
     }
+
+    public void startSnow() {
+        snowFallTimer.restart();
+    }
+
+    public void stopSnow() {
+        snowFallTimer.stop();
+    }
+
+    public void setSnowFallSpeed(int snowFallSpeed) {
+        PlayZone.snowFallSpeed = snowFallSpeed;
+        snowFallTimer = new Timer(snowFallSpeed, this);
+        snowFallTimer.restart();
+    }
+
+    
 }

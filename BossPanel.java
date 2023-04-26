@@ -34,9 +34,10 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Snow;
         terrariaFont = GameFrame.getTerrariaFont(20);
-        adjustBrightness(stage);
+        playZone = GameFrame.getPlayZone();
+        changeEnvironment(stage);
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
@@ -47,7 +48,6 @@ public class BossPanel extends JPanel implements ActionListener{
         
         spawnTimer = new Timer(100, this);
         
-        playZone = GameFrame.getPlayZone();
         bossAttack = new BossAttack();
         bossTitle = new JLabel();
         bossTitle.setForeground(new Color(193,221,196,255));
@@ -102,8 +102,8 @@ public class BossPanel extends JPanel implements ActionListener{
 
     private void drawBorderImage(Graphics g) {
         BossPanel bossPanel = GameFrame.getBossPanel();
-        Image BGImage = new ImageIcon(bossPanel.getStage().getBossPanelBorderImagePath()).getImage();
-        g.drawImage(BGImage, 0, 0, null);
+        Image BorderImage = new ImageIcon(bossPanel.getStage().getBossPanelBorderImagePath()).getImage();
+        g.drawImage(BorderImage, 0, 0, null);
     }
     
     public void attemptSpawn(){
@@ -121,6 +121,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     case UnderWorld:
                         ChatPanel.newMessage(stage, false);
                         stage = stage.next();
+                        changeEnvironment(stage);
                         spawnChance = 100;
                         break;
                     default:
@@ -149,48 +150,43 @@ public class BossPanel extends JPanel implements ActionListener{
                 case KingSlime:
                     boss = new Boss("KingSlime",5000*powerMultiplier,5000*powerMultiplier,8);
                     bossTitle.setText("King Slime");
-                    GameFrame.playSE(9);
                     break;
                 case EyeOfCthulhu:
                     boss = new Boss("EyeOfCthulhu",6000*powerMultiplier,6000*powerMultiplier,5);
                     bossTitle.setText("Eye Of Cthulhu");
-                    GameFrame.playSE(9);
                     break;
                 case EaterOfWorld:
                     boss = new Boss("EaterOfWorld",15000*powerMultiplier,15000*powerMultiplier,10);
                     bossTitle.setText("Eater Of World");
-                    GameFrame.playSE(9);
                     break;
                 case BrainOfCthulhu:
                     boss = new Boss("BrainOfCthulhu",10000*powerMultiplier,10000*powerMultiplier,10);
                     bossTitle.setText("Brain Of Cthulhu");
-                    GameFrame.playSE(9);
+                    bossAttack.applyBlindness(stateTimer);
                     break;
                 case QueenBee:
                     boss = new Boss("QueenBee",25000*powerMultiplier,25000*powerMultiplier,10);
                     bossTitle.setText("Queen Bee");
-                    GameFrame.playSE(9);
                     break;
                 case DeerClops:
-                    boss = new Boss("DeerClops",32000*powerMultiplier,32000*powerMultiplier,10);
+                    boss = new Boss("DeerClops",2000*powerMultiplier,2000*powerMultiplier,10);
                     bossTitle.setText("Deerclops");
-                    GameFrame.playSE(9);
+                    bossAttack.increaseSnowFallSpeed(boss.getState());
                     break;
                 case Skeletron:
                     this.setBounds(455, 20, 250, 306);
                     this.setBackground(Color.black);
                     boss = new Boss("Skeletron",40000*powerMultiplier,40000*powerMultiplier,10);
                     bossTitle.setText("Skeletron");
-                    GameFrame.playSE(9);
                     break;
                 case WallOfFlesh:
                     boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,10);
                     bossTitle.setText("Wall Of Flesh");
-                    GameFrame.playSE(9);
                     break;
                 default:
                     break;
             }
+            GameFrame.playSE(9);
             enterFight();
         }
     }
@@ -210,6 +206,11 @@ public class BossPanel extends JPanel implements ActionListener{
         int phase = boss.getPhase();
         switch (name) {
             case "KingSlime":
+            case "EaterOfWorld" :
+            case "QueenBee" :
+            case "DeerClops" :
+            case "Skeletron" :
+            case "WallOfFlesh" :
                 if(phase >= 2){
                     exitFight();
                 }
@@ -230,11 +231,6 @@ public class BossPanel extends JPanel implements ActionListener{
                     exitFight();
                 }
                 break;
-            case "EaterOfWorld" :
-                if(phase >= 2){
-                    exitFight();
-                }
-                break;
             case "BrainOfCthulhu":
                 if(phase == 2){
                     bossAttack.stopAllTimer();
@@ -245,26 +241,6 @@ public class BossPanel extends JPanel implements ActionListener{
                     GameFrame.playSE(9);
                 }
                 else if(phase >= 3){
-                    exitFight();
-                }
-                break;
-            case "QueenBee" :
-                if(phase >= 2){
-                    exitFight();
-                }
-                break;
-            case "DeerClops" :
-                if(phase >= 2){
-                    exitFight();
-                }
-                break;
-            case "Skeletron" :
-                if(phase >= 2){
-                    exitFight();
-                }
-                break;
-            case "WallOfFlesh" :
-                if(phase >= 2){
                     exitFight();
                 }
                 break;
@@ -319,6 +295,18 @@ public class BossPanel extends JPanel implements ActionListener{
                     }
                 }
                 break;
+            case "DeerClops":
+                if(boss.getPhase() == 1){
+                    if(boss.getState() == 2 && stateTimer != 2){
+                        boss.setCooldownSeconds(6);
+                        stateTimer = 2;  
+                    }
+                    else if(boss.getState() == 3  && stateTimer != 3){
+                        boss.setCooldownSeconds(7);
+                        stateTimer = 3;
+                    }
+                    bossAttack.increaseSnowFallSpeed(boss.getState());
+                }
             default:
                 break;
         }
@@ -351,7 +339,7 @@ public class BossPanel extends JPanel implements ActionListener{
         bossTitle.setText("");
         restartSpawnTimer();
         stage = stage.next();
-        adjustBrightness(stage);
+        changeEnvironment(stage);
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.repaint();
         NextPanel nextPanel = GameFrame.getNextPanel();
@@ -363,7 +351,8 @@ public class BossPanel extends JPanel implements ActionListener{
         GameFrame.playMusic(0);
     }
 
-    public void adjustBrightness(Theme stage) {
+    public void changeEnvironment(Theme stage) {
+        playZone = GameFrame.getPlayZone();
         switch (stage) {
             case Night:
             case EyeOfCthulhu:
@@ -371,8 +360,18 @@ public class BossPanel extends JPanel implements ActionListener{
             case Skeletron:
                 brightness = (10)/100.0f;
                 break;
+            case Snow:
+            case DeerClops:
+                brightness = (80)/100.0f;
+                if(playZone != null){
+                    playZone.startSnow();
+                }
+                break;
             default:
                 brightness = (80)/100.0f;
+                if(playZone != null){
+                    playZone.stopSnow();
+                }
                 break;
         }
     }
@@ -419,7 +418,11 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void animate(){
         repaint();
-        boss.setFrame((boss.getFrame() + 1) % 8);
+        boss.setFrame((boss.getFrame() + 1) % 24);
+        if(stage == Theme.Snow && stage == Theme.DeerClops){
+            PlayZone playZone = GameFrame.getPlayZone();
+            playZone.repaint();
+        }
     }
 
     public void drawBoss(Graphics g){  
@@ -440,7 +443,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 x = 40;
                 y = 50;
                 if (phase == 1){
-                    path += frame + ".png";  
+                    path += (frame % 8) + ".png";  
                 }
                 else if (phase == 2 && (bossAttack.getProjectileDelay() < -250 || bossAttack.getProjectileDelay() > 500)){
                     path += (frame % 4)+ ".png"; 
@@ -454,25 +457,25 @@ public class BossPanel extends JPanel implements ActionListener{
             case "BrainOfCthulhu":
                 x = 50;
                 y = 70;
-                path += frame + ".png";  
+                path += (frame % 8) + ".png";  
                 break;
             case "QueenBee":
                 x = 41;
                 y = 60;
-                path += frame + ".png";  
+                path += (frame % 8) + ".png";  
                 break;
             case "DeerClops":
                 x = 50;
                 y = 15;
-                path += frame + ".png";
+                path += (frame % 8) + ".png";
                 if(AnimationThread.getActonTick() >= 24){
-                    path = "Assets/Image/Bosses/" + name + "/Blink_" + phase + "_" + state + "_" + frame + ".png";
+                    path = "Assets/Image/Bosses/" + name + "/Blink_" + phase%8 + "_" + state + "_" + (frame % 8) + ".png";
                 }
                 break;  
             case "Skeletron":
                 x = 29;
                 y = 90;
-                path += frame + ".png";
+                path += (frame % 8) + ".png";
                 break;
         }
         bossImage = new ImageIcon(path).getImage();

@@ -3,7 +3,6 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,7 +34,7 @@ public class RewardPanel extends JPanel implements ActionListener{
         this.setLayout(null);
 
         rewardLabel.setForeground(new Color(193,221,196,255));
-        rewardLabel.setFont(new Font("Futura",Font.BOLD,35));
+        rewardLabel.setFont(GameFrame.getTerrariaFont(35));
         rewardLabel.setBounds(0, 30, 600, 40);
         rewardLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -64,6 +63,7 @@ public class RewardPanel extends JPanel implements ActionListener{
             textureLabels[i] = new JLabel();
             textureLabels[i].setBounds(20 + (i*120), 80, (int)(this.getWidth()/3.0), 50);
             textureLabels[i].setText(""+slotTexture);
+            textureLabels[i].setFont(GameFrame.getTerrariaFont(20));
             textureLabels[i].repaint();
             this.add(textureLabels[i]);
 
@@ -77,6 +77,7 @@ public class RewardPanel extends JPanel implements ActionListener{
             modes[i].setBounds(20 + (i*120), 220, 100, 50);
             String text = rewards[i].isUpgrade() ? "Upgrade" : "Unlock";
             modes[i].setText(""+text);
+            modes[i].setFont(GameFrame.getTerrariaFont(20));
             modes[i].repaint();
             this.add(modes[i]);
         }

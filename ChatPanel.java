@@ -126,12 +126,13 @@ public class ChatPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        PlayZone playZone = GameFrame.getPlayZone();
         if(e.getSource() == showTimer){
             chat.setText(null);
             showTimer.stop();
             GameFrame.getPausePanel().repaint();
         }
-        if(e.getSource() == glowTimer && !KeyHandler.isPause()){
+        if(e.getSource() == glowTimer && !KeyHandler.isPause() && !playZone.isGameOver()){
             if(chat.getText() != null){
                 if(darkLevel < 3){
                     darkLevel++;

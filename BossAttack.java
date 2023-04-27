@@ -1150,15 +1150,14 @@ public class BossAttack implements ActionListener{
     public void ShiftRow(){
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
         
-        for (int row = 0; row < 20; row++){
+        for (int row = 0; row < 21; row++){
             for (int col = 0; col < 10; col++){
                 if(row == 0){
                     backgroundBlock[row][col] = null;
                 }
-                else if (row == 19){
-                    backgroundBlock[row-1][col] = backgroundBlock[row][col];
+                else if (row == 20){
                     if(col != projectileCoordinate[0]){
-                        backgroundBlock[row][col] = BlockTexture.Stone.getColor();
+                        backgroundBlock[row-1][col] = BlockTexture.Stone.getColor();
                     }
                 }
                 else{

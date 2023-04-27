@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.UnderWorld;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
         playZone = GameFrame.getPlayZone();
         changeEnvironment(stage);
@@ -179,7 +179,7 @@ public class BossPanel extends JPanel implements ActionListener{
                 case Skeletron:
                     this.setBounds(455, 20, 250, 306);
                     this.setBackground(Color.black);
-                    boss = new Boss("Skeletron",2000*powerMultiplier,2000*powerMultiplier,10);
+                    boss = new Boss("Skeletron",40000*powerMultiplier,40000*powerMultiplier,10);
                     bossTitle.setText("Skeletron");
                     bossAttack.setProjectileDelay(1000);
                     break;

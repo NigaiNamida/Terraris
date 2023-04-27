@@ -46,6 +46,8 @@ public class BossAttack implements ActionListener{
     private static int[] projectileType;
     private static int[] projectileVariant;
 
+    private static int boneCurseCount;
+
     private static Image bossAttackImage;
     private static String path = "Assets/Image/Bosses/";
     
@@ -73,6 +75,10 @@ public class BossAttack implements ActionListener{
 
         projectileType = new int[1];
         projectileVariant = new int[1];
+
+        boneCurseCount = 0;
+
+        
     }
 
     public void Attack(String bossName, int phase, int state) {
@@ -95,6 +101,11 @@ public class BossAttack implements ActionListener{
             case "DeerClops":
                 DeerClopsAttack(state);
                 break;
+            case "Skeletron":
+                SkeletronAttack(state);
+                break;
+            case "WallOfFlesh":
+                WallOfFleshAttack(state);
             default:
                 break;
         }
@@ -217,6 +228,23 @@ public class BossAttack implements ActionListener{
         setDebrisColumn(state);
         projectileTimer = new Timer(50, this);
         projectileTimer.restart();
+    }
+
+    public void SkeletronAttack(int state){
+        HoldPanel holdPanel = GameFrame.getHoldPanel();
+        if(holdPanel.getBlock() != null){
+            swapHoldAndNext();
+        }
+        if(state != 1){   
+            setSkeletronHandRow(state);
+            projectileTimer = new Timer(30, this);
+            projectileTimer.restart();
+        }
+    }
+
+    public void WallOfFleshAttack(int state){
+        setShiftRow();
+        ShiftRow();
     }
 
     public void setSlimeRainColumn(int state){
@@ -441,39 +469,51 @@ public class BossAttack implements ActionListener{
     }
 
     public void setDebrisColumn(int state) {
+        
         Random ran = new Random();
-        projectileCount = state;
+        projectileDelay = new int[1];
+        projectileCoordinate = new int[1];
+        projectileType = new int[1];
+        projectileVariant = new int[1];
+        blocked = new int[1];
+
+        projectileDelay[0] = -150;
+        projectileCoordinate[0] = ran.nextInt(8)+1;
+        projectileType[0] = ran.nextInt(4);
+        projectileVariant[0] = ran.nextInt(3);
         
-        projectileDelay = new int[projectileCount];
-        for(int i = 0; i < projectileCount; i++) {
-            projectileDelay[i] = -i*150-100;
+    }
+
+    public void setSkeletronHandRow(int state){
+        Random ran = new Random();
+
+        projectileCoordinate[0] = ran.nextInt(3)+5;
+
+        if(state == 2){
+            projectileDirection[0] = 0;
         }
 
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for(int i = 1; i < 9; i++) {
-            list.add(i);
-        }
-        
-        Collections.shuffle(list);
-        
-        projectileCoordinate = new int[projectileCount];
-        for(int i = 1; i < projectileCount; i++) {
-            projectileCoordinate[i] = list.get(i);
+        else if (state == 3){
+            if(projectileDirection[0] == 0){
+                projectileDirection[0] = 1;
+            }
+            else{
+                projectileDirection[0] = 0;
+            }
         }
 
-        projectileType = new int[projectileCount];
-        for(int i = 0; i < projectileCount; i++) {
-            projectileType[i] = ran.nextInt(4);
+        if(projectileDirection[0] == 0){
+            projectileDelay[0] = -250;
+        }
+        else{
+            projectileDelay[0] = 500;
         }
 
-        projectileVariant = new int[projectileCount];
-        for(int i = 0; i < projectileCount; i++) {
-            projectileVariant[i] = ran.nextInt(3);
-        }
-        
-        blocked = new int[projectileCount];
-        System.out.println(blocked.length);
-
+    }
+    
+    public void setShiftRow() {
+        Random ran = new Random();
+        projectileCoordinate[0] = ran.nextInt(10);
     }
 
     @Override
@@ -508,6 +548,9 @@ public class BossAttack implements ActionListener{
                         break;
                     case "DeerClops":
                         movingDebris();
+                        break;
+                    case "Skeletron":
+                        movingSkeletronHand();
                         break;
                     default:
                         break;
@@ -662,16 +705,26 @@ public class BossAttack implements ActionListener{
     public void movingDebris() {
         playZone = GameFrame.getPlayZone();
         Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
-        for (int i = 0; i < projectileCount; i++) {
-            projectileDelay[i] += 10;
-            if(blocked[i] == 0){
-                dropBlock(i);
-                if((projectileDelay[i]/25 >= 0 && projectileDelay[i]/25 <= 19) && backgroundBlock[projectileDelay[i]/25][projectileCoordinate[i]] != null){
-                    blocked[i] = 1;
-                }
+        if(blocked[0] == 0){
+            projectileDelay[0] += 10;
+            dropBlock(0);
+            if(((projectileDelay[0]/25)+1 >= 0 && (projectileDelay[0]/25)+1 <= 19) && backgroundBlock[(projectileDelay[0]/25)+1][projectileCoordinate[0]] != null){
+                blocked[0] = 1;
             }
         }
     }
+
+    public void movingSkeletronHand(){
+        curseBlock(0);
+        if(projectileDirection[0] == 0){
+            projectileDelay[0] += 5;
+            System.out.println(projectileDelay[0]/25+" "+projectileCoordinate[0]);
+        }
+        else{
+            projectileDelay[0] -= 5;
+        }
+    }
+
 
     void repaintPlayZone(){
         playZone.repaint();
@@ -698,6 +751,10 @@ public class BossAttack implements ActionListener{
                     break;
                 case "DeerClops":
                     drawDeerClopsAttack(g);
+                    break;
+                case "Skeletron":
+                    drawSkeletronAttack(g);
+                    break;
                 default:
                     break;
             }
@@ -889,14 +946,25 @@ public class BossAttack implements ActionListener{
 
     public static void drawDeerClopsAttack(Graphics g) {
         Boss boss = GameFrame.getBossPanel().getBoss();
-        for (int i = 0; i < projectileCount; i++) {
-            if(blocked[i] == 0 && projectileDelay[i] <= 500 && projectileDelay[i] >= -200){
-                bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Debris_" + projectileType[i] + "_" + projectileVariant[i] + ".png").getImage();
-                g.drawImage(bossAttackImage, projectileCoordinate[i]*25-4 , projectileDelay[i], null);  
-                g.setColor(new Color(255, 0, 0, 100));
-                g.fillRect(projectileCoordinate[i]*25 , 0, 25 , 500);
+        if(blocked[0] == 0 && projectileDelay[0] <= 500 && projectileDelay[0] >= -200){
+            bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Debris_" + projectileType[0] + "_" + projectileVariant[0] + ".png").getImage();
+            g.drawImage(bossAttackImage, projectileCoordinate[0]*25-4 , projectileDelay[0], null);  
+            g.setColor(new Color(255, 0, 0, 100));
+            g.fillRect(projectileCoordinate[0]*25 , 0, 25 , 500);
+        }
+    }
+
+    public static void drawSkeletronAttack(Graphics g) {
+        Boss boss = GameFrame.getBossPanel().getBoss();
+        if(projectileDelay[0] >= -250 && projectileDelay[0] <= 500){
+            if(projectileDirection[0] == 0){
+                bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Hand_Right.png").getImage();  
+            }
+            else{
+                bossAttackImage = new ImageIcon(path + boss.getName() + "/Attack/Hand_Left.png").getImage();   
             }
         }
+        g.drawImage(bossAttackImage, projectileDelay[0], projectileCoordinate[0]*25 - 3, null);
     }
 
     public static boolean isHit(int i){
@@ -1045,10 +1113,10 @@ public class BossAttack implements ActionListener{
     public void increaseSnowFallSpeed(int state){
         playZone = GameFrame.getPlayZone();
         if (state == 1){
-            playZone.setSnowFallSpeed(40);
+            playZone.setSnowFallSpeed(50);
         }
         else if (state == 2){
-            playZone.setSnowFallSpeed(30);
+            playZone.setSnowFallSpeed(35);
         }
         else if (state == 3){
             playZone.setSnowFallSpeed(20);
@@ -1074,6 +1142,35 @@ public class BossAttack implements ActionListener{
         }
     }
 
+    public void swapHoldAndNext(){
+        playZone = GameFrame.getPlayZone();
+        playZone.swapHoldAndNext();
+    }
+
+    public void ShiftRow(){
+        Color[][] backgroundBlock = PlayZone.getBackgroundBlock();
+        
+        for (int row = 0; row < 20; row++){
+            for (int col = 0; col < 10; col++){
+                if(row == 0){
+                    backgroundBlock[row][col] = null;
+                }
+                else if (row == 19){
+                    backgroundBlock[row-1][col] = backgroundBlock[row][col];
+                    if(col != projectileCoordinate[0]){
+                        backgroundBlock[row][col] = BlockTexture.Stone.getColor();
+                    }
+                }
+                else{
+                    backgroundBlock[row-1][col] = backgroundBlock[row][col];
+                    backgroundBlock[row][col] = null;
+                }
+            }
+        }
+        playZone = GameFrame.getPlayZone();
+        playZone.applySandGravity();
+    }
+
     public void stopAllTimer(){
         if(projectileTimer != null){
             projectileTimer.stop();
@@ -1082,6 +1179,24 @@ public class BossAttack implements ActionListener{
 
     public int getProjectileDelay() {
         return projectileDelay[0];
+    }
+
+    public void curseBlock(int i) {
+        TetrisPiece block = playZone.getBlock();
+        int blockHeight = block.getHeight();
+        int blockWidth = block.getWidth();
+        int[][] shape = block.getShape();
+        int x = block.getX();
+        int y = block.getY();
+        for (int row = 0; row < blockHeight; row++) {
+            for (int col = 0; col < blockWidth; col++) {
+                if(shape[row][col] == 1){
+                    if((col+x <= (projectileDelay[i]+76)/25 && col+x >= projectileDelay[i]/25) && (row+y <= projectileCoordinate[i]+1 && row+y >= projectileCoordinate[i])){            
+                        boneCurseCount = 2;
+                    }
+                }
+            }
+        }
     }
 
     public void setProjectileDelay(int projectileDelay) {
@@ -1096,4 +1211,11 @@ public class BossAttack implements ActionListener{
         BossAttack.confuseCount = confuseCount;
     }
 
+    public static int getBoneCurseCount() {
+        return boneCurseCount;
+    }
+
+    public static void setBoneCurseCount(int  boneCurseCount) {
+        BossAttack. boneCurseCount =  boneCurseCount;
+    }
 }

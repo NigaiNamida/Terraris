@@ -25,6 +25,23 @@ public class HoldPanel extends DataPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);//not have = no panel bg color
         super.drawBlock(g, block);
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        if(bossPanel.getBoss() != null && bossPanel.getBoss().getName() == "Skeletron" && bossPanel.getBoss().getState() > 1){
+            drawSkeletronAttack(g);
+            drawBorder(g);
+        }
+    }
+
+    public void drawSkeletronAttack(Graphics g){
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getDataPanelBGImageDarkPath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
+    }
+
+    private void drawBorder(Graphics g) {
+        BossPanel bossPanel = GameFrame.getBossPanel();
+        Image BGImage = new ImageIcon(bossPanel.getStage().getDataPanelBorderImagePath()).getImage();
+        g.drawImage(BGImage, 0, 0, null);
     }
 
     public TetrisPiece getBlock() {

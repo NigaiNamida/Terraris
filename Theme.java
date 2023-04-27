@@ -28,6 +28,7 @@ public enum Theme {
     private String playZoneBorderImagePath;
     private String BossPanelBorderImagePath;
     private String DataPanelBorderImagePath;
+    private String DataPanelBGImageDarkPath;
 
     private static final Theme[] vals = values();
     
@@ -39,6 +40,7 @@ public enum Theme {
         playZoneBGImagePath = BGPath + "PlayZone/" + this + ".png";
         BossPanelBGImagePath = BGPath + "BossPanel/" + this + ".png";
         DataPanelBGImagePath = BGPath + "DataPanel/" + Stage() + ".png";
+        DataPanelBGImageDarkPath = BGPath + "DataPanel/" + Stage() + "_Dark.png";
 
         playZoneBorderImagePath = BGPath + "PlayZone/" + Stage() + "_Border.png";
         BossPanelBorderImagePath = BGPath + "BossPanel/" + Stage() + "_Border.png";
@@ -114,6 +116,10 @@ public enum Theme {
 
     public String getDataPanelBGImagePath() {
         return DataPanelBGImagePath;
+    }
+
+    public String getDataPanelBGImageDarkPath() {
+        return DataPanelBGImageDarkPath;
     }
 
     public String getPlayZoneBorderImagePath() {

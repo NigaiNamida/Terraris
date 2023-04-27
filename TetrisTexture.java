@@ -115,6 +115,10 @@ public class TetrisTexture extends JPanel{
             block = "Honey";
             n[0] = n[2] = n[6] = n[8] = 'D';  
         }
+        else if(middle.equals(BlockTexture.Bone.getColor())){
+            block = "Bone";
+            n[0] = n[2] = n[6] = n[8] = 'D';  
+        }
         else if(middle.equals(BlockTexture.Cloud.getColor())){
             block = "Cloud";
         }

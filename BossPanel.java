@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Snow;
+        stage = Theme.UnderWorld;
         terrariaFont = GameFrame.getTerrariaFont(20);
         playZone = GameFrame.getPlayZone();
         changeEnvironment(stage);
@@ -85,6 +85,9 @@ public class BossPanel extends JPanel implements ActionListener{
         if(isBossAlive()){
             drawBoss(g);
             drawHP(g);
+            if (boss.getName() == "WallOfFlesh") {
+                drawBorderImage(g);
+            }
         }
     }
 
@@ -169,18 +172,19 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossTitle.setText("Queen Bee");
                     break;
                 case DeerClops:
-                    boss = new Boss("DeerClops",2000*powerMultiplier,2000*powerMultiplier,10);
+                    boss = new Boss("DeerClops",32000*powerMultiplier,32000*powerMultiplier,10);
                     bossTitle.setText("Deerclops");
                     bossAttack.increaseSnowFallSpeed(boss.getState());
                     break;
                 case Skeletron:
                     this.setBounds(455, 20, 250, 306);
                     this.setBackground(Color.black);
-                    boss = new Boss("Skeletron",40000*powerMultiplier,40000*powerMultiplier,10);
+                    boss = new Boss("Skeletron",2000*powerMultiplier,2000*powerMultiplier,10);
                     bossTitle.setText("Skeletron");
+                    bossAttack.setProjectileDelay(1000);
                     break;
                 case WallOfFlesh:
-                    boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,10);
+                    boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,20);
                     bossTitle.setText("Wall Of Flesh");
                     break;
                 default:
@@ -298,15 +302,43 @@ public class BossPanel extends JPanel implements ActionListener{
             case "DeerClops":
                 if(boss.getPhase() == 1){
                     if(boss.getState() == 2 && stateTimer != 2){
-                        boss.setCooldownSeconds(6);
+                        boss.setCooldownSeconds(4);
                         stateTimer = 2;  
                     }
                     else if(boss.getState() == 3  && stateTimer != 3){
-                        boss.setCooldownSeconds(7);
+                        boss.setCooldownSeconds(3);
                         stateTimer = 3;
                     }
                     bossAttack.increaseSnowFallSpeed(boss.getState());
                 }
+            case "Skeletron":
+                if(boss.getPhase() == 1){
+                    if(boss.getState() == 2 && stateTimer != 2){
+                        boss.setCooldownSeconds(7);
+                        stateTimer = 2;  
+                        HoldPanel holdPanel = GameFrame.getHoldPanel();
+                        holdPanel.repaint();
+                    }
+                    else if(boss.getState() == 3  && stateTimer != 3){
+                        boss.setCooldownSeconds(5);
+                        stateTimer = 3;
+                        NextPanel nextPanel = GameFrame.getNextPanel();
+                        nextPanel.repaint();
+                    }
+                    bossAttack.increaseSnowFallSpeed(boss.getState());
+                }
+            case "WallOfFlesh":
+                if(boss.getPhase() == 1){
+                    if(boss.getState() == 2 && stateTimer != 2){
+                        boss.setCooldownSeconds(15);
+                        stateTimer = 2;  
+                    }
+                    else if(boss.getState() == 3  && stateTimer != 3){
+                        boss.setCooldownSeconds(10);
+                        stateTimer = 3;
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -413,7 +445,6 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void attack(){
         bossAttack.Attack(boss.getName(), boss.getPhase(), boss.getState());
-        System.out.println(boss.getName() + " " + boss.getPhase() + " " +  boss.getState());
     }
 
     public void animate(){
@@ -475,6 +506,11 @@ public class BossPanel extends JPanel implements ActionListener{
             case "Skeletron":
                 x = 29;
                 y = 90;
+                path += (frame % 8) + ".png";
+                break;
+            case "WallOfFlesh":
+                x = 0;
+                y = 0;
                 path += (frame % 8) + ".png";
                 break;
         }

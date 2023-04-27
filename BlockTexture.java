@@ -13,9 +13,12 @@ public enum BlockTexture {
     Cloud,
     SlimePuddle,
     SlimeBlock,
-    Honey;
+    Honey,
+    Bone;
 
     private Color color;
+
+    private static final BlockTexture[] vals = values();
 
     private BlockTexture(){
         int n = this.ordinal()+1;
@@ -36,6 +39,15 @@ public enum BlockTexture {
 
     public static BlockTexture[] getSpecialTexture() {
         return new BlockTexture[]{Sand,Cloud,Dynamite,Bubble};
+    }
+
+    public static BlockTexture colorToBlockTexture(Color color) {
+        for(int i = 0; i < vals.length; i++){
+            if(vals[i].getColor() == color){
+                return vals[i];
+            }
+        }
+        return null;
     }
     
 }

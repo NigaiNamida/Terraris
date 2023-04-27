@@ -187,6 +187,11 @@ public class PlayZone extends JPanel implements ActionListener{
         addQueueIfLow();
         lastTimerReset();
         lastAction = 15;
+        if(BossAttack.getBoneCurseCount()>0){
+            blockQueue.set(0, Tetris.O);
+            textureQueue.set(0, BlockTexture.Bone);
+            BossAttack.setBoneCurseCount(BossAttack.getBoneCurseCount()-1);
+        }
         block = TetrisPiece.getBlock(blockQueue.remove(0),textureQueue.remove(0));
         if(block.getColor().equals(BlockTexture.Cloud.getColor())){
             gravity.setTimerScale(cloudGravityScale);
@@ -946,7 +951,7 @@ public class PlayZone extends JPanel implements ActionListener{
         }
     }
 
-    private void applySandGravity() {
+    public void applySandGravity() {
         Color color;
         for (int row = gridRows-1; row >= 0; row--) {
             for (int col = 0; col < gridCols; col++) {
@@ -1193,6 +1198,26 @@ public class PlayZone extends JPanel implements ActionListener{
     public void setHoldHoneyBlock() {
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.setBlock(TetrisPiece.getBlock(holdPanel.getBlock().getName(),honey));
+        holdPanel.repaint();
+    }
+
+    public void swapHoldAndNext(){
+        HoldPanel holdPanel = GameFrame.getHoldPanel();
+        NextPanel nextPanel = GameFrame.getNextPanel();
+
+        Tetris nextBlock = holdPanel.getBlock().getName();
+        BlockTexture nextTexture = BlockTexture.colorToBlockTexture(holdPanel.getBlock().getColor());
+
+
+        Tetris holdBlock = nextPanel.getBlock().getName();
+        Color holdColor = nextPanel.getBlock().getColor();
+
+        blockQueue.set(0, nextBlock);
+        textureQueue.set(0, nextTexture);
+        nextPanel.setBlock(getNextPiece());
+        nextPanel.repaint();
+
+        holdPanel.setBlock(TetrisPiece.getBlock(holdBlock,holdColor));
         holdPanel.repaint();
     }
 

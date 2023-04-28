@@ -1,11 +1,9 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class PlayZone extends JPanel implements ActionListener{
+public class PlayZone extends JPanel{
     private HoldPanel holdPanel;
     private XPPanel XPPanel;
     private NextPanel nextPanel;
@@ -39,8 +37,6 @@ public class PlayZone extends JPanel implements ActionListener{
     private static Color slimeBlock = BlockTexture.SlimeBlock.getColor(); 
     private static Color honey = BlockTexture.Honey.getColor(); 
 
-    private Timer snowFallTimer;
-    private static int snowFallSpeed; 
     private static int snowFallFrame; 
 
     private int[][] testSet;
@@ -80,14 +76,7 @@ public class PlayZone extends JPanel implements ActionListener{
         
         gravity = new Gravity(this,1);
 
-        Theme stage = GameFrame.getBossPanel().getStage();
         snowFallFrame = 0;
-        snowFallSpeed = 40;
-        snowFallTimer = new Timer(snowFallSpeed, this);
-        if (stage == Theme.Snow || stage == Theme.DeerClops){
-            snowFallTimer.restart();
-        }
-
         createBlock();
     }
     
@@ -148,7 +137,7 @@ public class PlayZone extends JPanel implements ActionListener{
         return lowestPointIndex;
     }
 
-    public void lastTimerTrigger(){
+    public void triggerLastTimer(){
         if (isBottom() || !canGo("Down")){
             gravity.stopTimer();
             gravity.startLastTimer();
@@ -159,12 +148,12 @@ public class PlayZone extends JPanel implements ActionListener{
         }
     }
 
-    public void lastTimerReset(){
+    public void resetLastTimer(){
         gravity.stopLastTimer();
         gravity.restartLastTimer();
     }
 
-    public void TowerSlide(){
+    public void doTowerSlide(){
         if(isBottom() || !canGo("Down")){
             if (lastAction <= 0){
                 int m = (lowestPoint()-block.getHeight()) - block.getY();
@@ -185,7 +174,7 @@ public class PlayZone extends JPanel implements ActionListener{
         applySandGravity();
         resetTSpin();
         addQueueIfLow();
-        lastTimerReset();
+        resetLastTimer();
         lastAction = 15;
         if(BossAttack.getBoneCurseCount()>0){
             blockQueue.set(0, Tetris.O);
@@ -487,17 +476,17 @@ public class PlayZone extends JPanel implements ActionListener{
                     block.setVariant((block.getVariant()-1) % 4);
             }
             if(isBottom() || !canGo("Down")){
-                TowerSlide();
+                doTowerSlide();
                 lastAction--;
                 if(lastAction > 0)
-                    lastTimerReset();
+                    resetLastTimer();
             }
             int newX = block.getX() + testSet[rotateResult][0] + xOffset;
             int newY = block.getY() + testSet[rotateResult][1] + yOffset;
             block.setPosition(newX, newY);
             block.setShape(rotateShape(direction));
             if(!isBottom() || canGo("Down"))
-                TowerSlide();
+                doTowerSlide();
             repaint();
             checkSlime();
         }
@@ -581,14 +570,14 @@ public class PlayZone extends JPanel implements ActionListener{
     public void moveRight(){
         if(block.getX() + block.getWidth() < gridCols && canGo("Right")){
             if(isBottom() || !canGo("Down")){
-                TowerSlide();
+                doTowerSlide();
                 lastAction--;
                 if(lastAction > 0)
-                    lastTimerReset();
+                    resetLastTimer();
             }
             block.moveRight();
             if(!isBottom() || canGo("Down"))
-                TowerSlide();
+                doTowerSlide();
             repaint();
             checkSlime();
         }
@@ -597,14 +586,14 @@ public class PlayZone extends JPanel implements ActionListener{
     public void moveLeft(){
         if(block.getX() > 0 && canGo("Left")){
             if(isBottom() || !canGo("Down")){
-                TowerSlide();
+                doTowerSlide();
                 lastAction--;
                 if(lastAction > 0)
-                    lastTimerReset();
+                    resetLastTimer();
             }
             block.moveLeft();
             if(!isBottom() || canGo("Down"))
-                TowerSlide();
+                doTowerSlide();
             repaint();
             checkSlime();
         }
@@ -622,7 +611,7 @@ public class PlayZone extends JPanel implements ActionListener{
         if(!isBottom() && canGo("Down")){
             resetTSpin();
             block.moveDown();
-            lastTimerTrigger();
+            triggerLastTimer();
             repaint();
             checkSlime();
         }
@@ -710,6 +699,41 @@ public class PlayZone extends JPanel implements ActionListener{
                 }
             }
         }
+    }
+    
+    public void applySandGravity() {
+        Color color;
+        for (int row = gridRows-1; row >= 0; row--) {
+            for (int col = 0; col < gridCols; col++) {
+                color = backgroundBlock[row][col];
+                if (color != null && color.equals(sand)){
+                    int tempRow = row;
+                    while(tempRow+1 < gridRows){
+                        if(col+1 < gridCols && (backgroundBlock[tempRow][col+1] == slimeBlock)){
+                            break;
+                        }
+                        else if(col-1 > 0 && (backgroundBlock[tempRow][col-1] == slimeBlock)){
+                            break;
+                        }
+                        else if(tempRow-1 > 0 && (backgroundBlock[tempRow-1][col] == slimeBlock)){
+                            break;
+                        }
+                        else if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddle)){
+                                backgroundBlock[tempRow][col] = null;
+                                backgroundBlock[tempRow+1][col] = sand;
+                                tempRow++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(block != null){
+            checkFullLine();
+        }
+        repaint();
     }
 
     public void checkSlime(){
@@ -951,41 +975,6 @@ public class PlayZone extends JPanel implements ActionListener{
         }
     }
 
-    public void applySandGravity() {
-        Color color;
-        for (int row = gridRows-1; row >= 0; row--) {
-            for (int col = 0; col < gridCols; col++) {
-                color = backgroundBlock[row][col];
-                if (color != null && color.equals(sand)){
-                    int tempRow = row;
-                    while(tempRow+1 < gridRows){
-                        if(col+1 < gridCols && (backgroundBlock[tempRow][col+1] == slimeBlock)){
-                            break;
-                        }
-                        else if(col-1 > 0 && (backgroundBlock[tempRow][col-1] == slimeBlock)){
-                            break;
-                        }
-                        else if(tempRow-1 > 0 && (backgroundBlock[tempRow-1][col] == slimeBlock)){
-                            break;
-                        }
-                        else if(backgroundBlock[tempRow+1][col] == null || backgroundBlock[tempRow+1][col].equals(slimePuddle)){
-                                backgroundBlock[tempRow][col] = null;
-                                backgroundBlock[tempRow+1][col] = sand;
-                                tempRow++;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        if(block != null){
-            checkFullLine();
-        }
-        repaint();
-    }
-
     private void drawSlime(Graphics g){
         Color color;
         for (int row = 0; row < gridRows; row++) {
@@ -1043,14 +1032,6 @@ public class PlayZone extends JPanel implements ActionListener{
     private void drawBossAttack(Graphics g){
         BossAttack.drawBossAttack(g);
     }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(!isGameOver() && !KeyHandler.isPause() && GameFrame.isPlaying() && e.getSource() == snowFallTimer){
-            snowFallFrame = (snowFallFrame + 1) % 12;
-            repaint();
-        }
-    }
 
     private void drawSnow(Graphics g){    
         BossPanel bossPanel = GameFrame.getBossPanel();
@@ -1091,15 +1072,17 @@ public class PlayZone extends JPanel implements ActionListener{
         else if(bossPanel.getStage() == Theme.Snow || bossPanel.getStage() == Theme.DeerClops ){
             if(bossPanel.getBoss() != null){
                 radius = 20 + (bossPanel.getBoss().getState()-1)*3;
+                darkness = bossPanel.getBoss().getState()-1;
             }
             else{
                 radius = 20;
+                darkness = 0;
             }
             for (int row = 0; row < radius; row++) {
                 if(row > 19){
                     break;
                 }
-                g.setColor(new Color(255, 255, 255, 200/radius*(radius-row)));
+                g.setColor(new Color(255, 255, 255, (150 + 50*darkness)/radius*(radius-row)));
                 g.fillRect(0,row*25,250,25);
             }
         }
@@ -1173,7 +1156,7 @@ public class PlayZone extends JPanel implements ActionListener{
     }
 
     public void addDynamiteDamage() {
-        dynamiteDamage += 100;
+        dynamiteDamage += 200;
     }
 
     public float getCloudGravityScale() {
@@ -1198,6 +1181,7 @@ public class PlayZone extends JPanel implements ActionListener{
     public void setHoldHoneyBlock() {
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.setBlock(TetrisPiece.getBlock(holdPanel.getBlock().getName(),honey));
+        holdPanel.getBlock().spawnTetris(gridCols);
         holdPanel.repaint();
     }
 
@@ -1217,23 +1201,23 @@ public class PlayZone extends JPanel implements ActionListener{
         nextPanel.setBlock(getNextPiece());
         nextPanel.repaint();
 
-        holdPanel.setBlock(TetrisPiece.getBlock(holdBlock,holdColor));
+        if(isUseHold){
+            holdPanel.setBlock(TetrisPiece.getBlock(holdBlock,holdColor));
+            isUseHold = true;
+        }
+        else{
+            holdPanel.setBlock(TetrisPiece.getBlock(holdBlock,holdColor));
+        }
         holdPanel.repaint();
     }
 
-    public void startSnow() {
-        snowFallTimer.restart();
+    public int getSnowFallFrame() {
+        return snowFallFrame;
     }
 
-    public void stopSnow() {
-        snowFallTimer.stop();
-    }
 
-    public void setSnowFallSpeed(int snowFallSpeed) {
-        PlayZone.snowFallSpeed = snowFallSpeed;
-        snowFallTimer = new Timer(snowFallSpeed, this);
-        snowFallTimer.restart();
+    public void setSnowFallFrame(int snowFallFrame) {
+        PlayZone.snowFallFrame = snowFallFrame;
     }
-
     
 }

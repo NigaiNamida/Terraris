@@ -38,7 +38,9 @@ public class LevelPanel extends DataPanel{
     public static void addLevel() {
         level++;
         bossPanel = GameFrame.getBossPanel();
-        bossPanel.spawnChance += 5;
+        if(bossPanel.spawnChance > 100){
+            bossPanel.spawnChance += 5;
+        }
         if(bossPanel.getBoss() == null){
             bossPanel.setCanSpawn(true);
             bossPanel.restartSpawnTimer();

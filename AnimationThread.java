@@ -8,12 +8,14 @@ public class AnimationThread extends Thread{
     private static int freezeFrame;
     private static int actionTick;
     private static int freezeActionTick;
+    private static int snowFallSpeed;
 
     @Override
     public void run() {
         setInitialValue();
         frame = 0;
         actionTick = 0;
+        snowFallSpeed = 3;
         while(GameFrame.isPlaying()){
             if(!playZone.isGameOver()){
                 if(GameFrame.getEffect().getClip() != null)
@@ -56,6 +58,7 @@ public class AnimationThread extends Thread{
     private void animate(int i) {
         BossPanel bossPanel = GameFrame.getBossPanel();
         Boss boss = bossPanel.getBoss();
+        playZone = GameFrame.getPlayZone();
         if(boss != null){
             int cooldown = boss.getCooldownSeconds();
             if(frame % (FPS/8) == 0){
@@ -64,6 +67,22 @@ public class AnimationThread extends Thread{
             if(cooldown != 0 && i % (FPS*cooldown) == 0){
                 attack();
             }
+            if(!KeyHandler.isPause() && BossAttack.getProjectileSpeed() != 0 && frame % (BossAttack.getProjectileSpeed()) == 0){
+                BossAttack.movingAttack();
+            }
+        }
+        if(bossPanel.getStage() == Theme.Snow || bossPanel.getStage()==Theme.DeerClops ){
+            snowFallSpeed = 3;
+            if(boss != null){
+                snowFallSpeed = snowFallSpeed-(boss.getState()-1);
+            }
+            if(frame % (snowFallSpeed) == 0){
+                playZone.setSnowFallFrame((playZone.getSnowFallFrame() + 1) % 12);
+                playZone.repaint();
+            }
+        }
+        else{
+            playZone.setSnowFallFrame(0);
         }
     }
 

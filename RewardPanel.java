@@ -17,7 +17,6 @@ public class RewardPanel extends JPanel implements ActionListener{
     private JLabel[] modes;
     private RewardSlotPanel[] rewards;
     private ArrayList<BlockTexture> textures;
-    private int bubblePersist;
     
     public RewardPanel(){
         textures = new ArrayList<>();
@@ -27,7 +26,6 @@ public class RewardPanel extends JPanel implements ActionListener{
         textureLabels = new JLabel[3];
         modes = new JLabel[3];
         rewards = new RewardSlotPanel[3];
-        bubblePersist = 0;
 
         this.setOpaque(true);
         this.setBounds(100, 120, 600, 300);
@@ -111,14 +109,10 @@ public class RewardPanel extends JPanel implements ActionListener{
                 
                 break;
             case Dynamite:
-                playZone.addRadius();
                 playZone.addDynamiteDamage();
                 break;
             case Cloud:
                 playZone.addCloudGravityScale();
-                break;
-            case Bubble:
-                bubblePersist++;
                 break;
             default:
                 break;

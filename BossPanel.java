@@ -34,10 +34,10 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Day;
+        stage = Theme.Jungle;
         terrariaFont = GameFrame.getTerrariaFont(20);
         playZone = GameFrame.getPlayZone();
-        changeEnvironment(stage);
+        changeBGBrightness(stage);
         spawnDelay = 100;
         spawnChance = -5;
         tickCount = 0;
@@ -73,7 +73,6 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void stopAllTimer(){
         spawnTimer.stop();
-        bossAttack.stopAllTimer();
     }
 
     @Override
@@ -124,7 +123,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     case UnderWorld:
                         ChatPanel.newMessage(stage, false);
                         stage = stage.next();
-                        changeEnvironment(stage);
+                        changeBGBrightness(stage);
                         spawnChance = 100;
                         break;
                     default:
@@ -168,23 +167,22 @@ public class BossPanel extends JPanel implements ActionListener{
                     bossAttack.applyBlindness(stateTimer);
                     break;
                 case QueenBee:
-                    boss = new Boss("QueenBee",25000*powerMultiplier,25000*powerMultiplier,10);
+                    boss = new Boss("QueenBee",25000*powerMultiplier,25000*powerMultiplier,6);
                     bossTitle.setText("Queen Bee");
                     break;
                 case DeerClops:
                     boss = new Boss("DeerClops",32000*powerMultiplier,32000*powerMultiplier,10);
                     bossTitle.setText("Deerclops");
-                    bossAttack.increaseSnowFallSpeed(boss.getState());
                     break;
                 case Skeletron:
                     this.setBounds(455, 20, 250, 306);
                     this.setBackground(Color.black);
                     boss = new Boss("Skeletron",40000*powerMultiplier,40000*powerMultiplier,10);
                     bossTitle.setText("Skeletron");
-                    bossAttack.setProjectileDelay(1000);
+                    BossAttack.setProjectileDelay(1000);
                     break;
                 case WallOfFlesh:
-                    boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,20);
+                    boss = new Boss("WallOfFlesh",50000*powerMultiplier,50000*powerMultiplier,15);
                     bossTitle.setText("Wall Of Flesh");
                     break;
                 default:
@@ -221,7 +219,6 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "EyeOfCthulhu":
                 if(phase == 2){
-                    bossAttack.stopAllTimer();
                     boss.setMaxHP(3000*powerMultiplier);
                     boss.setHP(3000*powerMultiplier);
                     boss.setCooldownSeconds(10);
@@ -229,7 +226,7 @@ public class BossPanel extends JPanel implements ActionListener{
                     GameFrame.playSE(9);
                     playZone = GameFrame.getPlayZone();
                     playZone.setBlindness(0);
-                    bossAttack.setProjectileDelay(1000);
+                    BossAttack.setProjectileDelay(1000);
                 }
                 else if(phase >= 3){
                     exitFight();
@@ -237,10 +234,10 @@ public class BossPanel extends JPanel implements ActionListener{
                 break;
             case "BrainOfCthulhu":
                 if(phase == 2){
-                    bossAttack.stopAllTimer();
                     boss.setMaxHP(10000*powerMultiplier);
                     boss.setHP(10000*powerMultiplier);
                     boss.setCooldownSeconds(5);
+                    bossAttack.BossesDefeat(name);
                     boss.setState(1);
                     GameFrame.playSE(9);
                 }
@@ -302,14 +299,13 @@ public class BossPanel extends JPanel implements ActionListener{
             case "DeerClops":
                 if(boss.getPhase() == 1){
                     if(boss.getState() == 2 && stateTimer != 2){
-                        boss.setCooldownSeconds(4);
+                        boss.setCooldownSeconds(7);
                         stateTimer = 2;  
                     }
                     else if(boss.getState() == 3  && stateTimer != 3){
-                        boss.setCooldownSeconds(3);
+                        boss.setCooldownSeconds(9);
                         stateTimer = 3;
                     }
-                    bossAttack.increaseSnowFallSpeed(boss.getState());
                 }
             case "Skeletron":
                 if(boss.getPhase() == 1){
@@ -325,12 +321,11 @@ public class BossPanel extends JPanel implements ActionListener{
                         NextPanel nextPanel = GameFrame.getNextPanel();
                         nextPanel.repaint();
                     }
-                    bossAttack.increaseSnowFallSpeed(boss.getState());
                 }
             case "WallOfFlesh":
                 if(boss.getPhase() == 1){
                     if(boss.getState() == 2 && stateTimer != 2){
-                        boss.setCooldownSeconds(15);
+                        boss.setCooldownSeconds(13);
                         stateTimer = 2;  
                     }
                     else if(boss.getState() == 3  && stateTimer != 3){
@@ -371,7 +366,7 @@ public class BossPanel extends JPanel implements ActionListener{
         bossTitle.setText("");
         restartSpawnTimer();
         stage = stage.next();
-        changeEnvironment(stage);
+        changeBGBrightness(stage);
         HoldPanel holdPanel = GameFrame.getHoldPanel();
         holdPanel.repaint();
         NextPanel nextPanel = GameFrame.getNextPanel();
@@ -383,7 +378,7 @@ public class BossPanel extends JPanel implements ActionListener{
         GameFrame.playMusic(0);
     }
 
-    public void changeEnvironment(Theme stage) {
+    public void changeBGBrightness(Theme stage) {
         playZone = GameFrame.getPlayZone();
         switch (stage) {
             case Night:
@@ -392,18 +387,8 @@ public class BossPanel extends JPanel implements ActionListener{
             case Skeletron:
                 brightness = (10)/100.0f;
                 break;
-            case Snow:
-            case DeerClops:
-                brightness = (80)/100.0f;
-                if(playZone != null){
-                    playZone.startSnow();
-                }
-                break;
             default:
                 brightness = (80)/100.0f;
-                if(playZone != null){
-                    playZone.stopSnow();
-                }
                 break;
         }
     }
@@ -449,7 +434,7 @@ public class BossPanel extends JPanel implements ActionListener{
 
     public void animate(){
         repaint();
-        boss.setFrame((boss.getFrame() + 1) % 24);
+        boss.setFrame((boss.getFrame() + 1) % 8);
         if(stage == Theme.Snow && stage == Theme.DeerClops){
             PlayZone playZone = GameFrame.getPlayZone();
             playZone.repaint();

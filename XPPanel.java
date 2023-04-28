@@ -65,24 +65,25 @@ public class XPPanel extends JPanel{
     }
 
     public void addTSpinXP(boolean isTSpin,int fullLineAmount) {
+        String text = null;
         int point = 0;
         if(isTSpin){
             switch (fullLineAmount) {
                 case 0:
                     point = 250;
-                    System.out.println("T-SPIN!");
+                    text = "T-SPIN!";
                     break;
                 case 1:
                     point = 500;
-                    System.out.println("T-SPIN! SINGLE");
+                    text ="T-SPIN! SINGLE!";
                     break;
                 case 2:
                     point = 750;
-                    System.out.println("T-SPIN! DOUBLE");
+                    text ="T-SPIN! DOUBLE!";
                     break;
                 case 3:
                     point = 1000;
-                    System.out.println("T-SPIN! TRIPLE");
+                    text ="T-SPIN! TRIPLE!";
                     break;
             }
         }
@@ -90,13 +91,17 @@ public class XPPanel extends JPanel{
             switch (fullLineAmount) {
                 case 0:
                     point = 60;
-                    System.out.println("MINI T-SPIN!");
+                    text ="MINI T-SPIN!";
                     break;
                 case 1:
                     point = 125;
-                    System.out.println("MINI T-SPIN! SINGLE");
+                    text ="MINI T-SPIN! SINGLE!";
                     break;
             }
+        }
+
+        if(text != null){
+            ChatPanel.comboMessage(text);
         }
 
         if(bossPanel.isBossAlive()){
@@ -108,7 +113,7 @@ public class XPPanel extends JPanel{
             point *= 1.5;
         }
         if(!isBackToBack){
-            System.out.println("Starting Back To Back");
+            System.out.println("Back To Back!");
         }
         isBackToBack = true;
 
@@ -122,6 +127,7 @@ public class XPPanel extends JPanel{
     }
 
     public void addFullLineXP(int fullLineAmount){
+        String text = null;
         int point = 0;
         switch (fullLineAmount) {
             case 1:
@@ -135,8 +141,14 @@ public class XPPanel extends JPanel{
                 break;
             default:
                 point = 500;
+                text = "TETRIS!";
                 break;
         }
+
+        if(text != null){
+            ChatPanel.comboMessage(text);
+        }
+        
         if(bossPanel.isBossAlive()){
             PlayZone.queueSpecialTexture();
         }

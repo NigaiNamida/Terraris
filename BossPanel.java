@@ -34,7 +34,7 @@ public class BossPanel extends JPanel implements ActionListener{
     private float brightness;
 
     public BossPanel(){
-        stage = Theme.Jungle;
+        stage = Theme.Day;
         terrariaFont = GameFrame.getTerrariaFont(20);
         playZone = GameFrame.getPlayZone();
         changeBGBrightness(stage);

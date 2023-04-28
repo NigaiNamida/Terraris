@@ -35,6 +35,13 @@ public class ChatPanel extends JPanel implements ActionListener{
         this.setBackground(Color.BLACK);
     }
 
+    public static void comboMessage(String text){
+        chat.setForeground(warningColor);
+        chat.setText(text);
+        showTimer.restart();
+        glowTimer.restart();
+    }
+
     public static void newMessage(Theme stage,boolean isDefeat){
         String text = "";
         switch (stage) {

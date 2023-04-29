@@ -27,6 +27,7 @@ public class TetrisTexture extends JPanel{
     }
 
     public static void mergePileTexture(Graphics g, Color middle, int x, int y,char[][] c){
+        PlayZone playZone = GameFrame.getPlayZone();
         Theme bossStage = GameFrame.getBossPanel().getStage();
         String stage = "";
         char[] n = new char[9];
@@ -89,23 +90,26 @@ public class TetrisTexture extends JPanel{
                 stage = "Normal";
             }
         }
-        else if(middle.equals(BlockTexture.Sand.getColor())){
+        else if(playZone.isSand(middle)){
             block = "Sand";
             if(stage == "Jungle"){
                 stage = "Normal";
             }
         }
-        else if(middle.equals(BlockTexture.Dynamite.getColor()) || middle.equals(BlockTexture.PlacedDynamite.getColor())){
+        else if(playZone.isDynamite(middle)){
             block = "Dynamite";
             n[0] = n[2] = n[6] = n[8] = 'D';  
         }
-        else if(middle.equals(BlockTexture.PrimeDynamite.getColor())){
+        else if(playZone.isPrimeDynamite(middle)){
             block = "PrimeDynamite";
             n[0] = n[2] = n[6] = n[8] = 'D';  
         }
-        else if(middle.equals(BlockTexture.Bubble.getColor()) || middle.equals(BlockTexture.PlacedBubble.getColor())){
+        else if(playZone.isBubble(middle) || middle.equals(BlockTexture.PlacedBubble.getColor())){
             block = "Bubble";
             n[0] = n[2] = n[6] = n[8] = 'D';  
+        }
+        else if(playZone.isCloud(middle)){
+            block = "Cloud";
         }
         else if(middle.equals(BlockTexture.FadedBubble.getColor())){
             block = "FadedBubble";
@@ -118,9 +122,6 @@ public class TetrisTexture extends JPanel{
         else if(middle.equals(BlockTexture.Bone.getColor())){
             block = "Bone";
             n[0] = n[2] = n[6] = n[8] = 'D';  
-        }
-        else if(middle.equals(BlockTexture.Cloud.getColor())){
-            block = "Cloud";
         }
         
         String name = ""+n[0]+n[1]+n[2]+n[3]+n[5]+n[6]+n[7]+n[8];

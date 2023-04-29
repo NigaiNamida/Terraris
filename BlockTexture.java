@@ -4,13 +4,30 @@ public enum BlockTexture {
     Grass,
     Stone,
     Sand,
+    Sand_Lv1,
+    Sand_Lv2,
+    Sand_Lv3,
     Dynamite,
-    PlacedDynamite,
+    Dynamite_Lv1,
+    Dynamite_Lv2,
+    Dynamite_Lv3,
+    PlacedDynamite_Lv1,
+    PlacedDynamite_Lv2,
+    PlacedDynamite_Lv3,
     PrimeDynamite,
+    PrimeDynamite_Lv1,
+    PrimeDynamite_Lv2,
+    PrimeDynamite_Lv3,
     Bubble,
+    Bubble_Lv1,
+    Bubble_Lv2,
+    Bubble_Lv3,
     PlacedBubble,
     FadedBubble,
     Cloud,
+    Cloud_Lv1,
+    Cloud_Lv2,
+    Cloud_Lv3,
     SlimePuddle,
     SlimeBlock,
     Honey,
@@ -38,7 +55,11 @@ public enum BlockTexture {
     }
 
     public static BlockTexture[] getSpecialTexture() {
-        return new BlockTexture[]{Sand,Cloud,Dynamite,Bubble};
+        return new BlockTexture[]{Sand_Lv1,Cloud_Lv1,Dynamite_Lv1,Bubble_Lv1};
+    }
+
+    public static BlockTexture[] getUpgradableTexture() {
+        return new BlockTexture[]{Sand_Lv1,Sand_Lv2,Cloud_Lv1,Cloud_Lv2,Dynamite_Lv1,Dynamite_Lv2,Bubble_Lv1,Bubble_Lv2};
     }
 
     public static BlockTexture colorToBlockTexture(Color color) {

@@ -218,12 +218,12 @@ public class PlayZone extends JPanel{
         if(GameFrame.getMusic() != null){
             GameFrame.stopMusic();
         }
-        int[] topXP = Leaderboard.getTopScore();
-        int XP = XPPanel.getXP();
-        for (int i = 0; i< topXP.length; i++) {
-            if(XP > topXP[i]){
+        int[] topScore = Leaderboard.getTopScore();
+        int score = XPPanel.getScore();
+        for (int i = 0; i< topScore.length; i++) {
+            if(score > topScore[i]){
                 isHighXP = true;
-                HighScorePanel.getScore().setText(String.format("%,d",XP));
+                HighScorePanel.getScore().setText(String.format("%,d",score));
                 GameFrame.getHighScorePanel().setVisible(true);
                 break;
             }

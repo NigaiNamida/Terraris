@@ -8,12 +8,14 @@ public class XPPanel extends JPanel{
     private boolean isBackToBack;
     private double maxXP;
     private int XP;
+    private int score;
 
     public XPPanel(){
         bossPanel = GameFrame.getBossPanel();
         isBackToBack = false;
         maxXP = 2000;
         XP = 1000;
+        score = XP;
 
         this.setBounds(415, 20, 20, 500);
         this.setBackground(Color.black);
@@ -52,6 +54,10 @@ public class XPPanel extends JPanel{
 
     public int getXP() {
         return XP;
+    }
+
+    public int getScore(){
+        return score;
     }
 
     public void deductXP(int point){
@@ -122,6 +128,7 @@ public class XPPanel extends JPanel{
         }
         else{
             XP += point;
+            score += point;
         }
         checkLevel();
     }
@@ -170,6 +177,7 @@ public class XPPanel extends JPanel{
         }
         else{
             XP += point;
+            score += point;
         }
         checkLevel();
     }
@@ -178,6 +186,7 @@ public class XPPanel extends JPanel{
         int point = 0;
         point = (int)(LevelPanel.getLevel()/1.5 * HP);
         XP += point;
+        score += point;
         checkLevel();
     }
 
@@ -187,6 +196,7 @@ public class XPPanel extends JPanel{
         }
         else{
             XP++;
+            score++;
         }
         checkLevel();
     }
@@ -197,6 +207,7 @@ public class XPPanel extends JPanel{
         }
         else{
             XP += 2*m;
+            score += 2*m;
         }
         checkLevel();
     }

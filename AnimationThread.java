@@ -59,6 +59,9 @@ public class AnimationThread extends Thread{
         BossPanel bossPanel = GameFrame.getBossPanel();
         Boss boss = bossPanel.getBoss();
         playZone = GameFrame.getPlayZone();
+        if(frame % 3 == 0){
+            playZone.applySandGravity();
+        }
         if(boss != null){
             int cooldown = boss.getCooldownSeconds();
             if(frame % (FPS/8) == 0){

@@ -543,7 +543,6 @@ public class BossAttack{
                     }
                     else if (backgroundColor == slimePuddleColor){
                         playZone.setBackgroundBlock(projectileDelay[i]/25, projectileCoordinate[i], slimeBlockColor);
-                        playZone.checkFullLine();
                     }
                 }
             }
@@ -1136,7 +1135,7 @@ public class BossAttack{
             }
         }
         playZone = GameFrame.getPlayZone();
-        playZone.applySandGravity();
+        //playZone.applySandGravity();
     }
 
     public int getProjectileDelay() {

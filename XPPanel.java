@@ -33,6 +33,7 @@ public class XPPanel extends JPanel{
             levelUp();
             RewardPanel rewardPanel = GameFrame.getRewardPanel();
             rewardPanel.promptReward();
+            rewardPanel.randomNewBlock();
         }
         repaint();
     }
@@ -76,19 +77,19 @@ public class XPPanel extends JPanel{
         if(isTSpin){
             switch (fullLineAmount) {
                 case 0:
-                    point = 250;
+                    point = 150;
                     text = "T-SPIN!";
                     break;
                 case 1:
-                    point = 500;
+                    point = 200;
                     text ="T-SPIN! SINGLE!";
                     break;
                 case 2:
-                    point = 750;
+                    point = 400;
                     text ="T-SPIN! DOUBLE!";
                     break;
                 case 3:
-                    point = 1000;
+                    point = 800;
                     text ="T-SPIN! TRIPLE!";
                     break;
             }
@@ -108,10 +109,6 @@ public class XPPanel extends JPanel{
 
         if(text != null){
             ChatPanel.comboMessage(text);
-        }
-
-        if(bossPanel.isBossAlive()){
-            PlayZone.queueSpecialTexture();
         }
 
         point = (int)(LevelPanel.getLevel()/1.5 * point);
@@ -156,10 +153,6 @@ public class XPPanel extends JPanel{
             ChatPanel.comboMessage(text);
         }
         
-        if(bossPanel.isBossAlive()){
-            PlayZone.queueSpecialTexture();
-        }
-
         point = (int)(LevelPanel.getLevel()/1.5 * point);
         if(!isBackToBack && fullLineAmount == 4){
             System.out.println("Starting Back To Back");

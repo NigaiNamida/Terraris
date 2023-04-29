@@ -7,6 +7,7 @@ import java.util.Collections;
 public class TetrisPiece {
     private static Tetris[] blockSet = Tetris.values();
     private static BlockTexture[] textureSet = BlockTexture.getNormalTexture();
+    private static ArrayList<BlockTexture> addedTextureSet = new ArrayList<>();
     private static ArrayList<BlockTexture> specialTextureSet = new ArrayList<>();
     private Tetris name;
     private int[][] shape;
@@ -52,19 +53,31 @@ public class TetrisPiece {
         specialTextureSet.add(texture);
     }
 
-    public static void queueSpecialTexture(ArrayList<BlockTexture> textureQueue){
-		Collections.shuffle(specialTextureSet);
-        textureQueue.add(specialTextureSet.get(0));
+    public static void addTexture(ArrayList<BlockTexture> addedQueue){
+		addedTextureSet.addAll(addedQueue);
+    }
+
+    public static void removeTextureIndex(int removeQueue) {
+        addedTextureSet.remove(removeQueue);
+    }
+
+    public static void removeTextureBlock(BlockTexture removeQueue) {
+        addedTextureSet.remove(removeQueue);
     }
 
     public static void queueTexture(ArrayList<BlockTexture> textureQueue,boolean reset){
         if(reset){
             textureQueue.clear();
+            addedTextureSet = new ArrayList<>();
             specialTextureSet = new ArrayList<>();
         }
 		List<BlockTexture> textureList = Arrays.asList(textureSet);
-		Collections.shuffle(textureList);
-        textureQueue.addAll(textureList);
+        List<BlockTexture> addedTextureList = addedTextureSet;
+        List<BlockTexture> combinedTextureList = new ArrayList<BlockTexture>();
+		combinedTextureList.addAll(textureList);
+        combinedTextureList.addAll(addedTextureList);
+        Collections.shuffle(combinedTextureList);
+        textureQueue.addAll(combinedTextureList);
     }
 
     public static void queueBlock(ArrayList<Tetris> blockQueue,boolean reset){
@@ -145,5 +158,9 @@ public class TetrisPiece {
 
     public static boolean containSpecialTexture(BlockTexture texture) {
         return specialTextureSet.contains(texture);
+    }
+
+    public static ArrayList<BlockTexture> getAddedTextureSet() {
+        return addedTextureSet;
     }
 }
